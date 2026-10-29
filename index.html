@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilgi Macerası</title>
+<style>
+* { box-sizing: border-box; }
+
+:root {
+  --ink: #26304b;
+  --purple: #7657e8;
+  --pink: #ff76ad;
+  --mint: #69e3bd;
+  --yellow: #ffdc72;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 15%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 85% 25%, #fff 0 4px, transparent 5px),
+    linear-gradient(135deg, #c5f5f1, #d9d0ff 52%, #ffe0ee);
+  background-size: 75px 75px, 100px 100px, auto;
+  padding: 20px;
+}
+
+button { font: inherit; cursor: pointer; }
+
+.app {
+  max-width: 1050px;
+  min-height: 650px;
+  margin: auto;
+  padding: 24px;
+  border: 4px solid white;
+  border-radius: 32px;
+  background: rgba(255,255,255,.76);
+  box-shadow: 0 18px 55px #51438a25;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(22px, 4vw, 34px);
+  font-weight: 1000;
+  letter-spacing: -1px;
+}
+
+.logo-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: var(--yellow);
+  border: 3px solid white;
+  border-radius: 18px;
+  font-size: 27px;
+  box-shadow: 0 5px 0 #e9b94d;
+}
+
+.pill {
+  padding: 10px 15px;
+  border-radius: 30px;
+  background: white;
+  font-weight: bold;
+  box-shadow: 0 3px 0 #d8d7ee;
+}
+
+h1, h2, p { margin-top: 0; }
+
+h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  margin-bottom: 10px;
+  letter-spacing: -1.5px;
+}
+
+.subtitle {
+  color: #646b87;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.screen { display: none; }
+.screen.active { display: block; animation: appear .35s ease; }
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 25px;
+  align-items: center;
+  padding: 25px 5px;
+}
+
+.hero-art {
+  min-height: 300px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, #b7f3de, #c5c3ff);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-art::before, .hero-art::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #ffffff55;
+  border-radius: 50%;
+}
+.hero-art::before { top: -25px; left: -20px; }
+.hero-art::after { right: -20px; bottom: -30px; }
+
+.hero-monsters {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 2px;
+  transform: scale(.9);
+}
+
+.monster {
+  position: relative;
+  width: 110px;
+  height: 128px;
+  flex-shrink: 0;
+  border: 4px solid #303650;
+  border-radius: 48% 48% 38% 38%;
+  box-shadow: inset -8px -8px #00000012, 0 8px 0 #30365020;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.monster:nth-child(2) { animation-delay: -.7s; }
+.monster:nth-child(3) { animation-delay: -1.3s; }
+
+.monster::before, .monster::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 19px;
+  background: #ff9fbe;
+  border-radius: 50%;
+  top: 73px;
+}
+.monster::before { left: 9px; }
+.monster::after { right: 9px; }
+
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-9px) rotate(2deg); }
+}
+
+.eye {
+  position: absolute;
+  top: 30px;
+  width: 28px;
+  height: 34px;
+  border: 3px solid #303650;
+  border-radius: 50%;
+  background: white;
+}
+.eye::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 13px;
+  background: #303650;
+  border-radius: 50%;
+  top: 8px;
+  left: 7px;
+}
+.eye.one { left: 36px; }
+
+.three .eye { width: 22px; height: 29px; top: 31px; }
+.three .eye:nth-child(1) { left: 7px; }
+.three .eye:nth-child(2) { left: 39px; }
+.three .eye:nth-child(3) { left: 70px; }
+
+.two-tall {
+  height: 165px;
+  width: 94px;
+  border-radius: 45% 45% 30% 30%;
+}
+.two-tall .eye { top: 39px; width: 24px; height: 30px; }
+.two-tall .eye:nth-child(1) { left: 12px; }
+.two-tall .eye:nth-child(2) { left: 49px; }
+.two-tall .mouth { top: 88px; }
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  top: 78px;
+  width: 27px;
+  height: 13px;
+  transform: translateX(-50%);
+  border-bottom: 4px solid #303650;
+  border-radius: 50%;
+}
+.two-tall .mouth { top: 88px; }
+
+.one .mouth { top: 79px; }
+
+.tag {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background: #fff0bd;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.primary, .secondary {
+  border: 0;
+  border-radius: 17px;
+  padding: 15px 24px;
+  font-weight: 1000;
+  transition: transform .15s, filter .15s;
+}
+.primary {
+  color: white;
+  background: linear-gradient(135deg, #8062f3, #a05de8);
+  box-shadow: 0 6px 0 #6043bd;
+}
+.secondary {
+  color: var(--ink);
+  background: white;
+  box-shadow: 0 5px 0 #d9d8ee;
+}
+.primary:hover, .secondary:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.primary:active, .secondary:active { transform: translateY(3px); box-shadow: none; }
+
+.button-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+
+.section-heading { text-align: center; margin: 10px 0 22px; }
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.character-card {
+  border: 4px solid transparent;
+  border-radius: 24px;
+  padding: 16px 8px;
+  background: white;
+  box-shadow: 0 7px 0 #dcdaf0;
+  text-align: center;
+  transition: transform .2s, border-color .2s;
+}
+.character-card:hover { transform: translateY(-5px); }
+.character-card.selected {
+  border-color: #8062f3;
+  background: #f3efff;
+}
+.character-card .monster {
+  margin: 10px auto 20px;
+  transform: scale(.72);
+  transform-origin: center bottom;
+  margin-top: 0;
+  margin-bottom: -12px;
+}
+.character-card .monster:hover { animation: float 1s infinite; }
+.character-card h3 { margin: 8px 0 5px; }
+.character-card p { margin: 0; color: #737891; font-size: 13px; }
+
+.selection-note {
+  text-align: center;
+  color: #626982;
+  min-height: 24px;
+}
+
+.game-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.progress-wrap {
+  height: 12px;
+  width: 100%;
+  background: #e8e6f7;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #65dfb5, #8c77f4);
+  border-radius: inherit;
+  transition: width .4s;
+}
+.question-card {
+  background: white;
+  padding: clamp(20px, 4vw, 35px);
+  border-radius: 26px;
+  box-shadow: 0 8px 0 #dcdaf0;
+}
+.room-label {
+  display: inline-block;
+  color: #6852c9;
+  background: #f0ecff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+.question { font-size: clamp(21px, 4vw, 30px); line-height: 1.4; }
+.answers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+.answer {
+  min-height: 60px;
+  border: 3px solid #e8e6f5;
+  border-radius: 17px;
+  background: #faf9ff;
+  color: var(--ink);
+  font-weight: 800;
+  padding: 13px;
+  text-align: left;
+}
+.answer:hover:not(:disabled) { border-color: #a292f4; background: #f0edff; }
+.answer.correct { background: #d8fff0; border-color: #50c99e; }
+.answer.wrong { background: #ffe1e9; border-color: #ff86a7; }
+.answer:disabled { cursor: default; }
+
+.feedback {
+  min-height: 32px;
+  margin-top: 18px;
+  font-weight: 900;
+}
+.feedback.good { color: #128960; }
+.feedback.bad { color: #d74d72; }
+
+footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 12px;
+  color: #7c8097;
+}
+
+@media (max-width: 650px) {
+  body { padding: 8px; }
+  .app { padding: 16px; border-radius: 24px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-art { min-height: 230px; }
+  .monster { width: 90px; height: 115px; }
+  .character-grid { gap: 7px; }
+  .character-card { padding: 10px 3px; }
+  .character-card .monster { transform: scale(.58); margin-bottom: -20px; }
+  .character-card h3 { font-size: 14px; }
+  .character-card p { font-size: 11px; }
+  .answers { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⭐</div>
+      <span>Bilgi Macerası</span>
+    </div>
+    <div class="pill">📚 Türkçe • 7. Sınıf</div>
+  </header>
+
+  <!-- BAŞLANGIÇ EKRANI -->
+  <section id="home" class="screen active">
+    <div class="hero">
+      <div>
+        <span class="tag">✨ MACERA BAŞLIYOR!</span>
+        <h1>Bilgi dünyasına hazır mısın?</h1>
+        <p class="subtitle">
+          Sevimli canavarını seç, soruları çöz ve gizemli odalarda
+          ilerle! Her doğru cevap seni zafere biraz daha yaklaştırır.
+        </p>
+        <div class="button-row">
+          <button class="primary" onclick="showCharacters()">OYUNA BAŞLA →</button>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="hero-monsters">
+          <div class="monster three" style="background:#ffbd68">
+            <span class="eye"></span><span class="eye"></span><span class="eye"></span>
+            <span class="mouth"></span>
+          </div>
+          <div class="monster one" style="background:#8ce8cb">
+            <span class="eye one"></span><span class="mouth"></span>
+          </div>
+          <div class="monster two-tall" style="background:#ff8db7">
+            <span class="eye"></span><span class="eye"></span><span class="mouth"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KARAKTER SEÇİMİ -->
+  <section id="characters" class="screen">
+    <div class="section-heading">
+      <span class="tag">🧩 ADIM 1</span>
+      <h1>Canavarını seç!</h1>
+      <p class="subtitle">Macera boyunca sana bu karakter eşlik edecek.</p>
+    </div>
+
+    <div class="character-grid">
+      <button class="character-card selected" id="card-0" onclick="selectCharacter(0)">
+        <div class="monster three" style="background:#ffbd68">
+          <span class="eye"></span><span class="eye"></span><span class="eye"></span>
+          <span class="mouth"></span>
+        </div>
+        <h3>Üçgöz</h3>
+        <p>Her şeyi fark eder! 👀</p>
+      </button>
+
+      <button class="character-card" id="card-1" onclick="selectCharacter(1)">
+        <div class="monster one" style="background:#8ce8cb">
+          <span class="eye one"></span><span class="mouth"></span>
+        </div>
+        <h3>Tekgöz</h3>
+        <p>Dikkatli ve meraklı! 💚</p>
+      </button>
+
+      <button class="character-card" id="card-2" onclick="selectCharacter(2)">
+        <div class="monster two-tall" style="background:#ff8db7">
+          <span class="eye"></span><span class="eye"></span><span class="mouth"></span>
+        </div>
+        <h3>Uzuniki</h3>
+        <p>Uzun boylu dostun! 🌸</p>
+      </button>
+    </div>
+
+    <p class="selection-note" id="selectionNote">Seçilen karakter: Üçgöz</p>
+    <div class="button-row" style="justify-content:center">
+      <button class="secondary" onclick="showScreen('home')">← Geri</button>
+      <button class="primary" onclick="startGame()">MACERAYA BAŞLA! 🚀</button>
+    </div>
+  </section>
+
+  <!-- OYUN EKRANI -->
+  <section id="game" class="screen">
+    <div class="game-top">
+      <div>
+        <span class="tag">🗺️ BİLGİ ODALARI</span>
+        <h2 id="roomTitle" style="margin:5px 0">Oda 1</h2>
+      </div>
+      <div class="pill" id="playerBadge">👾 Üçgöz</div>
+      <div class="pill" id="scoreBadge">⭐ Puan: 0</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="question-card" style="margin-top:22px">
+      <span class="room-label" id="topic">TÜRKÇE BİLGİSİ</span>
+      <h2 class="question" id="questionText">Soru burada görünecek.</h2>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="button-row">
+        <button class="primary" id="nextButton" onclick="nextQuestion()" style="display:none">
+          SONRAKİ ODA →
+        </button>
+        <button class="secondary" onclick="backToHome()">Menüye dön</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BİTİŞ EKRANI -->
+  <section id="finish" class="screen">
+    <div class="section-heading" style="padding:45px 0">
+      <div style="font-size:75px">🏆</div>
+      <span class="tag">MACERA TAMAMLANDI!</span>
+      <h1>Harikasın!</h1>
+      <p class="subtitle" id="finalText">Bütün soruları tamamladın.</p>
+      <div class="button-row" style="justify-content:center">
+        <button class="primary" onclick="showCharacters()">YENİDEN OYNA ↻</button>
+        <button class="secondary" onclick="showScreen('home')">Ana menü</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>Bilgi Macerası • Öğren, keşfet, eğlen! ✨</footer>
+</div>
+
+<script>
+const characters = [
+  { name: "Üçgöz", emoji: "🧡" },
+  { name: "Tekgöz", emoji: "💚" },
+  { name: "Uzuniki", emoji: "🌸" }
+];
+
+const questions = [
+  {
+    topic: "SÖZCÜKTE ANLAM",
+    q: '"Küçük çocuk çok neşeliydi." cümlesinde "neşeli" sözcüğünün eş anlamlısı hangisidir?',
+    a: ["Üzgün", "Mutlu", "Kızgın", "Yorgun"], correct: 1
+  },
+  {
+    topic: "DEYİMLER",
+    q: '"Etekleri zil çalmak" deyimi ne anlama gelir?',
+    a: ["Çok sevinmek", "Çok yorulmak", "Korkmak", "Şaşırmak"], correct: 0
+  },
+  {
+    topic: "NOKTALAMA",
+    q: "Aşağıdaki cümlelerin hangisinin sonuna soru işareti konmalıdır?",
+    a: ["Bugün hava çok güzel", "Eyvah, geç kaldım", "Saat kaçta geleceksin", "Yaşasın, kazandık"], correct: 2
+  },
+  {
+    topic: "FİİLLER",
+    q: '"Elif kitap okuyor." cümlesindeki fiil hangisidir?',
+    a: ["Elif", "Kitap", "Okuyor", "Cümle"], correct: 2
+  },
+  {
+    topic: "ZIT ANLAM",
+    q: '"Cömert" sözcüğünün zıt anlamlısı hangisidir?',
+    a: ["Yardımsever", "Cimri", "Neşeli", "Dürüst"], correct: 1
+  },
+  {
+    topic: "ATASÖZLERİ",
+    q: '"Damlaya damlaya göl olur." atasözü hangi düşünceyi anlatır?',
+    a: ["Küçük birikimler zamanla büyür", "Her iş çok zordur", "Su her zaman gereklidir", "Hızlı olmak önemlidir"], correct: 0
+  },
+  {
+    topic: "İSİMLER",
+    q: "Aşağıdakilerden hangisi özel isimdir?",
+    a: ["Şehir", "Kalem", "Ankara", "Okul"], correct: 2
+  },
+  {
+    topic: "ANLAM İLİŞKİSİ",
+    q: '"Kardeşim gibi hızlı koşuyor." cümlesinde hangi anlam ilişkisi vardır?',
+    a: ["Karşılaştırma", "Neden-sonuç", "Amaç-sonuç", "Koşul"], correct: 0
+  },
+  {
+    topic: "YAZIM KURALLARI",
+    q: "Hangi cümlede yazım doğru yapılmıştır?",
+    a: ["ayşe bugün geldi.", "Ayşe bugün geldi.", "Ayşe bugün Geldi.", "ayşe Bugün geldi."], correct: 1
+  },
+  {
+    topic: "CÜMLE ANLAMI",
+    q: '"Yağmur yağdığı için maç ertelendi." cümlesinde hangi anlam ilişkisi vardır?',
+    a: ["Amaç-sonuç", "Neden-sonuç", "Karşılaştırma", "Benzetme"], correct: 1
+  }
+];
+
+let selectedCharacter = 0;
+let currentQuestion = 0;
+let score = 0;
+let locked = false;
+let order = [];
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showCharacters() {
+  showScreen("characters");
+}
+
+function selectCharacter(index) {
+  selectedCharacter = index;
+  document.querySelectorAll(".character-card").forEach((card, i) => {
+    card.classList.toggle("selected", i === index);
+  });
+  document.getElementById("selectionNote").textContent =
+    "Seçilen karakter: " + characters[index].name + " " + characters[index].emoji;
+}
+
+function startGame() {
+  currentQuestion = 0;
+  score = 0;
+  order = questions.map((_, i) => i);
+  // Sorular her oyunda farklı sırayla gelir.
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  document.getElementById("playerBadge").textContent =
+    "👾 " + characters[selectedCharacter].name;
+  showScreen("game");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  locked = false;
+  const q = questions[order[currentQuestion]];
+  document.getElementById("roomTitle").textContent =
+    "Oda " + (currentQuestion + 1) + " / " + questions.length;
+  document.getElementById("topic").textContent = q.topic;
+  document.getElementById("questionText").textContent = q.q;
+  document.getElementById("scoreBadge").textContent = "⭐ Puan: " + score;
+  document.getElementById("progress").style.width =
+    (currentQuestion / questions.length * 100) + "%";
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("feedback").className = "feedback";
+  document.getElementById("nextButton").style.display = "none";
+
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "";
+
+  q.a.forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.className = "answer";
+    button.textContent = String.fromCharCode(65 + index) + ") " + answer;
+    button.onclick = () => checkAnswer(index, button);
+    answers.appendChild(button);
+  });
+}
+
+function checkAnswer(index, button) {
+  if (locked) return;
+  locked = true;
+
+  const q = questions[order[currentQuestion]];
+  const buttons = [...document.querySelectorAll(".answer")];
+  buttons.forEach(b => b.disabled = true);
+
+  const feedback = document.getElementById("feedback");
+
+  if (index === q.correct) {
+    score += 10;
+    button.classList.add("correct");
+    feedback.textContent = "🎉 Doğru cevap! 10 puan kazandın!";
+    feedback.classList.add("good");
+  } else {
+    button.classList.add("wrong");
+    buttons[q.correct].classList.add("correct");
+    feedback.textContent = "💫 Bu kez olmadı! Yeşil gösterilen cevap doğru.";
+    feedback.classList.add("bad");
+  }
+
+  document.getElementById("scoreBadge").textContent = "⭐ Puan: " + score;
+  document.getElementById("progress").style.width =
+    ((currentQuestion + 1) / questions.length * 100) + "%";
+  document.getElementById("nextButton").style.display = "inline-block";
+  document.getElementById("nextButton").textContent =
+    currentQuestion === questions.length - 1 ? "SONUÇLARI GÖR 🏆" : "SONRAKİ ODA →";
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    document.getElementById("finalText").textContent =
+      questions.length + " soruyu tamamladın! Toplam puanın: " + score +
+      ". " + characters[selectedCharacter].name + " seninle gurur duyuyor!";
+    showScreen("finish");
+  } else {
+    renderQuestion();
+  }
+}
+
+function backToHome() {
+  showScreen("home");
+}
+</script>
+</body>
+</html>
