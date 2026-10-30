@@ -3,254 +3,340 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Kelime Dedektifleri: Kayıp Kütüphane</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Türkçe Şehri: Kelime Krizi</title>
 <style>
+:root{--bg:#101727;--panel:#1c2940;--line:#344966;--gold:#ffd166;--green:#70e1b0;--text:#f5f7ff}
 *{box-sizing:border-box}
-body{margin:0;background:#101827;color:#f5f5ff;font-family:system-ui,Arial}
-header{padding:14px;background:#17263d;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
-h1{font-size:clamp(18px,3vw,27px);margin:0;color:#ffd166}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial,sans-serif}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 15px;font-weight:750;transition:transform .15s,filter .15s}
+button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+button:focus-visible{outline:3px solid white;outline-offset:3px}
+.primary{background:var(--gold);color:#202333}
+.secondary{background:#30435f;color:white;border:1px solid #526b8e}
+header{padding:16px clamp(12px,3vw,30px);background:#172238;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:clamp(21px,3vw,32px);margin:0;color:var(--gold)}
+.subtitle{color:#b5c6de;font-size:13px;margin-top:4px}
 .stats{display:flex;gap:8px;flex-wrap:wrap}
-.badge{background:#293c59;border-radius:20px;padding:7px 12px;font-weight:bold}
-main{max-width:1200px;margin:auto;padding:12px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:12px}
-.panel{background:#1a2940;border:1px solid #40516c;border-radius:15px;overflow:hidden}
-#game{display:block;width:100%;height:auto;aspect-ratio:8/5;touch-action:none;background:#244d42}
-.gamehead{padding:10px 13px;background:#243751;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-aside{display:flex;flex-direction:column;gap:12px}
-.card{background:#1a2940;border:1px solid #40516c;border-radius:15px;padding:14px}
-.card h2{font-size:16px;margin:0 0 10px}
-button{font:inherit;border:0;border-radius:10px;padding:11px 13px;cursor:pointer;font-weight:bold}
-.gold{background:#ffd166;color:#172033}
-.blue{background:#344d70;color:white}
-#controls{display:none;padding:10px;justify-content:space-between;align-items:center;gap:10px}
-.pad{display:grid;grid-template-columns:repeat(3,42px);gap:4px}
-.pad button{padding:8px;background:#344d70;color:white;touch-action:none}
-.actions{display:flex;gap:6px;flex-wrap:wrap}
-#overlay{position:fixed;inset:0;background:#080e19dd;display:flex;align-items:center;justify-content:center;padding:15px;z-index:5}
-.dialog{background:#1c2d47;border:1px solid #667c9e;border-radius:20px;padding:24px;width:min(540px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 70px #0009}
-.dialog h2{color:#ffd166;margin-top:5px}
-.dialog p{line-height:1.6;color:#e1e8f5}
-#answers{display:grid;gap:9px;margin:16px 0}
-.answer{background:#304562;color:white;text-align:left;border:1px solid #516786}
-.answer:hover{border-color:#ffd166}
-#feedback{display:none;background:#102a2a;border-radius:10px;padding:12px;line-height:1.5}
-#next{margin-top:12px}
-#hint{padding:10px;font-size:13px;color:#b8c9df}
-.task{padding:8px 0;border-bottom:1px solid #34445d;font-size:14px}
-@media(max-width:800px){main{grid-template-columns:1fr}aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#controls{display:flex}}
-@media(max-width:480px){main{padding:7px}aside{gap:7px}.card{padding:10px}.dialog{padding:17px}}
+.stat{background:#263650;border:1px solid #425674;border-radius:12px;padding:9px 12px;font-size:13px}
+.stat b{color:var(--gold)}
+main{max-width:1250px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:15px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.panelhead{padding:15px 17px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.panelhead h2{font-size:17px;margin:0}
+.world{position:relative;overflow:hidden;background:#31594b;min-height:370px}
+#city{display:block;width:100%;height:auto;aspect-ratio:1.22;touch-action:manipulation}
+.worldlabel{position:absolute;top:12px;left:12px;background:#101727d9;border:1px solid #ffffff38;border-radius:12px;padding:9px 12px;font-weight:700}
+.worldhint{position:absolute;bottom:10px;left:10px;right:10px;text-align:center;background:#101727db;padding:9px;border-radius:10px;font-size:12px;color:#dbe8f8}
+.content{padding:16px}
+h2,h3,p{margin-top:0}
+.locations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.loc{background:#253852;border:1px solid #415876;border-radius:14px;padding:13px;text-align:left;color:white;min-width:0}
+.loc .emoji{font-size:27px;display:block;margin-bottom:7px}
+.loc small{display:block;color:#c3d2e7;line-height:1.4;margin-top:5px;font-weight:400}
+.loc.locked{opacity:.48}
+.loc.active{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.side{display:flex;flex-direction:column;gap:15px}
+.progress{height:9px;background:#0f1725;border-radius:20px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:linear-gradient(90deg,#50d5a0,#c9ef84);width:0;transition:width .3s}
+.log{font-size:13px;line-height:1.7;color:#d5e2f3;max-height:150px;overflow:auto}
+.log div{border-bottom:1px solid #34435a;padding:5px 0}
+#modal{position:fixed;inset:0;background:#070c16dc;z-index:10;display:none;align-items:center;justify-content:center;padding:14px}
+.dialog{width:min(620px,100%);max-height:92vh;overflow:auto;background:#1b2a42;border:1px solid #526987;border-radius:20px;padding:clamp(18px,4vw,28px);box-shadow:0 20px 80px #0009}
+.dialog h2{color:var(--gold);font-size:25px}
+.tag{font-size:12px;font-weight:800;letter-spacing:.7px;color:var(--green);text-transform:uppercase}
+.question{font-size:20px;line-height:1.5;margin:16px 0}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.answer{background:#2c405d;border:1px solid #49617f;color:white;text-align:left;line-height:1.45}
+.answer.correct{background:#17553f;border-color:#70e1b0}
+.answer.wrong{background:#6b2b3b;border-color:#ff8e9a}
+.answer:disabled{cursor:default}
+.feedback{display:none;padding:13px;margin-top:13px;border-radius:12px;line-height:1.55;background:#132f30}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+#startScreen{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at 50% 10%,#385e68,#121a2c 65%);display:flex;align-items:center;justify-content:center;padding:16px}
+.startbox{max-width:680px;text-align:center;background:#15243beF;border:1px solid #617993;border-radius:24px;padding:clamp(20px,5vw,40px);box-shadow:0 25px 80px #0007}
+.logo{font-size:70px}
+.startbox h2{font-size:clamp(29px,6vw,48px);color:var(--gold);margin:5px 0 12px}
+.startbox p{line-height:1.7;color:#d5e3f7}
+#playerName{width:100%;padding:13px;background:#101a2a;color:white;border:1px solid #536783;border-radius:11px;margin:10px 0 14px;font:inherit}
+@media(max-width:850px){main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.world{min-height:0}}
+@media(max-width:520px){main{padding:9px;gap:10px}.side{display:flex}.locations{gap:7px}.loc{padding:10px}.answers{grid-template-columns:1fr}.stat{padding:7px 9px}.worldhint{font-size:11px}}
 </style>
 </head>
 <body>
 <header>
- <div><h1>🔎 Kelime Dedektifleri</h1><small>Kayıp Kütüphane • 7. Sınıf Türkçe Macerası</small></div>
+ <div><h1>🏙️ Türkçe Şehri</h1><div class="subtitle">KELİME KRİZİ · 7. SINIF MACERASI</div></div>
  <div class="stats">
-  <div class="badge">⭐ Seviye <span id="level">1</span></div>
-  <div class="badge">✨ XP <span id="xp">0</span></div>
-  <div class="badge">🪙 Altın <span id="gold">0</span></div>
+  <div class="stat">⭐ Seviye <b id="level">1</b></div>
+  <div class="stat">✨ XP <b id="xp">0</b></div>
+  <div class="stat">🪙 <b id="coins">30</b></div>
+  <div class="stat">❤️ <b id="hearts">3</b></div>
  </div>
 </header>
 <main>
  <section class="panel">
-  <div class="gamehead"><b id="room">📚 Büyük Kütüphane</b><span id="mission">Görev: Lale ile konuş</span></div>
-  <canvas id="game" width="800" height="500"></canvas>
-  <div id="controls">
-   <div class="pad">
-    <span></span><button data-dir="up">▲</button><span></span>
-    <button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button>
-   </div>
-   <div class="actions"><button class="gold" id="talk">E • Etkileşim</button><button class="blue" id="journal">📖 Günlük</button></div>
+  <div class="panelhead"><h2 id="areaTitle">🗺️ Kelime Meydanı</h2><span id="heroName">Kahraman</span></div>
+  <div class="world">
+   <canvas id="city" width="720" height="590" aria-label="Türkçe Şehri haritası"></canvas>
+   <div class="worldlabel" id="weather">☀️ Macera zamanı</div>
+   <div class="worldhint">Bir bölge seç, görevini tamamla ve şehrini yeniden kur!</div>
   </div>
-  <div id="hint">WASD veya yön tuşlarıyla hareket et. Parlayan karakterlere yaklaş ve E tuşuna bas.</div>
+  <div class="content">
+   <h3>🧭 Keşfedilecek bölgeler</h3>
+   <div class="locations" id="locations"></div>
+  </div>
  </section>
- <aside>
-  <section class="card"><h2>📜 Görev günlüğü</h2><div class="task" id="t1">⬜ Kütüphaneci Lale ile konuş</div><div class="task" id="t2">⬜ Üç kayıp kelimeyi bul</div><div class="task" id="t3">⬜ Arşiv kapısını aç</div><div class="task" id="t4">⬜ Gölge Muhafızı'nı yen</div><div style="height:8px;background:#101827;border-radius:8px;margin-top:12px"><div id="bar" style="height:8px;width:0;background:#67e8c0;border-radius:8px"></div></div><small id="pct">İlerleme %0</small></section>
-  <section class="card"><h2>🎒 Bulunan mühürler</h2><div id="inventory">Henüz mühür yok.</div></section>
-  <section class="card"><h2>🧠 Öğrenme alanı</h2><p style="font-size:13px;line-height:1.6">Sözcükte anlam, deyimler, fiiller, yazım kuralları, noktalama ve cümlede anlam sorularını çöz. Her doğru cevap XP ve altın kazandırır.</p><button class="blue" id="reset">↻ Yeniden başla</button></section>
- </aside>
+ <div class="side">
+  <section class="panel">
+   <div class="panelhead"><h2>📜 Şehir görevleri</h2></div>
+   <div class="content">
+    <div id="objective">İlk göreve hazırlan!</div>
+    <div class="progress"><div id="progress"></div></div>
+    <small id="progressText">0 / 5 görev tamamlandı</small>
+    <hr style="border-color:#344966;margin:18px 0">
+    <h3>🏆 Şehir gelişimi</h3>
+    <p id="cityLevel" style="line-height:1.7;color:#cbd8ea">Şehrin yeniden canlanmayı bekliyor.</p>
+    <button class="secondary" id="upgrade" style="width:100%">🏗️ Şehri geliştir · 40 altın</button>
+   </div>
+  </section>
+  <section class="panel">
+   <div class="panelhead"><h2>🗞️ Şehir haberleri</h2><button class="secondary" id="help" style="padding:7px 10px">?</button></div>
+   <div class="content"><div class="log" id="log" aria-live="polite"></div></div>
+  </section>
+  <section class="panel">
+   <div class="content">
+    <h3>🎒 Kahraman çantası</h3>
+    <div id="bag">Henüz özel eşya yok.</div>
+    <button class="secondary" id="save" style="width:100%;margin-top:12px">💾 İlerlemeyi kaydet</button>
+    <button class="secondary" id="reset" style="width:100%;margin-top:8px">↻ Yeni oyun</button>
+   </div>
+  </section>
+ </div>
 </main>
-<div id="overlay">
- <div class="dialog">
-  <div style="font-size:45px">🕵️📚</div>
-  <h2>Kelime Dedektifleri: Kayıp Kütüphane</h2>
-  <p>Eski kütüphanedeki kelime mühürleri kayboldu! Salonları keşfet, karakterlerle konuş, bilmeceleri çöz ve unutulmuş hikâyeyi kurtar.</p>
-  <p>🎮 Keşif • 🧩 Türkçe bilmeceleri • ⭐ Seviye atlama • 🏆 Son görev</p>
-  <input id="name" placeholder="Dedektif adın (isteğe bağlı)" maxlength="16" style="width:100%;padding:12px;border-radius:9px;border:1px solid #60738f;background:#101827;color:white">
-  <p><button class="gold" id="start" style="width:100%">MACERAYA BAŞLA →</button></p>
-  <small>Bilgisayar: WASD / ok tuşları • Telefon: ekrandaki düğmeler</small>
+
+<div id="modal" role="dialog" aria-modal="true">
+ <div class="dialog" id="dialog"></div>
+</div>
+
+<div id="startScreen">
+ <div class="startbox">
+  <div class="logo">🏙️📚⚔️</div>
+  <h2>Türkçe Şehri</h2>
+  <div class="tag">Kelime Krizi</div>
+  <p>Gizemli bir sis şehrin kelimelerini çaldı! Kahramanını seç, bölgeleri keşfet, bilmeceleri çöz ve şehrin renklerini geri getir. Her doğru cevap seni güçlendirecek.</p>
+  <input id="playerName" maxlength="16" placeholder="Kahramanının adı (isteğe bağlı)" aria-label="Kahraman adı">
+  <button class="primary" id="begin" style="width:100%;font-size:17px">MACERAYA BAŞLA →</button>
+  <p style="font-size:12px;margin-bottom:0">Bilgisayar, telefon ve akıllı tahta uyumlu.</p>
  </div>
 </div>
+
 <script>
 (()=>{
+"use strict";
 const $=id=>document.getElementById(id);
-const canvas=$('game'),ctx=canvas.getContext('2d');
-let player={x:100,y:360},started=false,paused=true,room=0,xp=0,gold=0,answered={},seals=[],talked=false,finished=false;
-let keys={},touch={},near=null,active=null,answerChosen=false;
+const canvas=$("city"),ctx=canvas.getContext("2d");
+const places=[
+ {id:"meydan",name:"Kelime Meydanı",emoji:"🏛️",x:360,y:285,cost:0,desc:"Sözcükte anlam ve deyimler",topic:["Sözcükte anlam","Deyimler"]},
+ {id:"orman",name:"Deyim Ormanı",emoji:"🌳",x:140,y:150,cost:0,desc:"Deyimler ve atasözleri",topic:["Deyimler","Atasözleri"]},
+ {id:"okul",name:"Dil Okulu",emoji:"🏫",x:565,y:145,cost:20,desc:"Fiiller, zarflar ve dil bilgisi",topic:["Fiiller","Zarflar"]},
+ {id:"pazar",name:"Noktalama Pazarı",emoji:"🏪",x:150,y:430,cost:35,desc:"Yazım ve noktalama",topic:["Yazım kuralları","Noktalama"]},
+ {id:"kale",name:"Anlam Kalesi",emoji:"🏰",x:565,y:430,cost:55,desc:"Cümlede anlam ve büyük mücadele",topic:["Cümlede anlam","Ana fikir"]}
+];
 const questions=[
- {topic:'Sözcükte anlam',q:'“Bu haber içimi ısıttı.” cümlesinde “içimi ısıttı” sözü ne anlama gelir?',a:['Beni üşüttü','Beni sevindirdi','Beni terletti','Beni korkuttu'],c:1,why:'Burada gerçek sıcaklık değil, mutluluk ve sevinç anlatılır.'},
- {topic:'Deyimler',q:'“Etekleri zil çalmak” deyiminin anlamı nedir?',a:['Çok sevinmek','Çok yorulmak','Korkup kaçmak','Sessiz kalmak'],c:0,why:'Bu deyim çok sevinmek, mutluluktan heyecanlanmak anlamında kullanılır.'},
- {topic:'Fiiller',q:'Hangisi bir iş (kılış) fiilidir?',a:['Uyumak','Sararmak','Kalemi kırmak','Beklemek'],c:2,why:'“Kalemi kırmak” bir nesneyi etkileyen iş bildirir.'},
- {topic:'Cümlede anlam',q:'“Yağmur yağdığı için maç ertelendi.” cümlesinde hangi ilişki vardır?',a:['Amaç-sonuç','Neden-sonuç','Karşılaştırma','Koşul-sonuç'],c:1,why:'Maçın ertelenme nedeni yağmurun yağmasıdır.'},
- {topic:'Yazım kuralları',q:'Hangi cümlede “de” doğru yazılmıştır?',a:['Ben de sizinle geliyorum.','Ev de kimse yok.','Kitap ta masada.','Okul da ki çocuklar.'],c:0,why:'Bağlaç olan “de” ayrı yazılır ve cümleden çıkarıldığında cümle genellikle bozulmaz.'},
- {topic:'Noktalama',q:'Soru anlamı taşıyan cümlenin sonuna hangi işaret gelir?',a:['Nokta','Virgül','Soru işareti','İki nokta'],c:2,why:'Soru cümlelerinin sonuna soru işareti (?) konur.'},
- {topic:'Atasözleri',q:'“Damlaya damlaya göl olur.” atasözü ne anlatır?',a:['Yağmurun zararı vardır','Küçük birikimler zamanla büyür','Göller hemen oluşur','Çalışmak gereksizdir'],c:1,why:'Küçük birikimler zamanla büyük bir değere dönüşebilir.'},
- {topic:'Ana fikir',q:'“Ece her gün kitap okudu. Yeni kelimeler öğrendi ve yazıları zamanla güzelleşti.” Parçanın ana fikri nedir?',a:['Kitaplar pahalıdır','Yazmak çok zordur','Düzenli okumak dil becerisini geliştirir','Herkes aynı kitabı okumalıdır'],c:2,why:'Parça, düzenli okumanın kelime dağarcığını ve yazma becerisini geliştirdiğini anlatır.'}
+{t:"Sözcükte anlam",q:"“Bu sözleri duyunca içim ferahladı.” cümlesinde “içim ferahladı” sözü ne anlatır?",a:["İçeriye hava girdiğini","Rahatlayıp huzur bulduğunu","Hastalandığını","Üzüldüğünü"],c:1,e:"Mecaz anlamda ferahlamak, sıkıntıdan kurtulup rahatlamak demektir.",p:"meydan"},
+{t:"Deyimler",q:"“Burnundan solumak” deyiminin anlamı hangisidir?",a:["Çok sinirli olmak","Çok hızlı koşmak","Soğuk algınlığı geçirmek","Meraklanmak"],c:0,e:"Bu deyim çok öfkeli olmayı anlatır.",p:"orman"},
+{t:"Atasözleri",q:"“Bir elin nesi var, iki elin sesi var.” atasözü neyi vurgular?",a:["Sessiz çalışmayı","Birlikte çalışmanın gücünü","El becerisini","Yalnız olmayı"],c:1,e:"İş birliği yapmak, tek başına çalışmaktan daha etkili olabilir.",p:"orman"},
+{t:"Fiiller",q:"Hangisi oluş fiilidir?",a:["Kapıyı açmak","Yere oturmak","Yaprakların sararması","Kitap okumak"],c:2,e:"Sararmak, öznenin zamanla geçirdiği değişimi bildirir.",p:"okul"},
+{t:"Zarflar",q:"“Ece soruyu dikkatlice çözdü.” cümlesinde “dikkatlice” hangi sözcüğü belirtir?",a:["Ece","Soruyu","Çözdü","Hiçbirini"],c:2,e:"Dikkatlice, çözme işinin nasıl yapıldığını belirtir; durum zarfıdır.",p:"okul"},
+{t:"Yazım kuralları",q:"Hangi cümlede yazım doğrudur?",a:["Bende seninle geliyorum.","Ben de seninle geliyorum.","Ben deki kitabı aldım.","Okul da kimse yok."],c:1,e:"Bağlaç olan “de” ayrı yazılır. Bulunma eki olan -de ise bitişiktir.",p:"pazar"},
+{t:"Noktalama",q:"“Sevgili arkadaşım__ seni özledim.” boşluğa hangi işaret gelmelidir?",a:["Virgül","Soru işareti","Noktalı virgül","Kesme işareti"],c:0,e:"Hitap sözlerinden sonra virgül kullanılabilir.",p:"pazar"},
+{t:"Cümlede anlam",q:"“Elektrikler kesildiği için gösteri ertelendi.” cümlesindeki ilişki nedir?",a:["Amaç-sonuç","Neden-sonuç","Koşul-sonuç","Karşılaştırma"],c:1,e:"Gösterinin ertelenme nedeni elektriğin kesilmesidir.",p:"kale"},
+{t:"Ana fikir",q:"“Mert her gün kitap okudu. Bilmediği kelimeleri not etti. Zamanla kendini daha iyi ifade etmeye başladı.” Parçanın ana fikri nedir?",a:["Her kitap kısa olmalıdır","Not almak gereksizdir","Düzenli okuma dil becerisini geliştirir","Herkes aynı kitabı okumalıdır"],c:2,e:"Parçanın temel mesajı, okumanın kendini ifade etme becerisini geliştirmesidir.",p:"kale"},
+{t:"Sözcükte anlam",q:"Hangisinde “ince” sözcüğü mecaz anlamda kullanılmıştır?",a:["İnce bir ip aldı.","İnce dal hemen kırıldı.","İnce düşünceli bir insandı.","İnce bir defter getirdi."],c:2,e:"“İnce düşünceli” nazik, anlayışlı olmak anlamındadır.",p:"meydan"},
+{t:"Fiiller",q:"Hangisi durum fiilidir?",a:["Uyumak","Büyümek","Kırmak","Sararmak"],c:0,e:"Uyumak, nesneye yönelmeyen bir durum bildirir.",p:"okul"},
+{t:"Atasözleri",q:"“Ayağını yorganına göre uzat.” ne öğütler?",a:["Çok hızlı yürümeyi","İmkânlarına göre harcama yapmayı","Her zaman uyumayı","Yorgan satın almayı"],c:1,e:"İnsan, gelir ve imkânlarını aşmamalıdır.",p:"orman"},
+{t:"Cümlede anlam",q:"“Sınavı kazanmak için düzenli çalıştı.” cümlesinde hangi anlam ilişkisi vardır?",a:["Neden-sonuç","Amaç-sonuç","Karşılaştırma","Benzetme"],c:1,e:"Düzenli çalışmanın amacı sınavı kazanmaktır.",p:"kale"},
+{t:"Noktalama",q:"Hangisinin sonuna soru işareti konmalıdır?",a:["Ne güzel bir gün","Saat kaçta geleceksin","Eyvah otobüs kaçtı","Kitabı masaya koy"],c:1,e:"Soru anlamı taşıyan cümlelerin sonuna soru işareti konur.",p:"pazar"},
+{t:"Zarflar",q:"“Çocuklar dışarıda neşeyle oynuyor.” cümlesinde “neşeyle” hangi sorunun cevabıdır?",a:["Ne zaman?","Nereye?","Nasıl?","Ne kadar?"],c:2,e:"Neşeyle, oynama eyleminin nasıl yapıldığını belirtir.",p:"okul"}
 ];
-const rooms=[
- {name:'📚 Büyük Kütüphane',color:'#38644e',objects:[
-  {id:'lale',x:180,y:180,type:'npc',name:'Lale',emoji:'🧙'},
-  {id:'book1',x:360,y:120,type:'book',name:'Parlayan kitap',emoji:'📕',q:0,seal:'Anlam Mührü'},
-  {id:'book2',x:570,y:320,type:'book',name:'Eski kitap',emoji:'📘',q:1,seal:'Deyim Mührü'},
-  {id:'door1',x:735,y:230,type:'door',name:'Arşiv kapısı'}
- ]},
- {name:'🌿 Gizli Bahçe',color:'#31634d',objects:[
-  {id:'book3',x:210,y:180,type:'book',name:'Bahçe günlüğü',emoji:'📗',q:2,seal:'Fiil Mührü'},
-  {id:'book4',x:450,y:330,type:'book',name:'Yaşlı ağacın notu',emoji:'📙',q:3,seal:'Cümle Mührü'},
-  {id:'door2',x:735,y:230,type:'door',name:'Arşiv kapısı'}
- ]},
- {name:'🏛️ Unutulmuş Arşiv',color:'#61513e',objects:[
-  {id:'book5',x:200,y:160,type:'book',name:'Eski tablet',emoji:'📜',q:4,seal:'Yazım Mührü'},
-  {id:'book6',x:390,y:330,type:'book',name:'Noktalama sandığı',emoji:'🧰',q:5,seal:'Noktalama Mührü'},
-  {id:'book7',x:550,y:150,type:'book',name:'Bilgelik kitabı',emoji:'📖',q:6,seal:'Bilgelik Mührü'},
-  {id:'boss',x:680,y:340,type:'boss',name:'Gölge Muhafızı',emoji:'👹'}
- ]}
-];
-function roundRect(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+let state={name:"Kahraman",xp:0,coins:30,hearts:3,done:[],unlocked:["meydan","orman"],built:[],bag:[],boss:false,started:false};
+let activePlace=null,currentQ=null,answerLock=false,challengeSet=[],challengeIndex=0;
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+function log(s){let el=document.createElement("div");el.textContent="• "+s;$("log").prepend(el);while($("log").children.length>16)$("log").lastChild.remove()}
+function level(){return 1+Math.floor(state.xp/100)}
+function sync(){
+ $("level").textContent=level();$("xp").textContent=state.xp%100;$("coins").textContent=state.coins;$("hearts").textContent=state.hearts;$("heroName").textContent="🧙 "+state.name;
+ $("areaTitle").textContent=(places.find(p=>p.id===activePlace)||places[0]).emoji+" "+(places.find(p=>p.id===activePlace)||places[0]).name;
+ $("progress").style.width=Math.min(100,state.done.length/5*100)+"%";
+ $("progressText").textContent=state.done.length+" görev tamamlandı";
+ $("objective").textContent=state.boss?"🏆 Şehir kurtuldu! Büyük başarı!":state.done.length<5?"📚 "+(5-state.done.length)+" görev daha tamamla, sonra kalenin gizemini çöz!":"⚔️ Anlam Kalesi'ndeki Kelime Gölgesi'ne meydan oku!";
+ $("cityLevel").textContent=state.built.length?"Şehrinde "+state.built.length+" yeni yapı var. Halkın umutlanıyor!":"Binaları onarmak için görevlerden altın kazan.";
+ $("upgrade").disabled=state.coins<40||state.built.length>=3;
+ $("upgrade").textContent=state.built.length>=3?"✅ Şehir tamamen gelişti":"🏗️ Şehri geliştir · 40 altın";
+ $("bag").textContent=state.bag.length?state.bag.join(" • "):"Henüz özel eşya yok.";
+ $("locations").innerHTML="";
+ places.forEach(p=>{
+  let unlocked=state.unlocked.includes(p.id);
+  let b=document.createElement("button");b.className="loc"+(!unlocked?" locked":"")+(activePlace===p.id?" active":"");
+  b.innerHTML=`<span class="emoji">${p.emoji}</span><b>${p.name}</b><small>${unlocked?p.desc:"🔒 Açmak için "+p.cost+" altın"}</small>`;
+  b.disabled=!unlocked;b.onclick=()=>visit(p.id);$("locations").appendChild(b);
+ });
+ draw();
+}
+function visit(id){
+ activePlace=id;
+ let p=places.find(x=>x.id===id);
+ log(p.name+" bölgesine gittin.");
+ if(id==="kale"&&state.done.length>=5&&!state.boss){bossIntro();sync();return}
+ if(id==="kale"&&state.done.length<5){say("Kale kapısı","Kalenin kapısında beş görev mührü gerekiyor. Önce diğer bölgelerdeki görevleri tamamla.");sync();return}
+ const available=questions.filter(q=>q.p===id&&!state.done.includes(questions.indexOf(q)));
+ if(available.length)askQuestion(questions.indexOf(rand(available)));
+ else if(id==="meydan")say("Kelime Meydanı","Şehir halkı senden yeni görevler bekliyor. Diğer bölgeleri ziyaret et!");
+ else if(id==="kale"&&state.boss)say("Kahraman","Kelime Gölgesi yenildi. Şehir yeniden ışıl ışıl!");
+ else say(p.name,"Buradaki görevleri tamamladın! Şimdilik tekrar edebilir, yeni bölgeler açabilirsin.");
+ sync();
+}
+function say(title,msg){
+ show(`<div class="tag">Şehirden mesaj</div><h2>${title}</h2><p style="line-height:1.7">${msg}</p><div class="actions"><button class="primary" id="close">Devam et</button></div>`);
+ $("close").onclick=hide;
+}
+function show(html){$("dialog").innerHTML=html;$("modal").style.display="flex"}
+function hide(){$("modal").style.display="none"}
+function askQuestion(index,extra){
+ const q=questions[index];if(!q)return;
+ currentQ=index;answerLock=false;
+ show(`<div class="tag">Türkçe görevi · ${q.t}</div><h2>${extra||"Kelime sınavı"}</h2><div class="question">${q.q}</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="actions"><button class="primary" id="continue" disabled>Devam et →</button><button class="secondary" id="leave">Vazgeç</button></div>`);
+ const answerBox=$("answers");
+ const shuffled=q.a.map((a,i)=>({a,i})).sort(()=>Math.random()-.5);
+ shuffled.forEach(item=>{
+  const b=document.createElement("button");b.className="answer";b.textContent=item.a;
+  b.onclick=()=>{
+   if(answerLock)return;answerLock=true;
+   const correct=item.i===q.c;
+   [...answerBox.children].forEach(el=>el.disabled=true);
+   if(correct){
+    b.classList.add("correct");state.xp+=25;state.coins+=12;
+    if(!state.done.includes(index))state.done.push(index);
+    if(!state.bag.includes(q.t))state.bag.push(q.t);
+    $("feedback").style.background="#123b31";
+    $("feedback").innerHTML="<b>✅ Harika! +25 XP, +12 altın</b><br>"+q.e;
+    log("Doğru cevap: "+q.t+" görevini öğrendin.");
+   }else{
+    b.classList.add("wrong");state.hearts=Math.max(0,state.hearts-1);
+    const correctText=q.a[q.c];
+    [...answerBox.children].forEach(el=>{if(el.textContent===correctText)el.classList.add("correct")});
+    $("feedback").style.background="#402b30";
+    $("feedback").innerHTML="<b>🧠 Birlikte öğrenelim.</b><br>Doğru cevap: "+correctText+".<br>"+q.e;
+    log("Bir soruyu tekrar öğrendin.");
+    if(state.hearts===0){state.hearts=3;log("Moral topladın! Canların yenilendi.");$("feedback").innerHTML+="<br><b>💚 Biraz dinlendin, canların yenilendi.</b>"}
+   }
+   $("feedback").style.display="block";$("continue").disabled=false;sync();
+  };
+  answerBox.appendChild(b);
+ });
+ $("continue").onclick=()=>{if(!answerLock)return;hide();sync();if(extra==="Kelime Gölgesi")bossAfterAnswer()};
+ $("leave").onclick=hide;
+}
+function bossIntro(){
+ show(`<div class="tag">Bölüm sonu savaşı</div><h2>👾 Kelime Gölgesi</h2><p style="line-height:1.7">“Şehirde hiçbir kelimenin anlamı kalmayacak!” diye bağırıyor Kelime Gölgesi. Onu yenmek için son beş sorudan oluşan bir dil düellosuna gir.</p><p>❤️ 3 canın var. Her doğru cevap saldırı gücünü artırır. Açıklamalar sana yardımcı olur.</p><div class="actions"><button class="primary" id="fight">Düelloya gir ⚔️</button><button class="secondary" id="retreat">Hazırlan</button></div>`);
+ $("fight").onclick=()=>{challengeSet=[...questions.keys()].sort(()=>Math.random()-.5).slice(0,5);challengeIndex=0;hide();bossQuestion()};
+ $("retreat").onclick=hide;
+}
+function bossQuestion(){
+ if(challengeIndex>=challengeSet.length){state.boss=true;state.xp+=75;state.coins+=60;state.bag.push("🏆 Kelime Gölgesi Kupası");log("Kelime Gölgesi yenildi! +75 XP, +60 altın");sync();say("🏆 Şehir kurtuldu!","Tebrikler "+state.name+"! Kelime Gölgesi'ni yendin. Şehrin bütün ışıkları geri geldi. Türkçe bilginle gerçek bir kahraman oldun.");return}
+ askQuestion(challengeSet[challengeIndex],"Kelime Gölgesi");
+ const oldContinue=$("continue").onclick;
+ $("continue").onclick=()=>{if(!answerLock)return;hide();challengeIndex++;bossQuestion()};
+}
+function bossAfterAnswer(){}
+function unlock(){
+ const candidates=places.filter(p=>!state.unlocked.includes(p.id)&&state.coins>=p.cost);
+ if(!candidates.length){log("Yeni bölge açmak için biraz daha altın kazan.");return}
+ const p=candidates[0];state.coins-=p.cost;state.unlocked.push(p.id);state.xp+=5;
+ log("Yeni bölge açıldı: "+p.name);sync();say("Yeni bölge! "+p.emoji,p.name+" artık keşfedilebilir. "+p.desc+".");
+}
+$("upgrade").onclick=()=>{
+ if(state.coins<40||state.built.length>=3)return;
+ state.coins-=40;
+ const buildings=[["🏫","Dil Atölyesi"],["🌳","Bilgelik Bahçesi"],["🗼","Kelime Kulesi"]];
+ state.built.push(buildings[state.built.length][1]);state.xp+=15;
+ log("Şehir geliştirildi: "+buildings[state.built.length-1][1]);sync();
+ say("Şehir gelişiyor!",buildings[state.built.length-1][0]+" "+buildings[state.built.length-1][1]+" kuruldu! Şehrin daha da güzelleşti.");
+};
+$("help").onclick=()=>say("Nasıl oynanır?","1. Bölgeleri seç.<br>2. Türkçe sorularını cevapla.<br>3. Doğru cevaplardan altın ve XP kazan.<br>4. Yeni bölgeler aç.<br>5. Beş görevden sonra Kelime Gölgesi'ne meydan oku.<br>6. Altınlarını şehri geliştirmek için kullan.");
+$("begin").onclick=()=>{
+ state.name=$("playerName").value.trim()||"Kelime Kahramanı";
+ state.started=true;$("startScreen").style.display="none";activePlace="meydan";
+ log("Maceran başladı, "+state.name+"!");say("Şehir senden yardım istiyor!","Kelime Meydanı'na hoş geldin. Şehrin ilk görevini tamamlamak için meydanı ziyaret et.");sync();
+};
+$("save").onclick=()=>{
+ try{localStorage.setItem("turkceSehriSave",JSON.stringify(state));log("İlerleme bu tarayıcıya kaydedildi.");say("Kayıt tamamlandı","İlerlemen bu tarayıcıda saklandı. Başka cihazlarda görünmeyebilir.");}
+ catch(e){say("Kayıt yapılamadı","Tarayıcın yerel kayda izin vermiyor olabilir. Oyunu açık tut.");}
+};
+$("reset").onclick=()=>{if(confirm("Yeni oyun başlatılsın mı? İlerlemen sıfırlanacak.")){try{localStorage.removeItem("turkceSehriSave")}catch(e){}location.reload()}};
 function draw(){
  const W=canvas.width,H=canvas.height;
  ctx.clearRect(0,0,W,H);
- ctx.fillStyle=rooms[room].color;ctx.fillRect(0,0,W,H);
- // patterned floor
+ ctx.fillStyle="#386c53";ctx.fillRect(0,0,W,H);
+ // grass tiles
  for(let y=0;y<H;y+=40)for(let x=0;x<W;x+=40){
-  ctx.fillStyle=((x+y)/40)%2?'#ffffff08':'#00000008';ctx.fillRect(x,y,40,40);
-  ctx.strokeStyle='#ffffff0b';ctx.strokeRect(x,y,40,40);
+  ctx.fillStyle=((x/40+y/40)%2)?"#ffffff08":"#071b1608";ctx.fillRect(x,y,40,40);
  }
- // walls and windows
- ctx.fillStyle='#503b35';ctx.fillRect(0,0,W,28);ctx.fillRect(0,H-20,W,20);ctx.fillRect(0,0,20,H);ctx.fillRect(W-20,0,20,H);
- for(let x=55;x<730;x+=110){roundRect(x,35,70,12,3,'#b88a58');ctx.fillStyle='#8ed6d1';ctx.fillRect(x+7,38,56,5)}
- // rugs
- roundRect(275,210,250,115,12,'#8c4d45');roundRect(285,220,230,95,8,'#d0a75c');
- // shelves
- for(let i=0;i<5;i++){
-  let x=35+i*145,y=i%2?75:395;
-  roundRect(x,y,105,45,4,'#573b2d');ctx.fillStyle='#bc8d58';ctx.fillRect(x,y+6,105,5);
-  let colors=['#d35d52','#e8bf60','#529f8f','#7184c2','#c57c48'];
-  for(let j=0;j<8;j++){ctx.fillStyle=colors[(i+j)%colors.length];ctx.fillRect(x+5+j*12,y+12,9,27)}
+ // river
+ ctx.fillStyle="#327f9b";ctx.beginPath();ctx.moveTo(0,220);ctx.bezierCurveTo(150,175,240,290,350,255);ctx.bezierCurveTo(470,215,590,290,720,240);ctx.lineTo(720,300);ctx.bezierCurveTo(580,350,480,275,360,310);ctx.bezierCurveTo(230,340,130,225,0,280);ctx.fill();
+ ctx.strokeStyle="#75d4dc";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,240);ctx.bezierCurveTo(150,195,240,310,350,275);ctx.bezierCurveTo(470,235,590,310,720,260);ctx.stroke();
+ // winding roads
+ ctx.lineCap="round";ctx.lineWidth=42;ctx.strokeStyle="#bda77b";ctx.beginPath();ctx.moveTo(360,590);ctx.lineTo(360,330);ctx.lineTo(360,285);ctx.lineTo(145,285);ctx.moveTo(360,285);ctx.lineTo(570,285);ctx.lineTo(570,145);ctx.moveTo(360,285);ctx.lineTo(145,430);ctx.moveTo(360,285);ctx.lineTo(565,430);ctx.stroke();
+ ctx.lineWidth=2;ctx.strokeStyle="#e3d1a2";ctx.stroke();
+ // trees
+ for(let i=0;i<23;i++){
+  const x=(i*137+35)%700+10,y=(i*89+50)%560+10;
+  if(Math.abs(y-285)<55||Math.abs(x-360)<45||Math.abs(y-145)<40&&Math.abs(x-565)<55)continue;
+  ctx.fillStyle="#553f2c";ctx.fillRect(x-5,y+7,10,18);
+  ctx.fillStyle=i%2?"#1e6a4d":"#287b50";ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#3a9660";ctx.beginPath();ctx.arc(x-5,y-5,10,0,Math.PI*2);ctx.fill();
  }
- // objects
- near=null;let nearest=70;
- for(const o of rooms[room].objects){
-  let d=Math.hypot(o.x-player.x,o.y-player.y);
-  if(d<nearest){nearest=d;near=o}
-  if(o.type==='npc'){
-   ctx.font='31px system-ui';ctx.textAlign='center';ctx.fillText(o.emoji,o.x,o.y-5);
-   roundRect(o.x-30,o.y+4,60,22,7,'#152238');ctx.fillStyle='white';ctx.font='12px system-ui';ctx.fillText(o.name,o.x,o.y+19);
-   if(!talked)glow(o.x,o.y-10);
-  }else if(o.type==='book'){
-   glow(o.x,o.y);ctx.font='30px system-ui';ctx.textAlign='center';ctx.fillText(o.emoji,o.x,o.y+10);
-   if(!answered[o.id]){ctx.fillStyle='#fff0a9';ctx.font='11px system-ui';ctx.fillText('İPUCU',o.x,o.y+28)}
-  }else if(o.type==='door'){
-   roundRect(o.x-20,o.y-30,40,60,5,'#69472f');roundRect(o.x-13,o.y-23,26,48,3,'#d6b36e');
-   ctx.fillStyle='#614026';ctx.fillRect(o.x+6,o.y,4,4);ctx.font='12px system-ui';ctx.fillStyle='white';ctx.fillText('ARŞİV',o.x,o.y+43);
-  }else if(o.type==='boss'){
-   ctx.font='42px system-ui';ctx.textAlign='center';ctx.fillText(o.emoji,o.x,o.y+12);glow(o.x,o.y);
-   ctx.fillStyle='white';ctx.font='12px system-ui';ctx.fillText(o.name,o.x,o.y+34);
+ // city center
+ drawBuilding(360,285,62,54,"#d5b476","#fff0c5");
+ // landmarks
+ places.forEach(p=>{
+  let locked=!state.unlocked.includes(p.id);
+  const x=p.x,y=p.y;
+  if(p.id==="orman"){
+   ctx.fillStyle="#79502f";ctx.fillRect(x-5,y-3,10,28);
+   ctx.fillStyle="#26744c";ctx.beginPath();ctx.arc(x,y-8,28,0,Math.PI*2);ctx.fill();
+   ctx.fillStyle="#45a96b";ctx.beginPath();ctx.arc(x-8,y-15,15,0,Math.PI*2);ctx.fill();
+  }else if(p.id==="meydan")drawBuilding(x,y,62,55,"#b98b53","#f4db9e");
+  else if(p.id==="okul")drawBuilding(x,y,67,48,"#c36f60","#f5c9a4");
+  else if(p.id==="pazar")drawBuilding(x,y,60,44,"#6487bc","#d5e7fa");
+  else drawBuilding(x,y,72,68,"#8c84ad","#e3d8ff");
+  if(state.built.length&&p.id==="meydan"){
+   ctx.font="19px system-ui";ctx.fillText("🏫",x+45,y+40);
   }
- }
- // player
- ctx.save();ctx.translate(player.x,player.y);
- ctx.fillStyle='#0005';ctx.beginPath();ctx.ellipse(0,18,16,6,0,0,Math.PI*2);ctx.fill();
- roundRect(-12,-12,24,30,6,'#e8b84e');roundRect(-10,-28,20,19,6,'#e8c6a0');
- roundRect(-12,-31,24,8,4,'#43352d');ctx.fillStyle='#253a55';ctx.fillRect(-8,-2,16,13);
- ctx.fillStyle='#fff';ctx.fillRect(-5,-21,3,3);ctx.fillRect(3,-21,3,3);
- ctx.restore();
- if(near){ctx.strokeStyle='#ffe58a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(near.x,near.y,32,0,Math.PI*2);ctx.stroke();$('hint').textContent='E tuşu veya Etkileşim: '+near.name}
- else $('hint').textContent='WASD / ok tuşlarıyla yürü • Işıklı nesnelere yaklaş';
- if(finished){ctx.fillStyle='#07111dcc';ctx.fillRect(0,0,W,H);ctx.fillStyle='#ffd166';ctx.font='bold 34px system-ui';ctx.textAlign='center';ctx.fillText('KÜTÜPHANE KURTULDU!',W/2,H/2);ctx.fillStyle='white';ctx.font='19px system-ui';ctx.fillText('Türkçe Dedektifi oldun! 🏆',W/2,H/2+36)}
-}
-function glow(x,y){let g=ctx.createRadialGradient(x,y,2,x,y,38);g.addColorStop(0,'#ffe58a55');g.addColorStop(1,'#ffe58a00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,38,0,Math.PI*2);ctx.fill()}
-function update(){
- $('level').textContent=1+Math.floor(xp/100);$('xp').textContent=xp%100;$('gold').textContent=gold;
- $('inventory').textContent=seals.length?seals.join(' • '):'Henüz mühür yok.';
- const tasks=[talked,seals.length>=1,room>=2,finished];
- ['t1','t2','t3','t4'].forEach((id,i)=>$(id).textContent=(tasks[i]?'✅ ':'⬜ ')+['Kütüphaneci Lale ile konuş','Üç kayıp kelimeyi bul','Arşiv kapısını aç','Gölge Muhafızı’nı yen'][i]);
- let p=finished?100:Math.round((Number(talked)+Math.min(seals.length,3)/3+room/2)/3*100);
- $('bar').style.width=p+'%';$('pct').textContent='İlerleme %'+p;
- $('mission').textContent=finished?'Görev tamamlandı!':!talked?'Görev: Lale ile konuş':seals.length<3?'Görev: Kayıp mühürleri bul':'Görev: Muhafızı bul';
- $('room').textContent=rooms[room].name;
-}
-function move(dt){
- if(paused||finished)return;
- let dx=0,dy=0;
- if(keys.ArrowLeft||keys.a||keys.A||touch.left)dx--;
- if(keys.ArrowRight||keys.d||keys.D||touch.right)dx++;
- if(keys.ArrowUp||keys.w||keys.W||touch.up)dy--;
- if(keys.ArrowDown||keys.s||keys.S||touch.down)dy++;
- if(dx&&dy){dx*=.707;dy*=.707}
- player.x=Math.max(35,Math.min(765,player.x+dx*180*dt));
- player.y=Math.max(50,Math.min(455,player.y+dy*180*dt));
-}
-function ask(q,title,onRight){
- paused=true;answerChosen=false;active={onRight};
- $('overlay').style.display='flex';
- const d=document.querySelector('.dialog');
- d.innerHTML=`<div style="color:#67e8c0;font-weight:bold">${q.topic}</div><h2>${title}</h2><p>${q.q}</p><div id="answers"></div><div id="feedback"></div><button class="gold" id="next" disabled>Devam et →</button>`;
- q.a.forEach((a,i)=>{
-  let b=document.createElement('button');b.className='answer';b.textContent=String.fromCharCode(65+i)+') '+a;
-  b.onclick=()=>{
-   if(answerChosen)return;answerChosen=true;
-   const correct=i===q.c;
-   [...$('answers').children].forEach((el,j)=>{el.disabled=true;if(j===q.c)el.style.borderColor='#67e8c0'});
-   b.style.background=correct?'#185744':'#6b293b';
-   $('feedback').style.display='block';
-   $('feedback').innerHTML=(correct?'✅ Doğru cevap! ':'🧠 Tekrar öğrenelim. ')+q.why;
-   if(correct){xp+=25;gold+=10}
-   $('next').disabled=false;update();
-  };
-  $('answers').appendChild(b);
+  ctx.textAlign="center";ctx.font="25px system-ui";ctx.fillText(locked?"🔒":p.emoji,x,y-38);
+  ctx.fillStyle="#101727e8";ctx.beginPath();ctx.roundRect(x-63,y+35,126,23,8);ctx.fill();
+  ctx.fillStyle=locked?"#aab5c8":"#fff";ctx.font="bold 11px system-ui";ctx.fillText(locked?"KİLİTLİ":p.name,x,y+50);
+  if(activePlace===p.id){ctx.strokeStyle="#ffd166";ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,43,0,Math.PI*2);ctx.stroke()}
  });
- $('next').onclick=()=>{
-  if(!answerChosen)return;
-  $('overlay').style.display='none';paused=false;
-  if(active&&active.onRight)active.onRight($('feedback').textContent.startsWith('✅'));
-  active=null;update();
- };
+ // hero marker
+ const hero=places.find(p=>p.id===activePlace)||places[0];
+ ctx.fillStyle="#0005";ctx.beginPath();ctx.ellipse(hero.x,hero.y+19,15,6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#f2bd59";ctx.beginPath();ctx.roundRect(hero.x-11,hero.y-24,22,34,6);ctx.fill();
+ ctx.fillStyle="#f3d1aa";ctx.beginPath();ctx.arc(hero.x,hero.y-29,10,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle="#47352c";ctx.fillRect(hero.x-10,hero.y-38,20,7);
+ ctx.fillStyle="#28354d";ctx.fillRect(hero.x-8,hero.y-4,16,17);
+ ctx.fillStyle="#fff";ctx.fillRect(hero.x-4,hero.y-31,3,3);ctx.fillRect(hero.x+3,hero.y-31,3,3);
+ // sparkle particles
+ for(let i=0;i<10;i++){let x=(i*71+Math.floor(Date.now()/120)%720)%720,y=(i*53+60)%590;ctx.fillStyle="#fff7c955";ctx.fillRect(x,y,3,3)}
 }
-function interact(){
- if(paused)return;
- if(!near){toast('Bir karaktere veya nesneye yaklaş!');return}
- const o=near;
- if(o.id==='lale'){
-  ask(questions[0],'Kütüphaneci Lale',ok=>{if(ok&&!talked){talked=true;addSeal('Anlam Mührü')}update()});
- }else if(o.type==='book'){
-  if(answered[o.id]){toast('Bu ipucunu zaten buldun!');return}
-  ask(questions[o.q],o.name,ok=>{if(ok){answered[o.id]=true;addSeal(o.seal)}update()});
- }else if(o.type==='door'){
-  if(room===0){if(seals.length<2){toast('Kapı için en az iki mühür bul!');return}room=1;player.x=80;player.y=250}
-  else if(room===1){room=2;player.x=80;player.y=250}
-  update();
- }else if(o.type==='boss'){
-  if(seals.length<3){toast('Muhafız için üç mühür topla!');return}
-  ask(questions[7],'Gölge Muhafızı',ok=>{if(ok){xp+=50;gold+=30;finished=true;toast('Muhafız yenildi! Kütüphane kurtuldu!')}else toast('Muhafız hâlâ güçlü. Tekrar dene!');update()});
- }
+function drawBuilding(x,y,w,h,wall,roof){
+ ctx.fillStyle="#0004";ctx.fillRect(x-w/2+4,y-h/2+8,w,h);
+ ctx.fillStyle=wall;ctx.fillRect(x-w/2,y-h/2,w,h);
+ ctx.fillStyle=roof;ctx.beginPath();ctx.moveTo(x-w/2-8,y-h/2);ctx.lineTo(x,y-h/2-28);ctx.lineTo(x+w/2+8,y-h/2);ctx.closePath();ctx.fill();
+ ctx.fillStyle="#594632";ctx.fillRect(x-8,y+4,16,h/2);
+ ctx.fillStyle="#8bd5e5";ctx.fillRect(x-w/2+9,y-h/2+10,12,12);ctx.fillRect(x+w/2-21,y-h/2+10,12,12);
 }
-function addSeal(s){if(!seals.includes(s)){seals.push(s);gold+=5;toast('Yeni mühür bulundu: '+s)}}
-function toast(s){$('hint').textContent=s}
-function loop(t){let dt=Math.min((t-(loop.last||t))/1000,.04);loop.last=t;move(dt);draw();requestAnimationFrame(loop)}
-function reset(){player={x:100,y:360};started=false;paused=true;room=0;xp=0;gold=0;answered={};seals=[];talked=false;finished=false;$('overlay').style.display='flex';$('start').textContent='MACERAYA BAŞLA →';update()}
-window.addEventListener('keydown',e=>{keys[e.key]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(e.key.toLowerCase()==='e'||e.key==='Enter')interact()});
-window.addEventListener('keyup',e=>keys[e.key]=false);
-document.querySelectorAll('[data-dir]').forEach(b=>{
- const d=b.dataset.dir;
- b.addEventListener('pointerdown',e=>{e.preventDefault();touch[d]=true});
- ['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,()=>touch[d]=false));
-});
-$('start').onclick=()=>{started=true;paused=false;$('overlay').style.display='none';update()};
-$('talk').onclick=interact;
-$('journal').onclick=()=>{paused=true;ask({topic:'Dedektif Günlüğü',q:`${seals.length} mühür buldun. ${talked?'Lale ile konuştun.':'Lale seni bekliyor.'} Doğru cevaplar XP kazandırır.`,a:['Devam et'],c:0,why:'Maceraya devam et!'},'Görevlerin',()=>{})};
-$('reset').onclick=()=>{if(confirm('Oyunu baştan başlatmak istiyor musun?'))location.reload()};
-function resize(){/* canvas oyun alanı sabit koordinatlarda kalır */}
-update();requestAnimationFrame(loop);
+sync();
 })();
 </script>
 </body>
