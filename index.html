@@ -3,340 +3,517 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Türkçe Şehri: Kelime Krizi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Türkçe Kahramanı 3D - Kayıp Krallık</title>
 <style>
-:root{--bg:#101727;--panel:#1c2940;--line:#344966;--gold:#ffd166;--green:#70e1b0;--text:#f5f7ff}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Arial,sans-serif}
-button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 15px;font-weight:750;transition:transform .15s,filter .15s}
-button:hover{filter:brightness(1.1);transform:translateY(-1px)}
-button:focus-visible{outline:3px solid white;outline-offset:3px}
-.primary{background:var(--gold);color:#202333}
-.secondary{background:#30435f;color:white;border:1px solid #526b8e}
-header{padding:16px clamp(12px,3vw,30px);background:#172238;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-h1{font-size:clamp(21px,3vw,32px);margin:0;color:var(--gold)}
-.subtitle{color:#b5c6de;font-size:13px;margin-top:4px}
-.stats{display:flex;gap:8px;flex-wrap:wrap}
-.stat{background:#263650;border:1px solid #425674;border-radius:12px;padding:9px 12px;font-size:13px}
-.stat b{color:var(--gold)}
-main{max-width:1250px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:15px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.panelhead{padding:15px 17px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
-.panelhead h2{font-size:17px;margin:0}
-.world{position:relative;overflow:hidden;background:#31594b;min-height:370px}
-#city{display:block;width:100%;height:auto;aspect-ratio:1.22;touch-action:manipulation}
-.worldlabel{position:absolute;top:12px;left:12px;background:#101727d9;border:1px solid #ffffff38;border-radius:12px;padding:9px 12px;font-weight:700}
-.worldhint{position:absolute;bottom:10px;left:10px;right:10px;text-align:center;background:#101727db;padding:9px;border-radius:10px;font-size:12px;color:#dbe8f8}
-.content{padding:16px}
-h2,h3,p{margin-top:0}
-.locations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.loc{background:#253852;border:1px solid #415876;border-radius:14px;padding:13px;text-align:left;color:white;min-width:0}
-.loc .emoji{font-size:27px;display:block;margin-bottom:7px}
-.loc small{display:block;color:#c3d2e7;line-height:1.4;margin-top:5px;font-weight:400}
-.loc.locked{opacity:.48}
-.loc.active{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
-.side{display:flex;flex-direction:column;gap:15px}
-.progress{height:9px;background:#0f1725;border-radius:20px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:linear-gradient(90deg,#50d5a0,#c9ef84);width:0;transition:width .3s}
-.log{font-size:13px;line-height:1.7;color:#d5e2f3;max-height:150px;overflow:auto}
-.log div{border-bottom:1px solid #34435a;padding:5px 0}
-#modal{position:fixed;inset:0;background:#070c16dc;z-index:10;display:none;align-items:center;justify-content:center;padding:14px}
-.dialog{width:min(620px,100%);max-height:92vh;overflow:auto;background:#1b2a42;border:1px solid #526987;border-radius:20px;padding:clamp(18px,4vw,28px);box-shadow:0 20px 80px #0009}
-.dialog h2{color:var(--gold);font-size:25px}
-.tag{font-size:12px;font-weight:800;letter-spacing:.7px;color:var(--green);text-transform:uppercase}
-.question{font-size:20px;line-height:1.5;margin:16px 0}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.answer{background:#2c405d;border:1px solid #49617f;color:white;text-align:left;line-height:1.45}
-.answer.correct{background:#17553f;border-color:#70e1b0}
-.answer.wrong{background:#6b2b3b;border-color:#ff8e9a}
-.answer:disabled{cursor:default}
-.feedback{display:none;padding:13px;margin-top:13px;border-radius:12px;line-height:1.55;background:#132f30}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
-#startScreen{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at 50% 10%,#385e68,#121a2c 65%);display:flex;align-items:center;justify-content:center;padding:16px}
-.startbox{max-width:680px;text-align:center;background:#15243beF;border:1px solid #617993;border-radius:24px;padding:clamp(20px,5vw,40px);box-shadow:0 25px 80px #0007}
-.logo{font-size:70px}
-.startbox h2{font-size:clamp(29px,6vw,48px);color:var(--gold);margin:5px 0 12px}
-.startbox p{line-height:1.7;color:#d5e3f7}
-#playerName{width:100%;padding:13px;background:#101a2a;color:white;border:1px solid #536783;border-radius:11px;margin:10px 0 14px;font:inherit}
-@media(max-width:850px){main{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.world{min-height:0}}
-@media(max-width:520px){main{padding:9px;gap:10px}.side{display:flex}.locations{gap:7px}.loc{padding:10px}.answers{grid-template-columns:1fr}.stat{padding:7px 9px}.worldhint{font-size:11px}}
+body{margin:0;overflow:hidden;background:#101827;color:white;font-family:Arial,sans-serif;touch-action:none}
+#game{position:fixed;inset:0}
+canvas{display:block}
+#top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
+#stats{display:flex;gap:7px;flex-wrap:wrap}
+.stat{background:#17243bdc;border:1px solid #ffffff35;padding:9px 12px;border-radius:12px;font-weight:bold;font-size:13px}
+#helpButton{pointer-events:auto;border:1px solid #ffffff55;background:#17243b;color:white;border-radius:50%;width:38px;height:38px;font-size:19px;font-weight:bold}
+#mission{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#17243be8;border:1px solid #ffffff35;border-radius:12px;padding:10px 15px;text-align:center;font-size:13px;max-width:90%;width:max-content}
+#joystick{position:fixed;left:22px;bottom:25px;width:145px;height:145px;border-radius:50%;background:#17243b88;border:3px solid #ffffff80;touch-action:none;display:none}
+#stick{position:absolute;left:50%;top:50%;width:57px;height:57px;border-radius:50%;background:#ffd166;border:3px solid white;transform:translate(-50%,-50%);box-shadow:0 4px 14px #0008}
+#mobileActions{position:fixed;right:20px;bottom:27px;display:none;gap:12px;align-items:flex-end}
+.action{width:68px;height:68px;border-radius:50%;background:#ffd166;color:#172033;border:3px solid white;font-size:12px;font-weight:900;box-shadow:0 5px 15px #0008;touch-action:none}
+.action.small{width:57px;height:57px;background:#75d8bc}
+#keyboardHint{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);background:#17243bdc;padding:9px 15px;border-radius:10px;font-size:12px;white-space:nowrap}
+#toast{position:fixed;top:125px;left:50%;transform:translateX(-50%);background:#17243bf2;border:1px solid #ffd166;border-radius:12px;padding:12px 18px;display:none;text-align:center;max-width:90%;z-index:5}
+#modal{position:fixed;inset:0;background:#050a13d9;display:none;align-items:center;justify-content:center;padding:14px;z-index:10}
+.box{width:min(540px,100%);max-height:90vh;overflow:auto;background:#1b2b46;border:1px solid #637b9c;border-radius:19px;padding:22px;box-shadow:0 20px 70px #0009}
+.box h2{color:#ffd166;margin-top:5px}
+.box p{line-height:1.6;color:#e0e9f7}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
+.answer{background:#304665;color:white;padding:13px;border:1px solid #536d91;border-radius:10px;text-align:left}
+.answer:disabled{opacity:.8}
+button{cursor:pointer}
+.primary{background:#ffd166;color:#172033;border:0;border-radius:10px;padding:12px 17px;font-weight:bold}
+.secondary{background:#344b6b;color:white;border:1px solid #637b9c;border-radius:10px;padding:12px 17px}
+#start{position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#3b765e,#111b2c 70%);display:flex;align-items:center;justify-content:center;padding:15px;z-index:20}
+#start .box{text-align:center}
+#start h1{font-size:clamp(28px,6vw,48px);color:#ffd166}
+#name{width:100%;padding:13px;border-radius:9px;border:1px solid #647b98;background:#101827;color:white;font-size:16px;margin:8px 0 15px}
+#helpContent{line-height:1.7}
+kbd{background:#0c1728;border:1px solid #61748f;border-radius:5px;padding:3px 7px;color:#ffd166}
+@media(pointer:coarse),(max-width:800px){
+ #joystick{display:block}
+ #mobileActions{display:flex}
+ #keyboardHint{display:none}
+}
+@media(max-width:430px){
+ #joystick{width:125px;height:125px;left:14px;bottom:18px}
+ #stick{width:51px;height:51px}
+ #mobileActions{right:12px;bottom:22px;gap:7px}
+ .action{width:59px;height:59px}
+ .action.small{width:51px;height:51px}
+ .stat{font-size:11px;padding:7px 9px}
+ #mission{top:58px}
+}
 </style>
 </head>
 <body>
-<header>
- <div><h1>🏙️ Türkçe Şehri</h1><div class="subtitle">KELİME KRİZİ · 7. SINIF MACERASI</div></div>
- <div class="stats">
-  <div class="stat">⭐ Seviye <b id="level">1</b></div>
-  <div class="stat">✨ XP <b id="xp">0</b></div>
-  <div class="stat">🪙 <b id="coins">30</b></div>
-  <div class="stat">❤️ <b id="hearts">3</b></div>
- </div>
-</header>
-<main>
- <section class="panel">
-  <div class="panelhead"><h2 id="areaTitle">🗺️ Kelime Meydanı</h2><span id="heroName">Kahraman</span></div>
-  <div class="world">
-   <canvas id="city" width="720" height="590" aria-label="Türkçe Şehri haritası"></canvas>
-   <div class="worldlabel" id="weather">☀️ Macera zamanı</div>
-   <div class="worldhint">Bir bölge seç, görevini tamamla ve şehrini yeniden kur!</div>
-  </div>
-  <div class="content">
-   <h3>🧭 Keşfedilecek bölgeler</h3>
-   <div class="locations" id="locations"></div>
-  </div>
- </section>
- <div class="side">
-  <section class="panel">
-   <div class="panelhead"><h2>📜 Şehir görevleri</h2></div>
-   <div class="content">
-    <div id="objective">İlk göreve hazırlan!</div>
-    <div class="progress"><div id="progress"></div></div>
-    <small id="progressText">0 / 5 görev tamamlandı</small>
-    <hr style="border-color:#344966;margin:18px 0">
-    <h3>🏆 Şehir gelişimi</h3>
-    <p id="cityLevel" style="line-height:1.7;color:#cbd8ea">Şehrin yeniden canlanmayı bekliyor.</p>
-    <button class="secondary" id="upgrade" style="width:100%">🏗️ Şehri geliştir · 40 altın</button>
-   </div>
-  </section>
-  <section class="panel">
-   <div class="panelhead"><h2>🗞️ Şehir haberleri</h2><button class="secondary" id="help" style="padding:7px 10px">?</button></div>
-   <div class="content"><div class="log" id="log" aria-live="polite"></div></div>
-  </section>
-  <section class="panel">
-   <div class="content">
-    <h3>🎒 Kahraman çantası</h3>
-    <div id="bag">Henüz özel eşya yok.</div>
-    <button class="secondary" id="save" style="width:100%;margin-top:12px">💾 İlerlemeyi kaydet</button>
-    <button class="secondary" id="reset" style="width:100%;margin-top:8px">↻ Yeni oyun</button>
-   </div>
-  </section>
- </div>
-</main>
+<div id="game"></div>
 
-<div id="modal" role="dialog" aria-modal="true">
- <div class="dialog" id="dialog"></div>
+<div id="top">
+ <div id="stats">
+  <div class="stat">⭐ Seviye <span id="level">1</span></div>
+  <div class="stat">✨ XP <span id="xp">0</span></div>
+  <div class="stat">🪙 <span id="gold">0</span></div>
+  <div class="stat">💎 <span id="gems">0</span></div>
+ </div>
+ <button id="helpButton" aria-label="Kontroller">?</button>
 </div>
 
-<div id="startScreen">
- <div class="startbox">
-  <div class="logo">🏙️📚⚔️</div>
-  <h2>Türkçe Şehri</h2>
-  <div class="tag">Kelime Krizi</div>
-  <p>Gizemli bir sis şehrin kelimelerini çaldı! Kahramanını seç, bölgeleri keşfet, bilmeceleri çöz ve şehrin renklerini geri getir. Her doğru cevap seni güçlendirecek.</p>
-  <input id="playerName" maxlength="16" placeholder="Kahramanının adı (isteğe bağlı)" aria-label="Kahraman adı">
-  <button class="primary" id="begin" style="width:100%;font-size:17px">MACERAYA BAŞLA →</button>
-  <p style="font-size:12px;margin-bottom:0">Bilgisayar, telefon ve akıllı tahta uyumlu.</p>
+<div id="mission">📜 Görev: Bilge Lora'yı bul</div>
+<div id="toast"></div>
+
+<div id="joystick" aria-label="Hareket joysticki">
+ <div id="stick"></div>
+</div>
+
+<div id="mobileActions">
+ <button class="action small" id="jump">ZIPLA</button>
+ <button class="action" id="interact">ETKİLEŞİM</button>
+</div>
+
+<div id="keyboardHint">WASD: Hareket · SPACE: Zıpla · E: Etkileşim · Fare: Kamera</div>
+
+<div id="modal">
+ <div class="box" id="dialog"></div>
+</div>
+
+<div id="start">
+ <div class="box">
+  <div style="font-size:65px">⚔️🏰📚</div>
+  <h1>Türkçe Kahramanı 3D</h1>
+  <h2>KAYIP KRALLIK</h2>
+  <p>Kelime canavarları krallığın dilini çaldı! 3D dünyayı keşfet, kristalleri topla, görevleri tamamla ve Türkçe bilginle krallığı kurtar.</p>
+  <input id="name" maxlength="16" placeholder="Kahramanının adı">
+  <button class="primary" id="begin" style="width:100%;font-size:17px">MACERAYA BAŞLA</button>
+  <p style="font-size:12px">Bilgisayar, telefon ve akıllı tahta desteği.</p>
  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
 (()=>{
 "use strict";
 const $=id=>document.getElementById(id);
-const canvas=$("city"),ctx=canvas.getContext("2d");
-const places=[
- {id:"meydan",name:"Kelime Meydanı",emoji:"🏛️",x:360,y:285,cost:0,desc:"Sözcükte anlam ve deyimler",topic:["Sözcükte anlam","Deyimler"]},
- {id:"orman",name:"Deyim Ormanı",emoji:"🌳",x:140,y:150,cost:0,desc:"Deyimler ve atasözleri",topic:["Deyimler","Atasözleri"]},
- {id:"okul",name:"Dil Okulu",emoji:"🏫",x:565,y:145,cost:20,desc:"Fiiller, zarflar ve dil bilgisi",topic:["Fiiller","Zarflar"]},
- {id:"pazar",name:"Noktalama Pazarı",emoji:"🏪",x:150,y:430,cost:35,desc:"Yazım ve noktalama",topic:["Yazım kuralları","Noktalama"]},
- {id:"kale",name:"Anlam Kalesi",emoji:"🏰",x:565,y:430,cost:55,desc:"Cümlede anlam ve büyük mücadele",topic:["Cümlede anlam","Ana fikir"]}
-];
+if(!window.THREE){
+ $("start").querySelector(".box").innerHTML=
+ '<h2>3D motor yüklenemedi</h2><p>İnternet bağlantını kontrol et ve sayfayı yenile.</p>';
+ return;
+}
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x8bd4ed);
+scene.fog=new THREE.Fog(0x8bd4ed,35,105);
+
+const camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,180);
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+$("game").appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xc7efff,0x53613d,2));
+const sun=new THREE.DirectionalLight(0xfff0d0,2.3);
+sun.position.set(-20,35,18);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-45;
+sun.shadow.camera.right=45;
+sun.shadow.camera.top=45;
+sun.shadow.camera.bottom=-45;
+scene.add(sun);
+
+const mats={
+ grass:new THREE.MeshStandardMaterial({color:0x4b9b59}),
+ grass2:new THREE.MeshStandardMaterial({color:0x397e4c}),
+ dirt:new THREE.MeshStandardMaterial({color:0x89613e}),
+ stone:new THREE.MeshStandardMaterial({color:0x929da5}),
+ wood:new THREE.MeshStandardMaterial({color:0x765033}),
+ leaf:new THREE.MeshStandardMaterial({color:0x287448}),
+ leaf2:new THREE.MeshStandardMaterial({color:0x398a4d}),
+ gold:new THREE.MeshStandardMaterial({color:0xffd04b,emissive:0x7b4900}),
+ water:new THREE.MeshStandardMaterial({color:0x38a9cb,roughness:.25}),
+ white:new THREE.MeshStandardMaterial({color:0xffffff}),
+ dark:new THREE.MeshStandardMaterial({color:0x28344c}),
+ blue:new THREE.MeshStandardMaterial({color:0x3485d2}),
+ skin:new THREE.MeshStandardMaterial({color:0xf1c69c}),
+ red:new THREE.MeshStandardMaterial({color:0xb94646}),
+ crystal:new THREE.MeshStandardMaterial({color:0x61edff,emissive:0x146d8b,roughness:.2})
+};
+
+const cubeGeo=new THREE.BoxGeometry(1,1,1);
+function cube(parent,x,y,z,sx,sy,sz,mat){
+ const m=new THREE.Mesh(cubeGeo,mat);
+ m.position.set(x,y,z);m.scale.set(sx,sy,sz);
+ m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
+}
+function group(){return new THREE.Group()}
+
+const floor=cube(scene,0,-.7,0,100,1,100,mats.grass);
+floor.receiveShadow=true;
+
+// Taş yollar
+function road(x,z,w,d){
+ cube(scene,x,-.12,z,w,.13,d,mats.dirt);
+ for(let i=0;i<Math.floor(w*d/5);i++){
+  let px=x+(Math.random()-.5)*w*.9;
+  let pz=z+(Math.random()-.5)*d*.9;
+  cube(scene,px,-.025,pz,.7,.08,.7,mats.stone);
+ }
+}
+road(0,0,10,60);
+road(0,-15,48,7);
+road(0,15,48,7);
+road(-15,0,7,30);
+road(15,0,7,30);
+
+// Su göleti
+const pond=new THREE.Mesh(new THREE.CylinderGeometry(7,7,.2,32),mats.water);
+pond.position.set(-26,-.1,19);pond.receiveShadow=true;scene.add(pond);
+
+// Ağaçlar
+function tree(x,z,s=1){
+ const g=group();g.position.set(x,0,z);g.scale.setScalar(s);
+ cube(g,0,1,0,.7,2,.7,mats.wood);
+ const a=cube(g,0,3,0,3,3,3,mats.leaf);
+ cube(g,-.6,4.2,.2,1.8,1.8,1.8,mats.leaf2);
+ scene.add(g);
+ return g;
+}
+for(let i=0;i<95;i++){
+ const x=(Math.random()-.5)*88,z=(Math.random()-.5)*88;
+ if(Math.abs(x)<23&&Math.abs(z)<23)continue;
+ if(Math.hypot(x+26,z-19)<9)continue;
+ tree(x,z,.7+Math.random()*.6);
+}
+
+// Kale
+function castle(x,z){
+ const g=group();g.position.set(x,0,z);
+ cube(g,0,2,0,13,4,10,mats.stone);
+ cube(g,0,4.4,0,14,.8,11,mats.dirt);
+ for(const dx of [-6,6])for(const dz of [-4.5,4.5]){
+  cube(g,dx,5,dz,2.5,6,2.5,mats.stone);
+  cube(g,dx,8,dz,3,1.2,3,mats.red);
+ }
+ cube(g,0,1,5.1,3,2,1,mats.wood);
+ cube(g,0,2.2,5.7,1.5,2.5,.3,mats.dark);
+ scene.add(g);
+}
+castle(0,-33);
+
+// Binalar
+function house(x,z,color){
+ const g=group();g.position.set(x,0,z);
+ const wall=new THREE.MeshStandardMaterial({color});
+ cube(g,0,2,0,8,4,7,wall);
+ const roof=new THREE.Mesh(new THREE.ConeGeometry(6,3,4),mats.red);
+ roof.position.y=5;roof.rotation.y=Math.PI/4;roof.castShadow=true;g.add(roof);
+ cube(g,0,1,3.6,1.5,2,.2,mats.wood);
+ cube(g,-2,2,3.61,1.2,1.2,.2,mats.blue);
+ cube(g,2,2,3.61,1.2,1.2,.2,mats.blue);
+ scene.add(g);
+}
+house(-15,-13,0xd8bd87);
+house(15,-13,0xc9d3df);
+house(-15,14,0xc9a0a0);
+house(15,14,0xb5c9a4);
+
+// Oyuncu
+function makeHero(){
+ const g=group();
+ cube(g,0,1.3,0,.95,1.3,.65,mats.blue);
+ cube(g,0,2.25,0,.9,.85,.85,mats.skin);
+ cube(g,0,2.7,0,1,.28,.95,mats.dark);
+ cube(g,-.2,2.3,.43,.09,.1,.06,mats.white);
+ cube(g,.2,2.3,.43,.09,.1,.06,mats.white);
+ cube(g,-.3,.45,0,.35,.9,.4,mats.dark);
+ cube(g,.3,.45,0,.35,.9,.4,mats.dark);
+ cube(g,-.63,1.3,0,.3,1,.35,mats.skin);
+ cube(g,.63,1.3,0,.3,1,.35,mats.skin);
+ const sword=cube(g,.9,1.3,0,.16,1.2,.18,mats.stone);
+ sword.rotation.z=-.3;
+ scene.add(g);return g;
+}
+const hero=makeHero();
+hero.position.set(0,0,0);
+
+// NPC
+function makeNPC(x,z,color){
+ const g=group();
+ const body=new THREE.MeshStandardMaterial({color});
+ cube(g,0,1.2,0,.9,1.2,.65,body);
+ cube(g,0,2,0,.85,.8,.8,mats.skin);
+ cube(g,0,2.4,0,.9,.2,.9,mats.gold);
+ cube(g,-.2,2.1,.4,.1,.1,.06,mats.dark);
+ cube(g,.2,2.1,.4,.1,.1,.06,mats.dark);
+ g.position.set(x,0,z);scene.add(g);return g;
+}
+const npc=makeNPC(5,2,0x8b65cc);
+const guard=makeNPC(-8,-29,0xb84a4a);
+
+// Kristaller
+const crystals=[];
+function makeCrystal(x,z){
+ const g=group();
+ const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.65),mats.crystal);
+ mesh.position.y=1;mesh.castShadow=true;g.add(mesh);
+ const base=cube(g,0,.1,0,1.2,.2,1.2,mats.stone);
+ g.position.set(x,0,z);scene.add(g);
+ crystals.push({group:g,mesh,got:false,x,z});
+}
+[[-8,4],[10,6],[19,0],[-19,-3],[9,-20],[-10,-20],[24,20],[-28,2],[0,23],[28,-18]].forEach(p=>makeCrystal(p[0],p[1]));
+
+// Düşman
+function makeMonster(x,z){
+ const g=group();
+ const purple=new THREE.MeshStandardMaterial({color:0x7542a1});
+ cube(g,0,1,0,1.3,1.6,1.2,purple);
+ cube(g,0,2,0,1.2,.8,1.1,mats.dark);
+ cube(g,-.25,2.1,.57,.18,.18,.08,mats.red);
+ cube(g,.25,2.1,.57,.18,.18,.08,mats.red);
+ cube(g,-.8,.7,0,.4,1,.5,purple);
+ cube(g,.8,.7,0,.4,1,.5,purple);
+ g.position.set(x,0,z);scene.add(g);return g;
+}
+const monster=makeMonster(24,-30);
+
+// Etkileşim noktaları
 const questions=[
-{t:"Sözcükte anlam",q:"“Bu sözleri duyunca içim ferahladı.” cümlesinde “içim ferahladı” sözü ne anlatır?",a:["İçeriye hava girdiğini","Rahatlayıp huzur bulduğunu","Hastalandığını","Üzüldüğünü"],c:1,e:"Mecaz anlamda ferahlamak, sıkıntıdan kurtulup rahatlamak demektir.",p:"meydan"},
-{t:"Deyimler",q:"“Burnundan solumak” deyiminin anlamı hangisidir?",a:["Çok sinirli olmak","Çok hızlı koşmak","Soğuk algınlığı geçirmek","Meraklanmak"],c:0,e:"Bu deyim çok öfkeli olmayı anlatır.",p:"orman"},
-{t:"Atasözleri",q:"“Bir elin nesi var, iki elin sesi var.” atasözü neyi vurgular?",a:["Sessiz çalışmayı","Birlikte çalışmanın gücünü","El becerisini","Yalnız olmayı"],c:1,e:"İş birliği yapmak, tek başına çalışmaktan daha etkili olabilir.",p:"orman"},
-{t:"Fiiller",q:"Hangisi oluş fiilidir?",a:["Kapıyı açmak","Yere oturmak","Yaprakların sararması","Kitap okumak"],c:2,e:"Sararmak, öznenin zamanla geçirdiği değişimi bildirir.",p:"okul"},
-{t:"Zarflar",q:"“Ece soruyu dikkatlice çözdü.” cümlesinde “dikkatlice” hangi sözcüğü belirtir?",a:["Ece","Soruyu","Çözdü","Hiçbirini"],c:2,e:"Dikkatlice, çözme işinin nasıl yapıldığını belirtir; durum zarfıdır.",p:"okul"},
-{t:"Yazım kuralları",q:"Hangi cümlede yazım doğrudur?",a:["Bende seninle geliyorum.","Ben de seninle geliyorum.","Ben deki kitabı aldım.","Okul da kimse yok."],c:1,e:"Bağlaç olan “de” ayrı yazılır. Bulunma eki olan -de ise bitişiktir.",p:"pazar"},
-{t:"Noktalama",q:"“Sevgili arkadaşım__ seni özledim.” boşluğa hangi işaret gelmelidir?",a:["Virgül","Soru işareti","Noktalı virgül","Kesme işareti"],c:0,e:"Hitap sözlerinden sonra virgül kullanılabilir.",p:"pazar"},
-{t:"Cümlede anlam",q:"“Elektrikler kesildiği için gösteri ertelendi.” cümlesindeki ilişki nedir?",a:["Amaç-sonuç","Neden-sonuç","Koşul-sonuç","Karşılaştırma"],c:1,e:"Gösterinin ertelenme nedeni elektriğin kesilmesidir.",p:"kale"},
-{t:"Ana fikir",q:"“Mert her gün kitap okudu. Bilmediği kelimeleri not etti. Zamanla kendini daha iyi ifade etmeye başladı.” Parçanın ana fikri nedir?",a:["Her kitap kısa olmalıdır","Not almak gereksizdir","Düzenli okuma dil becerisini geliştirir","Herkes aynı kitabı okumalıdır"],c:2,e:"Parçanın temel mesajı, okumanın kendini ifade etme becerisini geliştirmesidir.",p:"kale"},
-{t:"Sözcükte anlam",q:"Hangisinde “ince” sözcüğü mecaz anlamda kullanılmıştır?",a:["İnce bir ip aldı.","İnce dal hemen kırıldı.","İnce düşünceli bir insandı.","İnce bir defter getirdi."],c:2,e:"“İnce düşünceli” nazik, anlayışlı olmak anlamındadır.",p:"meydan"},
-{t:"Fiiller",q:"Hangisi durum fiilidir?",a:["Uyumak","Büyümek","Kırmak","Sararmak"],c:0,e:"Uyumak, nesneye yönelmeyen bir durum bildirir.",p:"okul"},
-{t:"Atasözleri",q:"“Ayağını yorganına göre uzat.” ne öğütler?",a:["Çok hızlı yürümeyi","İmkânlarına göre harcama yapmayı","Her zaman uyumayı","Yorgan satın almayı"],c:1,e:"İnsan, gelir ve imkânlarını aşmamalıdır.",p:"orman"},
-{t:"Cümlede anlam",q:"“Sınavı kazanmak için düzenli çalıştı.” cümlesinde hangi anlam ilişkisi vardır?",a:["Neden-sonuç","Amaç-sonuç","Karşılaştırma","Benzetme"],c:1,e:"Düzenli çalışmanın amacı sınavı kazanmaktır.",p:"kale"},
-{t:"Noktalama",q:"Hangisinin sonuna soru işareti konmalıdır?",a:["Ne güzel bir gün","Saat kaçta geleceksin","Eyvah otobüs kaçtı","Kitabı masaya koy"],c:1,e:"Soru anlamı taşıyan cümlelerin sonuna soru işareti konur.",p:"pazar"},
-{t:"Zarflar",q:"“Çocuklar dışarıda neşeyle oynuyor.” cümlesinde “neşeyle” hangi sorunun cevabıdır?",a:["Ne zaman?","Nereye?","Nasıl?","Ne kadar?"],c:2,e:"Neşeyle, oynama eyleminin nasıl yapıldığını belirtir.",p:"okul"}
+ {t:"Sözcükte anlam",q:"“Bu haber içimi ısıttı.” cümlesinde bu söz hangi anlamdadır?",a:["Gerçek anlam","Mecaz anlam","Terim anlam","Yan anlam"],c:1,e:"İçimi ısıttı sözü burada mutlu olmak, sevinmek anlamında kullanılmıştır."},
+ {t:"Deyimler",q:"“Etekleri zil çalmak” deyimi ne demektir?",a:["Çok yorulmak","Çok sevinmek","Korkmak","Şaşırmak"],c:1,e:"Bu deyim çok sevinmek anlamına gelir."},
+ {t:"Fiiller",q:"Hangisi oluş fiilidir?",a:["Kapıyı açmak","Kitap okumak","Yaprakların sararması","Koşmak"],c:2,e:"Sararmak, zaman içinde kendiliğinden gerçekleşen bir değişimdir."},
+ {t:"Zarflar",q:"“Çocuk hızlıca koştu.” cümlesinde hızlıca hangi sözcüğü belirtir?",a:["Çocuk","Koştu","Cümleyi","Hiçbirini"],c:1,e:"Hızlıca, koşma eyleminin nasıl yapıldığını anlatır."},
+ {t:"Yazım kuralları",q:"Hangisi doğru yazılmıştır?",a:["Bende geliyorum.","Ben de geliyorum.","Ben deki kitap.","Ev de kimse yok."],c:1,e:"Bağlaç olan de ayrı yazılır."},
+ {t:"Noktalama",q:"Soru cümlesinin sonuna hangi işaret konur?",a:["Nokta","Virgül","Soru işareti","İki nokta"],c:2,e:"Soru cümlelerinin sonunda soru işareti kullanılır."},
+ {t:"Cümlede anlam",q:"“Yağmur yağdığı için maç ertelendi.” cümlesinde hangi ilişki vardır?",a:["Amaç-sonuç","Neden-sonuç","Koşul-sonuç","Karşılaştırma"],c:1,e:"Maçın ertelenme nedeni yağmurun yağmasıdır."},
+ {t:"Atasözleri",q:"“Damlaya damlaya göl olur.” ne anlatır?",a:["Küçük birikimler büyür","Yağmur tehlikelidir","Göller kurur","Su içmek gerekir"],c:0,e:"Küçük birikimler zamanla büyük sonuçlar oluşturur."},
+ {t:"Ana fikir",q:"Düzenli kitap okumanın en önemli yararlarından biri nedir?",a:["Kelime dağarcığını geliştirmesi","Uykuyu azaltması","Zamanı durdurması","Her kitabı ezberletmesi"],c:0,e:"Okumak kelime bilgimizi ve kendimizi ifade etme becerimizi geliştirir."}
 ];
-let state={name:"Kahraman",xp:0,coins:30,hearts:3,done:[],unlocked:["meydan","orman"],built:[],bag:[],boss:false,started:false};
-let activePlace=null,currentQ=null,answerLock=false,challengeSet=[],challengeIndex=0;
-const rand=a=>a[Math.floor(Math.random()*a.length)];
-function log(s){let el=document.createElement("div");el.textContent="• "+s;$("log").prepend(el);while($("log").children.length>16)$("log").lastChild.remove()}
-function level(){return 1+Math.floor(state.xp/100)}
-function sync(){
- $("level").textContent=level();$("xp").textContent=state.xp%100;$("coins").textContent=state.coins;$("hearts").textContent=state.hearts;$("heroName").textContent="🧙 "+state.name;
- $("areaTitle").textContent=(places.find(p=>p.id===activePlace)||places[0]).emoji+" "+(places.find(p=>p.id===activePlace)||places[0]).name;
- $("progress").style.width=Math.min(100,state.done.length/5*100)+"%";
- $("progressText").textContent=state.done.length+" görev tamamlandı";
- $("objective").textContent=state.boss?"🏆 Şehir kurtuldu! Büyük başarı!":state.done.length<5?"📚 "+(5-state.done.length)+" görev daha tamamla, sonra kalenin gizemini çöz!":"⚔️ Anlam Kalesi'ndeki Kelime Gölgesi'ne meydan oku!";
- $("cityLevel").textContent=state.built.length?"Şehrinde "+state.built.length+" yeni yapı var. Halkın umutlanıyor!":"Binaları onarmak için görevlerden altın kazan.";
- $("upgrade").disabled=state.coins<40||state.built.length>=3;
- $("upgrade").textContent=state.built.length>=3?"✅ Şehir tamamen gelişti":"🏗️ Şehri geliştir · 40 altın";
- $("bag").textContent=state.bag.length?state.bag.join(" • "):"Henüz özel eşya yok.";
- $("locations").innerHTML="";
- places.forEach(p=>{
-  let unlocked=state.unlocked.includes(p.id);
-  let b=document.createElement("button");b.className="loc"+(!unlocked?" locked":"")+(activePlace===p.id?" active":"");
-  b.innerHTML=`<span class="emoji">${p.emoji}</span><b>${p.name}</b><small>${unlocked?p.desc:"🔒 Açmak için "+p.cost+" altın"}</small>`;
-  b.disabled=!unlocked;b.onclick=()=>visit(p.id);$("locations").appendChild(b);
- });
- draw();
+
+let state={name:"Kahraman",xp:0,gold:0,gems:0,done:[],boss:false};
+let paused=true,keys={},joy={x:0,y:0},jumping=false,verticalSpeed=0;
+let cameraAngle=0,cameraDistance=9,nearTarget=null,toastTimer;
+const clock=new THREE.Clock();
+
+function showToast(text){
+ const t=$("toast");t.textContent=text;t.style.display="block";
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",2300);
 }
-function visit(id){
- activePlace=id;
- let p=places.find(x=>x.id===id);
- log(p.name+" bölgesine gittin.");
- if(id==="kale"&&state.done.length>=5&&!state.boss){bossIntro();sync();return}
- if(id==="kale"&&state.done.length<5){say("Kale kapısı","Kalenin kapısında beş görev mührü gerekiyor. Önce diğer bölgelerdeki görevleri tamamla.");sync();return}
- const available=questions.filter(q=>q.p===id&&!state.done.includes(questions.indexOf(q)));
- if(available.length)askQuestion(questions.indexOf(rand(available)));
- else if(id==="meydan")say("Kelime Meydanı","Şehir halkı senden yeni görevler bekliyor. Diğer bölgeleri ziyaret et!");
- else if(id==="kale"&&state.boss)say("Kahraman","Kelime Gölgesi yenildi. Şehir yeniden ışıl ışıl!");
- else say(p.name,"Buradaki görevleri tamamladın! Şimdilik tekrar edebilir, yeni bölgeler açabilirsin.");
- sync();
+function updateUI(){
+ $("level").textContent=1+Math.floor(state.xp/100);
+ $("xp").textContent=state.xp%100;
+ $("gold").textContent=state.gold;
+ $("gems").textContent=state.gems;
+ $("mission").textContent=state.boss?"🏆 Krallık kurtarıldı!":state.done.length<5?"📜 Görev: Kristalleri ve Türkçe bilgini topla":"⚔️ Son görev: Kelime Muhafızı";
 }
-function say(title,msg){
- show(`<div class="tag">Şehirden mesaj</div><h2>${title}</h2><p style="line-height:1.7">${msg}</p><div class="actions"><button class="primary" id="close">Devam et</button></div>`);
- $("close").onclick=hide;
+function modal(html){
+ paused=true;$("dialog").innerHTML=html;$("modal").style.display="flex";
 }
-function show(html){$("dialog").innerHTML=html;$("modal").style.display="flex"}
-function hide(){$("modal").style.display="none"}
-function askQuestion(index,extra){
- const q=questions[index];if(!q)return;
- currentQ=index;answerLock=false;
- show(`<div class="tag">Türkçe görevi · ${q.t}</div><h2>${extra||"Kelime sınavı"}</h2><div class="question">${q.q}</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="actions"><button class="primary" id="continue" disabled>Devam et →</button><button class="secondary" id="leave">Vazgeç</button></div>`);
- const answerBox=$("answers");
- const shuffled=q.a.map((a,i)=>({a,i})).sort(()=>Math.random()-.5);
- shuffled.forEach(item=>{
-  const b=document.createElement("button");b.className="answer";b.textContent=item.a;
+function closeModal(){ $("modal").style.display="none";paused=false; }
+function question(q,callback){
+ let locked=false;
+ modal(`<div style="color:#72e2ba;font-size:12px;font-weight:bold">${q.t}</div>
+ <h2>📚 Türkçe Görevi</h2><p style="font-size:19px;line-height:1.5">${q.q}</p>
+ <div class="answers" id="answers"></div><div id="feedback" style="display:none;padding:12px;border-radius:10px;background:#102e2a;line-height:1.5"></div>
+ <button class="primary" id="next" disabled>Devam et</button>`);
+ q.a.forEach((a,i)=>{
+  const b=document.createElement("button");b.className="answer";b.textContent=a;
   b.onclick=()=>{
-   if(answerLock)return;answerLock=true;
-   const correct=item.i===q.c;
-   [...answerBox.children].forEach(el=>el.disabled=true);
-   if(correct){
-    b.classList.add("correct");state.xp+=25;state.coins+=12;
-    if(!state.done.includes(index))state.done.push(index);
-    if(!state.bag.includes(q.t))state.bag.push(q.t);
-    $("feedback").style.background="#123b31";
-    $("feedback").innerHTML="<b>✅ Harika! +25 XP, +12 altın</b><br>"+q.e;
-    log("Doğru cevap: "+q.t+" görevini öğrendin.");
-   }else{
-    b.classList.add("wrong");state.hearts=Math.max(0,state.hearts-1);
-    const correctText=q.a[q.c];
-    [...answerBox.children].forEach(el=>{if(el.textContent===correctText)el.classList.add("correct")});
-    $("feedback").style.background="#402b30";
-    $("feedback").innerHTML="<b>🧠 Birlikte öğrenelim.</b><br>Doğru cevap: "+correctText+".<br>"+q.e;
-    log("Bir soruyu tekrar öğrendin.");
-    if(state.hearts===0){state.hearts=3;log("Moral topladın! Canların yenilendi.");$("feedback").innerHTML+="<br><b>💚 Biraz dinlendin, canların yenilendi.</b>"}
-   }
-   $("feedback").style.display="block";$("continue").disabled=false;sync();
+   if(locked)return;locked=true;
+   document.querySelectorAll(".answer").forEach(x=>x.disabled=true);
+   let ok=i===q.c;
+   b.style.background=ok?"#176047":"#6b3040";
+   if(ok){state.xp+=25;state.gold+=10;showToast("+25 XP · +10 altın")}
+   else showToast("Birlikte öğreniyoruz!");
+   $("feedback").style.display="block";
+   $("feedback").innerHTML=(ok?"✅ Doğru! ":"📖 Doğru cevap: "+q.a[q.c]+". ")+q.e;
+   $("next").disabled=false;updateUI();
   };
-  answerBox.appendChild(b);
+  $("answers").appendChild(b);
  });
- $("continue").onclick=()=>{if(!answerLock)return;hide();sync();if(extra==="Kelime Gölgesi")bossAfterAnswer()};
- $("leave").onclick=hide;
+ $("next").onclick=()=>{if(!locked)return;$("modal").style.display="none";paused=false;callback(locked)};
 }
-function bossIntro(){
- show(`<div class="tag">Bölüm sonu savaşı</div><h2>👾 Kelime Gölgesi</h2><p style="line-height:1.7">“Şehirde hiçbir kelimenin anlamı kalmayacak!” diye bağırıyor Kelime Gölgesi. Onu yenmek için son beş sorudan oluşan bir dil düellosuna gir.</p><p>❤️ 3 canın var. Her doğru cevap saldırı gücünü artırır. Açıklamalar sana yardımcı olur.</p><div class="actions"><button class="primary" id="fight">Düelloya gir ⚔️</button><button class="secondary" id="retreat">Hazırlan</button></div>`);
- $("fight").onclick=()=>{challengeSet=[...questions.keys()].sort(()=>Math.random()-.5).slice(0,5);challengeIndex=0;hide();bossQuestion()};
- $("retreat").onclick=hide;
-}
-function bossQuestion(){
- if(challengeIndex>=challengeSet.length){state.boss=true;state.xp+=75;state.coins+=60;state.bag.push("🏆 Kelime Gölgesi Kupası");log("Kelime Gölgesi yenildi! +75 XP, +60 altın");sync();say("🏆 Şehir kurtuldu!","Tebrikler "+state.name+"! Kelime Gölgesi'ni yendin. Şehrin bütün ışıkları geri geldi. Türkçe bilginle gerçek bir kahraman oldun.");return}
- askQuestion(challengeSet[challengeIndex],"Kelime Gölgesi");
- const oldContinue=$("continue").onclick;
- $("continue").onclick=()=>{if(!answerLock)return;hide();challengeIndex++;bossQuestion()};
-}
-function bossAfterAnswer(){}
-function unlock(){
- const candidates=places.filter(p=>!state.unlocked.includes(p.id)&&state.coins>=p.cost);
- if(!candidates.length){log("Yeni bölge açmak için biraz daha altın kazan.");return}
- const p=candidates[0];state.coins-=p.cost;state.unlocked.push(p.id);state.xp+=5;
- log("Yeni bölge açıldı: "+p.name);sync();say("Yeni bölge! "+p.emoji,p.name+" artık keşfedilebilir. "+p.desc+".");
-}
-$("upgrade").onclick=()=>{
- if(state.coins<40||state.built.length>=3)return;
- state.coins-=40;
- const buildings=[["🏫","Dil Atölyesi"],["🌳","Bilgelik Bahçesi"],["🗼","Kelime Kulesi"]];
- state.built.push(buildings[state.built.length][1]);state.xp+=15;
- log("Şehir geliştirildi: "+buildings[state.built.length-1][1]);sync();
- say("Şehir gelişiyor!",buildings[state.built.length-1][0]+" "+buildings[state.built.length-1][1]+" kuruldu! Şehrin daha da güzelleşti.");
-};
-$("help").onclick=()=>say("Nasıl oynanır?","1. Bölgeleri seç.<br>2. Türkçe sorularını cevapla.<br>3. Doğru cevaplardan altın ve XP kazan.<br>4. Yeni bölgeler aç.<br>5. Beş görevden sonra Kelime Gölgesi'ne meydan oku.<br>6. Altınlarını şehri geliştirmek için kullan.");
-$("begin").onclick=()=>{
- state.name=$("playerName").value.trim()||"Kelime Kahramanı";
- state.started=true;$("startScreen").style.display="none";activePlace="meydan";
- log("Maceran başladı, "+state.name+"!");say("Şehir senden yardım istiyor!","Kelime Meydanı'na hoş geldin. Şehrin ilk görevini tamamlamak için meydanı ziyaret et.");sync();
-};
-$("save").onclick=()=>{
- try{localStorage.setItem("turkceSehriSave",JSON.stringify(state));log("İlerleme bu tarayıcıya kaydedildi.");say("Kayıt tamamlandı","İlerlemen bu tarayıcıda saklandı. Başka cihazlarda görünmeyebilir.");}
- catch(e){say("Kayıt yapılamadı","Tarayıcın yerel kayda izin vermiyor olabilir. Oyunu açık tut.");}
-};
-$("reset").onclick=()=>{if(confirm("Yeni oyun başlatılsın mı? İlerlemen sıfırlanacak.")){try{localStorage.removeItem("turkceSehriSave")}catch(e){}location.reload()}};
-function draw(){
- const W=canvas.width,H=canvas.height;
- ctx.clearRect(0,0,W,H);
- ctx.fillStyle="#386c53";ctx.fillRect(0,0,W,H);
- // grass tiles
- for(let y=0;y<H;y+=40)for(let x=0;x<W;x+=40){
-  ctx.fillStyle=((x/40+y/40)%2)?"#ffffff08":"#071b1608";ctx.fillRect(x,y,40,40);
+function interact(){
+ if(paused)return;
+ if(!nearTarget){showToast("Yakınında etkileşime geçilecek bir şey yok.");return}
+ if(nearTarget==="npc"){
+  question(questions[0],()=>{
+   if(!state.done.includes(0))state.done.push(0);
+   showToast("Bilge Lora sana teşekkür ediyor!");
+   updateUI();
+  });
+ }else if(nearTarget==="guard"){
+  if(state.done.length<5){showToast("Muhafız için önce 5 görev tamamla!");return}
+  bossBattle();
+ }else if(nearTarget.type==="crystal"){
+  const c=nearTarget;
+  if(c.got)return;
+  c.got=true;c.group.visible=false;state.gems++;state.gold+=5;state.xp+=5;
+  showToast("💎 Kristal topladın! +5 XP");
+  updateUI();
+ }else if(nearTarget==="monster"){
+  if(state.gems<2){showToast("Canavarın kalkanını kırmak için 2 kristal bul!");return}
+  question(questions[2],()=>{monster.visible=false;state.xp+=30;state.gold+=20;showToast("Canavar yenildi!");updateUI()});
  }
- // river
- ctx.fillStyle="#327f9b";ctx.beginPath();ctx.moveTo(0,220);ctx.bezierCurveTo(150,175,240,290,350,255);ctx.bezierCurveTo(470,215,590,290,720,240);ctx.lineTo(720,300);ctx.bezierCurveTo(580,350,480,275,360,310);ctx.bezierCurveTo(230,340,130,225,0,280);ctx.fill();
- ctx.strokeStyle="#75d4dc";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,240);ctx.bezierCurveTo(150,195,240,310,350,275);ctx.bezierCurveTo(470,235,590,310,720,260);ctx.stroke();
- // winding roads
- ctx.lineCap="round";ctx.lineWidth=42;ctx.strokeStyle="#bda77b";ctx.beginPath();ctx.moveTo(360,590);ctx.lineTo(360,330);ctx.lineTo(360,285);ctx.lineTo(145,285);ctx.moveTo(360,285);ctx.lineTo(570,285);ctx.lineTo(570,145);ctx.moveTo(360,285);ctx.lineTo(145,430);ctx.moveTo(360,285);ctx.lineTo(565,430);ctx.stroke();
- ctx.lineWidth=2;ctx.strokeStyle="#e3d1a2";ctx.stroke();
- // trees
- for(let i=0;i<23;i++){
-  const x=(i*137+35)%700+10,y=(i*89+50)%560+10;
-  if(Math.abs(y-285)<55||Math.abs(x-360)<45||Math.abs(y-145)<40&&Math.abs(x-565)<55)continue;
-  ctx.fillStyle="#553f2c";ctx.fillRect(x-5,y+7,10,18);
-  ctx.fillStyle=i%2?"#1e6a4d":"#287b50";ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#3a9660";ctx.beginPath();ctx.arc(x-5,y-5,10,0,Math.PI*2);ctx.fill();
- }
- // city center
- drawBuilding(360,285,62,54,"#d5b476","#fff0c5");
- // landmarks
- places.forEach(p=>{
-  let locked=!state.unlocked.includes(p.id);
-  const x=p.x,y=p.y;
-  if(p.id==="orman"){
-   ctx.fillStyle="#79502f";ctx.fillRect(x-5,y-3,10,28);
-   ctx.fillStyle="#26744c";ctx.beginPath();ctx.arc(x,y-8,28,0,Math.PI*2);ctx.fill();
-   ctx.fillStyle="#45a96b";ctx.beginPath();ctx.arc(x-8,y-15,15,0,Math.PI*2);ctx.fill();
-  }else if(p.id==="meydan")drawBuilding(x,y,62,55,"#b98b53","#f4db9e");
-  else if(p.id==="okul")drawBuilding(x,y,67,48,"#c36f60","#f5c9a4");
-  else if(p.id==="pazar")drawBuilding(x,y,60,44,"#6487bc","#d5e7fa");
-  else drawBuilding(x,y,72,68,"#8c84ad","#e3d8ff");
-  if(state.built.length&&p.id==="meydan"){
-   ctx.font="19px system-ui";ctx.fillText("🏫",x+45,y+40);
+}
+function bossBattle(){
+ if(state.boss){showToast("Muhafız zaten yenildi!");return}
+ const q=questions[8];
+ question(q,()=>{
+  state.boss=true;state.xp+=100;state.gold+=100;
+  monster.visible=false;guard.visible=false;
+  modal(`<h2>🏆 KRALLIK KURTULDU!</h2><p>${state.name}, Kelime Muhafızı'nı yendin! Türkçe bilginle kayıp krallığı kurtardın.</p><p>⭐ +100 XP · 🪙 +100 altın</p><button class="primary" id="finish">Harika!</button>`);
+  $("finish").onclick=closeModal;updateUI();
+ });
+}
+
+// Joystick: dairesel dış alan ve hareketli iç top
+const joystick=$("joystick"),stick=$("stick");
+let joyPointer=null;
+function setJoy(e){
+ const r=joystick.getBoundingClientRect();
+ const cx=r.left+r.width/2,cy=r.top+r.height/2;
+ let dx=e.clientX-cx,dy=e.clientY-cy;
+ const max=r.width*.34;
+ const len=Math.hypot(dx,dy);
+ if(len>max){dx=dx/len*max;dy=dy/len*max}
+ joy.x=dx/max;joy.y=dy/max;
+ stick.style.left=`calc(50% + ${dx}px)`;
+ stick.style.top=`calc(50% + ${dy}px)`;
+}
+function resetJoy(){
+ joy={x:0,y:0};joyPointer=null;
+ stick.style.left="50%";stick.style.top="50%";
+}
+joystick.addEventListener("pointerdown",e=>{
+ e.preventDefault();joyPointer=e.pointerId;joystick.setPointerCapture(e.pointerId);setJoy(e);
+});
+joystick.addEventListener("pointermove",e=>{if(e.pointerId===joyPointer)setJoy(e)});
+joystick.addEventListener("pointerup",e=>{if(e.pointerId===joyPointer)resetJoy()});
+joystick.addEventListener("pointercancel",resetJoy);
+
+$("jump").addEventListener("pointerdown",e=>{e.preventDefault();if(!paused&&hero.position.y<.05){verticalSpeed=7.5}});
+$("interact").addEventListener("pointerdown",e=>{e.preventDefault();interact()});
+window.addEventListener("keydown",e=>{
+ keys[e.code]=true;
+ if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
+ if(e.code==="KeyE"||e.code==="Enter")interact();
+ if(e.code==="Space"&&!paused&&hero.position.y<.05)verticalSpeed=7.5;
+});
+window.addEventListener("keyup",e=>keys[e.code]=false);
+
+// Fareyle kamera döndürme
+let dragging=false,lastX=0;
+renderer.domElement.addEventListener("pointerdown",e=>{
+ if(e.pointerType==="mouse"){dragging=true;lastX=e.clientX}
+});
+window.addEventListener("pointerup",()=>dragging=false);
+window.addEventListener("pointermove",e=>{
+ if(dragging){cameraAngle-=(e.clientX-lastX)*.005;lastX=e.clientX}
+});
+
+function nearestInteraction(){
+ nearTarget=null;let best=3.4;
+ let d=Math.hypot(hero.position.x-npc.position.x,hero.position.z-npc.position.z);
+ if(d<best){best=d;nearTarget="npc"}
+ d=Math.hypot(hero.position.x-guard.position.x,hero.position.z-guard.position.z);
+ if(d<best){best=d;nearTarget="guard"}
+ d=Math.hypot(hero.position.x-monster.position.x,hero.position.z-monster.position.z);
+ if(d<best&&monster.visible){best=d;nearTarget="monster"}
+ crystals.forEach(c=>{
+  if(!c.got){
+   let dd=Math.hypot(hero.position.x-c.x,hero.position.z-c.z);
+   if(dd<best){best=dd;nearTarget=c}
   }
-  ctx.textAlign="center";ctx.font="25px system-ui";ctx.fillText(locked?"🔒":p.emoji,x,y-38);
-  ctx.fillStyle="#101727e8";ctx.beginPath();ctx.roundRect(x-63,y+35,126,23,8);ctx.fill();
-  ctx.fillStyle=locked?"#aab5c8":"#fff";ctx.font="bold 11px system-ui";ctx.fillText(locked?"KİLİTLİ":p.name,x,y+50);
-  if(activePlace===p.id){ctx.strokeStyle="#ffd166";ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,43,0,Math.PI*2);ctx.stroke()}
  });
- // hero marker
- const hero=places.find(p=>p.id===activePlace)||places[0];
- ctx.fillStyle="#0005";ctx.beginPath();ctx.ellipse(hero.x,hero.y+19,15,6,0,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#f2bd59";ctx.beginPath();ctx.roundRect(hero.x-11,hero.y-24,22,34,6);ctx.fill();
- ctx.fillStyle="#f3d1aa";ctx.beginPath();ctx.arc(hero.x,hero.y-29,10,0,Math.PI*2);ctx.fill();
- ctx.fillStyle="#47352c";ctx.fillRect(hero.x-10,hero.y-38,20,7);
- ctx.fillStyle="#28354d";ctx.fillRect(hero.x-8,hero.y-4,16,17);
- ctx.fillStyle="#fff";ctx.fillRect(hero.x-4,hero.y-31,3,3);ctx.fillRect(hero.x+3,hero.y-31,3,3);
- // sparkle particles
- for(let i=0;i<10;i++){let x=(i*71+Math.floor(Date.now()/120)%720)%720,y=(i*53+60)%590;ctx.fillStyle="#fff7c955";ctx.fillRect(x,y,3,3)}
+ if(nearTarget){
+  $("mission").textContent="✨ Yaklaştın! E / ETKİLEŞİM";
+ }else updateUI();
 }
-function drawBuilding(x,y,w,h,wall,roof){
- ctx.fillStyle="#0004";ctx.fillRect(x-w/2+4,y-h/2+8,w,h);
- ctx.fillStyle=wall;ctx.fillRect(x-w/2,y-h/2,w,h);
- ctx.fillStyle=roof;ctx.beginPath();ctx.moveTo(x-w/2-8,y-h/2);ctx.lineTo(x,y-h/2-28);ctx.lineTo(x+w/2+8,y-h/2);ctx.closePath();ctx.fill();
- ctx.fillStyle="#594632";ctx.fillRect(x-8,y+4,16,h/2);
- ctx.fillStyle="#8bd5e5";ctx.fillRect(x-w/2+9,y-h/2+10,12,12);ctx.fillRect(x+w/2-21,y-h/2+10,12,12);
+function update(dt){
+ if(paused)return;
+ let x=0,z=0;
+ if(keys.KeyA||keys.ArrowLeft)x-=1;
+ if(keys.KeyD||keys.ArrowRight)x+=1;
+ if(keys.KeyW||keys.ArrowUp)z-=1;
+ if(keys.KeyS||keys.ArrowDown)z+=1;
+ x+=joy.x;z+=joy.y;
+ const length=Math.hypot(x,z);
+ if(length>1){x/=length;z/=length}
+ const speed=7;
+ // Kamera yönüne göre hareket
+ const forward=new THREE.Vector3(Math.sin(cameraAngle),0,Math.cos(cameraAngle));
+ const right=new THREE.Vector3(forward.z,0,-forward.x);
+ const move=new THREE.Vector3().addScaledVector(right,x).addScaledVector(forward,z);
+ if(move.lengthSq()>.001){
+  move.normalize();
+  hero.position.addScaledVector(move,speed*dt);
+  hero.rotation.y=Math.atan2(move.x,move.z);
+ }
+ hero.position.x=THREE.MathUtils.clamp(hero.position.x,-43,43);
+ hero.position.z=THREE.MathUtils.clamp(hero.position.z,-43,43);
+ verticalSpeed-=18*dt;
+ hero.position.y+=verticalSpeed*dt;
+ if(hero.position.y<0){hero.position.y=0;verticalSpeed=0}
+ // Kristal hareketi
+ crystals.forEach(c=>{
+  if(!c.got){c.mesh.rotation.y+=dt*1.4;c.mesh.position.y=1+Math.sin(performance.now()*.002+c.x)*.2}
+ });
+ monster.position.y=0;
+ // Kamera takip
+ const target=new THREE.Vector3(hero.position.x,hero.position.y+1.5,hero.position.z);
+ const desired=new THREE.Vector3(
+  hero.position.x+Math.sin(cameraAngle)*9,
+  hero.position.y+6,
+  hero.position.z+Math.cos(cameraAngle)*9
+ );
+ camera.position.lerp(desired,1-Math.pow(.001,dt));
+ camera.lookAt(target);
+ nearestInteraction();
 }
-sync();
+function animate(){
+ requestAnimationFrame(animate);
+ const dt=Math.min(clock.getDelta(),.04);
+ update(dt);
+ renderer.render(scene,camera);
+}
+function resize(){
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
+}
+window.addEventListener("resize",resize);
+
+$("helpButton").onclick=()=>{
+ modal(`<h2>🎮 Kontroller</h2><div id="helpContent">
+ <h3>💻 Bilgisayar</h3>
+ <p><kbd>W</kbd> ileri · <kbd>S</kbd> geri<br><kbd>A</kbd> sol · <kbd>D</kbd> sağ<br><kbd>SPACE</kbd> zıpla<br><kbd>E</kbd> etkileşim<br>Fareyi basılı tutup sağa-sola sürükle: kamera</p>
+ <hr>
+ <h3>📱 Telefon</h3>
+ <p>Sol alttaki büyük yuvarlak joystick ile her yöne hareket et. İçindeki küçük daireyi sürükle.<br><b>ZIPLA:</b> zıplama düğmesi.<br><b>ETKİLEŞİM:</b> karakterlerle konuşma, kristal toplama ve savaş.</p>
+ <hr>
+ <h3>🖥️ Akıllı tahta</h3>
+ <p>Ekranın sol altındaki joysticki parmağınla sürükle.<br>Sağ alttaki ZIPLA ve ETKİLEŞİM düğmelerine dokun.<br>Karakterlere yaklaşınca etkileşim düğmesini kullan.</p>
+ <hr><p>💡 İpucu: Parlayan kristalleri topla. Bilge Lora ile konuş. Beş Türkçe görevini tamamlayıp kaleye git.</p>
+ </div><button class="primary" id="closeHelp">Oyuna dön</button>`);
+ $("closeHelp").onclick=closeModal;
+};
+$("begin").onclick=()=>{
+ state.name=$("name").value.trim()||"Kahraman";
+ $("start").style.display="none";paused=false;
+ showToast("Bilge Lora'yı bul ve onunla konuş!");
+ updateUI();
+};
+animate();
 })();
 </script>
 </body>
