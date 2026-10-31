@@ -1,519 +1,819 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Türkçe Kahramanı 3D - Kayıp Krallık</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Kelime Kaçışı: Zihin Arenası</title>
 <style>
+:root{--ink:#f7f4e9;--panel:#17243b;--gold:#ffd36a;--cyan:#75e6df;--pink:#ff799e}
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#101827;color:white;font-family:Arial,sans-serif;touch-action:none}
-#game{position:fixed;inset:0}
-canvas{display:block}
-#top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
-#stats{display:flex;gap:7px;flex-wrap:wrap}
-.stat{background:#17243bdc;border:1px solid #ffffff35;padding:9px 12px;border-radius:12px;font-weight:bold;font-size:13px}
-#helpButton{pointer-events:auto;border:1px solid #ffffff55;background:#17243b;color:white;border-radius:50%;width:38px;height:38px;font-size:19px;font-weight:bold}
-#mission{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#17243be8;border:1px solid #ffffff35;border-radius:12px;padding:10px 15px;text-align:center;font-size:13px;max-width:90%;width:max-content}
-#joystick{position:fixed;left:22px;bottom:25px;width:145px;height:145px;border-radius:50%;background:#17243b88;border:3px solid #ffffff80;touch-action:none;display:none}
-#stick{position:absolute;left:50%;top:50%;width:57px;height:57px;border-radius:50%;background:#ffd166;border:3px solid white;transform:translate(-50%,-50%);box-shadow:0 4px 14px #0008}
-#mobileActions{position:fixed;right:20px;bottom:27px;display:none;gap:12px;align-items:flex-end}
-.action{width:68px;height:68px;border-radius:50%;background:#ffd166;color:#172033;border:3px solid white;font-size:12px;font-weight:900;box-shadow:0 5px 15px #0008;touch-action:none}
-.action.small{width:57px;height:57px;background:#75d8bc}
-#keyboardHint{position:fixed;bottom:13px;left:50%;transform:translateX(-50%);background:#17243bdc;padding:9px 15px;border-radius:10px;font-size:12px;white-space:nowrap}
-#toast{position:fixed;top:125px;left:50%;transform:translateX(-50%);background:#17243bf2;border:1px solid #ffd166;border-radius:12px;padding:12px 18px;display:none;text-align:center;max-width:90%;z-index:5}
-#modal{position:fixed;inset:0;background:#050a13d9;display:none;align-items:center;justify-content:center;padding:14px;z-index:10}
-.box{width:min(540px,100%);max-height:90vh;overflow:auto;background:#1b2b46;border:1px solid #637b9c;border-radius:19px;padding:22px;box-shadow:0 20px 70px #0009}
-.box h2{color:#ffd166;margin-top:5px}
-.box p{line-height:1.6;color:#e0e9f7}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
-.answer{background:#304665;color:white;padding:13px;border:1px solid #536d91;border-radius:10px;text-align:left}
-.answer:disabled{opacity:.8}
-button{cursor:pointer}
-.primary{background:#ffd166;color:#172033;border:0;border-radius:10px;padding:12px 17px;font-weight:bold}
-.secondary{background:#344b6b;color:white;border:1px solid #637b9c;border-radius:10px;padding:12px 17px}
-#start{position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#3b765e,#111b2c 70%);display:flex;align-items:center;justify-content:center;padding:15px;z-index:20}
-#start .box{text-align:center}
-#start h1{font-size:clamp(28px,6vw,48px);color:#ffd166}
-#name{width:100%;padding:13px;border-radius:9px;border:1px solid #647b98;background:#101827;color:white;font-size:16px;margin:8px 0 15px}
-#helpContent{line-height:1.7}
-kbd{background:#0c1728;border:1px solid #61748f;border-radius:5px;padding:3px 7px;color:#ffd166}
-@media(pointer:coarse),(max-width:800px){
- #joystick{display:block}
- #mobileActions{display:flex}
- #keyboardHint{display:none}
-}
-@media(max-width:430px){
- #joystick{width:125px;height:125px;left:14px;bottom:18px}
- #stick{width:51px;height:51px}
- #mobileActions{right:12px;bottom:22px;gap:7px}
- .action{width:59px;height:59px}
- .action.small{width:51px;height:51px}
- .stat{font-size:11px;padding:7px 9px}
- #mission{top:58px}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101a2b;color:var(--ink);font-family:system-ui,Segoe UI,Arial,sans-serif;touch-action:none}
+#wrap{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 15%,#314b69,#101827 72%)}
+canvas{display:block;width:100%;height:100%;max-width:1200px;max-height:760px;image-rendering:pixelated;touch-action:none}
+#hud{position:fixed;inset:12px 12px auto;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px}
+.hudbox{background:#111d31ef;border:1px solid #ffffff25;border-radius:14px;padding:9px 13px;box-shadow:0 5px 20px #0004;font-size:13px}
+.brand{font-weight:900;font-size:16px;letter-spacing:.3px}
+.muted{color:#b8c7d9}
+.bar{height:8px;width:130px;background:#ffffff20;border-radius:20px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff668c,#ffb36c);border-radius:20px}
+.xpbar i{background:linear-gradient(90deg,#6ad9d0,#9aeb9b)}
+#topBtns{position:fixed;right:14px;top:75px;display:flex;gap:7px;z-index:5}
+button{font:inherit;color:inherit;border:1px solid #ffffff35;background:#263a58;border-radius:11px;padding:10px 13px;font-weight:750;cursor:pointer}
+button:active{transform:translateY(1px)}
+button:hover{filter:brightness(1.15)}
+#hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111d31d9;border:1px solid #ffffff22;border-radius:30px;padding:8px 15px;font-size:12px;color:#d7e4f4;white-space:nowrap;pointer-events:none}
+#overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#08111bd9;z-index:10;padding:18px}
+#panel{width:min(540px,100%);background:linear-gradient(160deg,#253b5a,#17243b);border:1px solid #ffffff3a;border-radius:22px;padding:24px;box-shadow:0 20px 70px #0009;text-align:center}
+#panel h1{font-size:clamp(25px,5vw,38px);margin:0 0 8px}
+#panel p{color:#c7d5e5;line-height:1.55}
+#answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+#answers button{text-align:left;min-height:54px;background:#314968;border-color:#ffffff28}
+#answers button.correct{background:#1d705e}
+#answers button.wrong{background:#8a3b54}
+#feedback{min-height:26px;margin-top:13px;font-weight:800;color:var(--gold)}
+.big{font-size:46px;margin:4px}
+#startScreen{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 35%,#395d78,#101827 75%)}
+.startcard{width:min(570px,100%);text-align:center;background:#14233bdc;border:1px solid #ffffff30;border-radius:25px;padding:28px;box-shadow:0 20px 70px #0008}
+.startcard h1{font-size:clamp(32px,7vw,55px);line-height:1.02;margin:5px 0 12px}
+.startcard h1 span{color:var(--gold)}
+.startcard p{color:#c9d8e9;line-height:1.6}
+.startcard .startbtn{background:linear-gradient(120deg,#e8a84f,#f06d83);border:0;color:#1d2636;font-size:18px;padding:14px 30px;border-radius:14px}
+.chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:17px 0}
+.chips span{border:1px solid #ffffff25;background:#ffffff0e;padding:7px 11px;border-radius:20px;font-size:12px}
+#touchControls{display:none;position:fixed;inset:auto 16px 22px;justify-content:space-between;align-items:end;z-index:4;pointer-events:none}
+#stickBase{width:126px;height:126px;border:3px solid #e8f3ff88;background:#dcecff20;border-radius:50%;position:relative;pointer-events:auto;touch-action:none;box-shadow:inset 0 0 20px #fff1}
+#stick{position:absolute;width:48px;height:48px;border-radius:50%;background:#dcecffb8;border:2px solid #fff;left:36px;top:36px;box-shadow:0 3px 12px #0005}
+#touchBtns{display:flex;gap:9px;pointer-events:auto}
+#touchBtns button{width:64px;height:64px;border-radius:50%;padding:0;background:#263e61ef;border:2px solid #b8d7f7;font-size:11px}
+#toast{position:fixed;left:50%;top:20%;transform:translate(-50%,-10px);opacity:0;background:#14243bef;border:1px solid #ffd36a;border-radius:12px;padding:11px 17px;z-index:7;font-weight:800;transition:.2s;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px),(pointer:coarse){
+ #touchControls{display:flex}
+ #hint{bottom:160px;font-size:10px}
+ .bar{width:85px}
+ #topBtns{top:82px;right:10px}
+ #hud{inset:9px 9px auto}
+ .hudbox{padding:8px 10px;font-size:11px}
+ .brand{font-size:13px}
 }
 </style>
 </head>
 <body>
-<div id="game"></div>
+<div id="wrap"><canvas id="game" aria-label="Kelime Kaçışı oyun alanı"></canvas></div>
 
-<div id="top">
- <div id="stats">
-  <div class="stat">⭐ Seviye <span id="level">1</span></div>
-  <div class="stat">✨ XP <span id="xp">0</span></div>
-  <div class="stat">🪙 <span id="gold">0</span></div>
-  <div class="stat">💎 <span id="gems">0</span></div>
+<div id="hud" style="display:none">
+ <div class="hudbox">
+  <div class="brand">🗝️ KELİME KAÇIŞI</div>
+  <div class="muted">Bölüm <b id="level">1</b> · ⭐ <b id="score">0</b></div>
  </div>
- <button id="helpButton" aria-label="Kontroller">?</button>
+ <div class="hudbox">
+  <div>❤️ <b id="hearts">3</b>　🪙 <b id="coins">0</b></div>
+  <div class="bar"><i id="hpbar"></i></div>
+  <div class="muted" style="margin-top:5px">Bilgi gücü</div>
+  <div class="bar xpbar"><i id="xpbar" style="width:0%"></i></div>
+ </div>
 </div>
 
-<div id="mission">📜 Görev: Bilge Lora'yı bul</div>
+<div id="topBtns" style="display:none">
+ <button id="help">? Yardım</button>
+ <button id="pause">Ⅱ</button>
+</div>
+
+<div id="hint" style="display:none">WASD / Oklar: hareket　·　Boşluk: atılma　·　Kapıya yaklaş: E</div>
 <div id="toast"></div>
 
-<div id="joystick" aria-label="Hareket joysticki">
- <div id="stick"></div>
-</div>
-
-<div id="mobileActions">
- <button class="action small" id="jump">ZIPLA</button>
- <button class="action" id="interact">ETKİLEŞİM</button>
-</div>
-
-<div id="keyboardHint">WASD: Hareket · SPACE: Zıpla · E: Etkileşim · Fare: Kamera</div>
-
-<div id="modal">
- <div class="box" id="dialog"></div>
-</div>
-
-<div id="start">
- <div class="box">
-  <div style="font-size:65px">⚔️🏰📚</div>
-  <h1>Türkçe Kahramanı 3D</h1>
-  <h2>KAYIP KRALLIK</h2>
-  <p>Kelime canavarları krallığın dilini çaldı! 3D dünyayı keşfet, kristalleri topla, görevleri tamamla ve Türkçe bilginle krallığı kurtar.</p>
-  <input id="name" maxlength="16" placeholder="Kahramanının adı">
-  <button class="primary" id="begin" style="width:100%;font-size:17px">MACERAYA BAŞLA</button>
-  <p style="font-size:12px">Bilgisayar, telefon ve akıllı tahta desteği.</p>
+<div id="touchControls">
+ <div id="stickBase"><div id="stick"></div></div>
+ <div id="touchBtns">
+  <button id="dashBtn">ATIL</button>
+  <button id="useBtn">ETKİLEŞ</button>
  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<div id="startScreen">
+ <div class="startcard">
+  <div class="big">🧭✨📚</div>
+  <h1>KELİME<br><span>KAÇIŞI</span></h1>
+  <p>Gölge Labirenti'nden kaç! Altınları topla, gölgelerden sıyrıl ve Türkçe bilgini kullanarak kapıları aç. Her doğru cevap seni güçlendirir.</p>
+  <div class="chips">
+   <span>🎮 2D macera</span>
+   <span>🧠 7. sınıf Türkçe</span>
+   <span>📱 Telefon desteği</span>
+  </div>
+  <button class="startbtn" id="start">MACERAYA BAŞLA</button>
+  <p class="muted" style="font-size:12px">İlerleme bu cihazda otomatik kaydedilir.</p>
+ </div>
+</div>
+
+<div id="overlay">
+ <div id="panel">
+  <div class="big" id="modalIcon">📜</div>
+  <h1 id="modalTitle">Kapı bilmecesi</h1>
+  <p id="question">Soru burada</p>
+  <div id="answers"></div>
+  <div id="feedback"></div>
+  <button id="continue" style="display:none;margin-top:10px">Devam et</button>
+ </div>
+</div>
+
 <script>
 (()=>{
-"use strict";
+'use strict';
+
+const canvas=document.getElementById('game');
+const ctx=canvas.getContext('2d');
 const $=id=>document.getElementById(id);
-if(!window.THREE){
- $("start").querySelector(".box").innerHTML=
- '<h2>3D motor yüklenemedi</h2><p>İnternet bağlantını kontrol et ve sayfayı yenile.</p>';
- return;
-}
+const W=960,H=600;
 
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x8bd4ed);
-scene.fog=new THREE.Fog(0x8bd4ed,35,105);
+let dpr=1,scale=1,offsetX=0,offsetY=0,last=0,raf=0;
+let mode='menu',level=1,score=0,coins=0,hearts=3,knowledge=0;
+let gateIndex=0,toastTimer=0;
+const keys=new Set();
+const joy={x:0,y:0,id:null};
 
-const camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,180);
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-$("game").appendChild(renderer.domElement);
-
-scene.add(new THREE.HemisphereLight(0xc7efff,0x53613d,2));
-const sun=new THREE.DirectionalLight(0xfff0d0,2.3);
-sun.position.set(-20,35,18);
-sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048);
-sun.shadow.camera.left=-45;
-sun.shadow.camera.right=45;
-sun.shadow.camera.top=45;
-sun.shadow.camera.bottom=-45;
-scene.add(sun);
-
-const mats={
- grass:new THREE.MeshStandardMaterial({color:0x4b9b59}),
- grass2:new THREE.MeshStandardMaterial({color:0x397e4c}),
- dirt:new THREE.MeshStandardMaterial({color:0x89613e}),
- stone:new THREE.MeshStandardMaterial({color:0x929da5}),
- wood:new THREE.MeshStandardMaterial({color:0x765033}),
- leaf:new THREE.MeshStandardMaterial({color:0x287448}),
- leaf2:new THREE.MeshStandardMaterial({color:0x398a4d}),
- gold:new THREE.MeshStandardMaterial({color:0xffd04b,emissive:0x7b4900}),
- water:new THREE.MeshStandardMaterial({color:0x38a9cb,roughness:.25}),
- white:new THREE.MeshStandardMaterial({color:0xffffff}),
- dark:new THREE.MeshStandardMaterial({color:0x28344c}),
- blue:new THREE.MeshStandardMaterial({color:0x3485d2}),
- skin:new THREE.MeshStandardMaterial({color:0xf1c69c}),
- red:new THREE.MeshStandardMaterial({color:0xb94646}),
- crystal:new THREE.MeshStandardMaterial({color:0x61edff,emissive:0x146d8b,roughness:.2})
+const player={
+ x:100,y:300,r:15,speed:205,dx:0,dy:0,
+ inv:0,dash:0,face:1
 };
 
-const cubeGeo=new THREE.BoxGeometry(1,1,1);
-function cube(parent,x,y,z,sx,sy,sz,mat){
- const m=new THREE.Mesh(cubeGeo,mat);
- m.position.set(x,y,z);m.scale.set(sx,sy,sz);
- m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;
-}
-function group(){return new THREE.Group()}
+let walls=[],gold=[],orbs=[],enemies=[],gates=[],particles=[];
+let worldW=1800,worldH=1100;
+let camera={x:0,y:0};
 
-const floor=cube(scene,0,-.7,0,100,1,100,mats.grass);
-floor.receiveShadow=true;
-
-// Taş yollar
-function road(x,z,w,d){
- cube(scene,x,-.12,z,w,.13,d,mats.dirt);
- for(let i=0;i<Math.floor(w*d/5);i++){
-  let px=x+(Math.random()-.5)*w*.9;
-  let pz=z+(Math.random()-.5)*d*.9;
-  cube(scene,px,-.025,pz,.7,.08,.7,mats.stone);
- }
-}
-road(0,0,10,60);
-road(0,-15,48,7);
-road(0,15,48,7);
-road(-15,0,7,30);
-road(15,0,7,30);
-
-// Su göleti
-const pond=new THREE.Mesh(new THREE.CylinderGeometry(7,7,.2,32),mats.water);
-pond.position.set(-26,-.1,19);pond.receiveShadow=true;scene.add(pond);
-
-// Ağaçlar
-function tree(x,z,s=1){
- const g=group();g.position.set(x,0,z);g.scale.setScalar(s);
- cube(g,0,1,0,.7,2,.7,mats.wood);
- const a=cube(g,0,3,0,3,3,3,mats.leaf);
- cube(g,-.6,4.2,.2,1.8,1.8,1.8,mats.leaf2);
- scene.add(g);
- return g;
-}
-for(let i=0;i<95;i++){
- const x=(Math.random()-.5)*88,z=(Math.random()-.5)*88;
- if(Math.abs(x)<23&&Math.abs(z)<23)continue;
- if(Math.hypot(x+26,z-19)<9)continue;
- tree(x,z,.7+Math.random()*.6);
-}
-
-// Kale
-function castle(x,z){
- const g=group();g.position.set(x,0,z);
- cube(g,0,2,0,13,4,10,mats.stone);
- cube(g,0,4.4,0,14,.8,11,mats.dirt);
- for(const dx of [-6,6])for(const dz of [-4.5,4.5]){
-  cube(g,dx,5,dz,2.5,6,2.5,mats.stone);
-  cube(g,dx,8,dz,3,1.2,3,mats.red);
- }
- cube(g,0,1,5.1,3,2,1,mats.wood);
- cube(g,0,2.2,5.7,1.5,2.5,.3,mats.dark);
- scene.add(g);
-}
-castle(0,-33);
-
-// Binalar
-function house(x,z,color){
- const g=group();g.position.set(x,0,z);
- const wall=new THREE.MeshStandardMaterial({color});
- cube(g,0,2,0,8,4,7,wall);
- const roof=new THREE.Mesh(new THREE.ConeGeometry(6,3,4),mats.red);
- roof.position.y=5;roof.rotation.y=Math.PI/4;roof.castShadow=true;g.add(roof);
- cube(g,0,1,3.6,1.5,2,.2,mats.wood);
- cube(g,-2,2,3.61,1.2,1.2,.2,mats.blue);
- cube(g,2,2,3.61,1.2,1.2,.2,mats.blue);
- scene.add(g);
-}
-house(-15,-13,0xd8bd87);
-house(15,-13,0xc9d3df);
-house(-15,14,0xc9a0a0);
-house(15,14,0xb5c9a4);
-
-// Oyuncu
-function makeHero(){
- const g=group();
- cube(g,0,1.3,0,.95,1.3,.65,mats.blue);
- cube(g,0,2.25,0,.9,.85,.85,mats.skin);
- cube(g,0,2.7,0,1,.28,.95,mats.dark);
- cube(g,-.2,2.3,.43,.09,.1,.06,mats.white);
- cube(g,.2,2.3,.43,.09,.1,.06,mats.white);
- cube(g,-.3,.45,0,.35,.9,.4,mats.dark);
- cube(g,.3,.45,0,.35,.9,.4,mats.dark);
- cube(g,-.63,1.3,0,.3,1,.35,mats.skin);
- cube(g,.63,1.3,0,.3,1,.35,mats.skin);
- const sword=cube(g,.9,1.3,0,.16,1.2,.18,mats.stone);
- sword.rotation.z=-.3;
- scene.add(g);return g;
-}
-const hero=makeHero();
-hero.position.set(0,0,0);
-
-// NPC
-function makeNPC(x,z,color){
- const g=group();
- const body=new THREE.MeshStandardMaterial({color});
- cube(g,0,1.2,0,.9,1.2,.65,body);
- cube(g,0,2,0,.85,.8,.8,mats.skin);
- cube(g,0,2.4,0,.9,.2,.9,mats.gold);
- cube(g,-.2,2.1,.4,.1,.1,.06,mats.dark);
- cube(g,.2,2.1,.4,.1,.1,.06,mats.dark);
- g.position.set(x,0,z);scene.add(g);return g;
-}
-const npc=makeNPC(5,2,0x8b65cc);
-const guard=makeNPC(-8,-29,0xb84a4a);
-
-// Kristaller
-const crystals=[];
-function makeCrystal(x,z){
- const g=group();
- const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.65),mats.crystal);
- mesh.position.y=1;mesh.castShadow=true;g.add(mesh);
- const base=cube(g,0,.1,0,1.2,.2,1.2,mats.stone);
- g.position.set(x,0,z);scene.add(g);
- crystals.push({group:g,mesh,got:false,x,z});
-}
-[[-8,4],[10,6],[19,0],[-19,-3],[9,-20],[-10,-20],[24,20],[-28,2],[0,23],[28,-18]].forEach(p=>makeCrystal(p[0],p[1]));
-
-// Düşman
-function makeMonster(x,z){
- const g=group();
- const purple=new THREE.MeshStandardMaterial({color:0x7542a1});
- cube(g,0,1,0,1.3,1.6,1.2,purple);
- cube(g,0,2,0,1.2,.8,1.1,mats.dark);
- cube(g,-.25,2.1,.57,.18,.18,.08,mats.red);
- cube(g,.25,2.1,.57,.18,.18,.08,mats.red);
- cube(g,-.8,.7,0,.4,1,.5,purple);
- cube(g,.8,.7,0,.4,1,.5,purple);
- g.position.set(x,0,z);scene.add(g);return g;
-}
-const monster=makeMonster(24,-30);
-
-// Etkileşim noktaları
 const questions=[
- {t:"Sözcükte anlam",q:"“Bu haber içimi ısıttı.” cümlesinde bu söz hangi anlamdadır?",a:["Gerçek anlam","Mecaz anlam","Terim anlam","Yan anlam"],c:1,e:"İçimi ısıttı sözü burada mutlu olmak, sevinmek anlamında kullanılmıştır."},
- {t:"Deyimler",q:"“Etekleri zil çalmak” deyimi ne demektir?",a:["Çok yorulmak","Çok sevinmek","Korkmak","Şaşırmak"],c:1,e:"Bu deyim çok sevinmek anlamına gelir."},
- {t:"Fiiller",q:"Hangisi oluş fiilidir?",a:["Kapıyı açmak","Kitap okumak","Yaprakların sararması","Koşmak"],c:2,e:"Sararmak, zaman içinde kendiliğinden gerçekleşen bir değişimdir."},
- {t:"Zarflar",q:"“Çocuk hızlıca koştu.” cümlesinde hızlıca hangi sözcüğü belirtir?",a:["Çocuk","Koştu","Cümleyi","Hiçbirini"],c:1,e:"Hızlıca, koşma eyleminin nasıl yapıldığını anlatır."},
- {t:"Yazım kuralları",q:"Hangisi doğru yazılmıştır?",a:["Bende geliyorum.","Ben de geliyorum.","Ben deki kitap.","Ev de kimse yok."],c:1,e:"Bağlaç olan de ayrı yazılır."},
- {t:"Noktalama",q:"Soru cümlesinin sonuna hangi işaret konur?",a:["Nokta","Virgül","Soru işareti","İki nokta"],c:2,e:"Soru cümlelerinin sonunda soru işareti kullanılır."},
- {t:"Cümlede anlam",q:"“Yağmur yağdığı için maç ertelendi.” cümlesinde hangi ilişki vardır?",a:["Amaç-sonuç","Neden-sonuç","Koşul-sonuç","Karşılaştırma"],c:1,e:"Maçın ertelenme nedeni yağmurun yağmasıdır."},
- {t:"Atasözleri",q:"“Damlaya damlaya göl olur.” ne anlatır?",a:["Küçük birikimler büyür","Yağmur tehlikelidir","Göller kurur","Su içmek gerekir"],c:0,e:"Küçük birikimler zamanla büyük sonuçlar oluşturur."},
- {t:"Ana fikir",q:"Düzenli kitap okumanın en önemli yararlarından biri nedir?",a:["Kelime dağarcığını geliştirmesi","Uykuyu azaltması","Zamanı durdurması","Her kitabı ezberletmesi"],c:0,e:"Okumak kelime bilgimizi ve kendimizi ifade etme becerimizi geliştirir."}
+ {q:'“Ağzı kulaklarına varmak” deyimi hangi anlamda kullanılır?',
+  a:['Çok sevinmek','Çok yorulmak','Şaşırıp kalmak','Kızmak'],c:0,
+  e:'Bu deyim çok sevinmek, mutlu olmak anlamına gelir.'},
+ {q:'Aşağıdaki cümlelerin hangisinde neden-sonuç ilişkisi vardır?',
+  a:['Kitabımı masaya bıraktım.','Yağmur yağdığı için maç ertelendi.','Yarın erkenden kalkacağım.','Keşke bize gelsen.'],c:1,
+  e:'“Yağmur yağdığı için” bölümü maçın ertelenme nedenini açıklar.'},
+ {q:'“Hızlıca” sözcüğünün türü nedir?',
+  a:['İsim','Sıfat','Zarf','Zamir'],c:2,
+  e:'Hızlıca, fiilin nasıl yapıldığını belirtir; durum zarfıdır.'},
+ {q:'Hangisinde yazım yanlışı vardır?',
+  a:['Her şey yolunda.','Birçok kitap okudum.','Hiç bir şey bilmiyorum.','Bugün okula gittim.'],c:2,
+  e:'“Hiçbir” bitişik yazılır.'},
+ {q:'“Küçük çocuk sessizce kapıyı açtı.” cümlesinde sıfat hangisidir?',
+  a:['küçük','çocuk','sessizce','açtı'],c:0,
+  e:'“Küçük”, çocuk ismini niteleyen sıfattır.'},
+ {q:'Bir metinde yazarın asıl anlatmak istediği düşünceye ne denir?',
+  a:['Konu','Ana fikir','Başlık','Örnek'],c:1,
+  e:'Ana fikir, metnin vermek istediği temel düşüncedir.'},
+ {q:'Hangisi eş anlamlı sözcük çiftidir?',
+  a:['Ak-kara','Uzak-yakın','Yanıt-cevap','Az-çok'],c:2,
+  e:'Yanıt ve cevap aynı anlamda kullanılır.'},
+ {q:'“Eyvah, anahtarımı evde unuttum!” cümlesinin sonuna hangi noktalama işareti gelir?',
+  a:['Nokta','Virgül','Soru işareti','Ünlem'],c:3,
+  e:'Duygu bildiren bu cümlenin sonunda ünlem kullanılır.'},
+ {q:'Hangisi öznel bir yargıdır?',
+  a:['Türkiye’nin başkenti Ankara’dır.','Bu film çok etkileyici.','Bir hafta yedi gündür.','Su 100°C’de kaynar.'],c:1,
+  e:'“Çok etkileyici” kişisel görüş bildirir.'},
+ {q:'“Damlaya damlaya göl olur.” atasözü neyi öğütler?',
+  a:['Sabırlı ve birikimli olmayı','Hızlı karar vermeyi','Yardım istememeyi','Risk almayı'],c:0,
+  e:'Küçük birikimler zamanla büyük sonuçlar oluşturur.'},
+ {q:'Hangisinde karşılaştırma yapılmıştır?',
+  a:['Bugün hava güneşli.','Ece, Duru’dan daha hızlı koşuyor.','Kapıyı yavaşça kapattı.','Bahçede üç kedi var.'],c:1,
+  e:'“Daha hızlı” ifadesi iki kişi arasında karşılaştırma yapar.'},
+ {q:'“Koşarak sınıfa girdi.” cümlesinde fiilimsi hangisidir?',
+  a:['sınıfa','girdi','koşarak','-'],c:2,
+  e:'“-arak” eki alan “koşarak” zarf-fiildir.'}
 ];
 
-let state={name:"Kahraman",xp:0,gold:0,gems:0,done:[],boss:false};
-let paused=true,keys={},joy={x:0,y:0},jumping=false,verticalSpeed=0;
-let cameraAngle=0,cameraDistance=9,nearTarget=null,toastTimer;
-const clock=new THREE.Clock();
-
-function showToast(text){
- const t=$("toast");t.textContent=text;t.style.display="block";
- clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",2300);
-}
-function updateUI(){
- $("level").textContent=1+Math.floor(state.xp/100);
- $("xp").textContent=state.xp%100;
- $("gold").textContent=state.gold;
- $("gems").textContent=state.gems;
- $("mission").textContent=state.boss?"🏆 Krallık kurtarıldı!":state.done.length<5?"📜 Görev: Kristalleri ve Türkçe bilgini topla":"⚔️ Son görev: Kelime Muhafızı";
-}
-function modal(html){
- paused=true;$("dialog").innerHTML=html;$("modal").style.display="flex";
-}
-function closeModal(){ $("modal").style.display="none";paused=false; }
-function question(q,callback){
- let locked=false;
- modal(`<div style="color:#72e2ba;font-size:12px;font-weight:bold">${q.t}</div>
- <h2>📚 Türkçe Görevi</h2><p style="font-size:19px;line-height:1.5">${q.q}</p>
- <div class="answers" id="answers"></div><div id="feedback" style="display:none;padding:12px;border-radius:10px;background:#102e2a;line-height:1.5"></div>
- <button class="primary" id="next" disabled>Devam et</button>`);
- q.a.forEach((a,i)=>{
-  const b=document.createElement("button");b.className="answer";b.textContent=a;
-  b.onclick=()=>{
-   if(locked)return;locked=true;
-   document.querySelectorAll(".answer").forEach(x=>x.disabled=true);
-   let ok=i===q.c;
-   b.style.background=ok?"#176047":"#6b3040";
-   if(ok){state.xp+=25;state.gold+=10;showToast("+25 XP · +10 altın")}
-   else showToast("Birlikte öğreniyoruz!");
-   $("feedback").style.display="block";
-   $("feedback").innerHTML=(ok?"✅ Doğru! ":"📖 Doğru cevap: "+q.a[q.c]+". ")+q.e;
-   $("next").disabled=false;updateUI();
-  };
-  $("answers").appendChild(b);
- });
- $("next").onclick=()=>{if(!locked)return;$("modal").style.display="none";paused=false;callback(locked)};
-}
-function interact(){
- if(paused)return;
- if(!nearTarget){showToast("Yakınında etkileşime geçilecek bir şey yok.");return}
- if(nearTarget==="npc"){
-  question(questions[0],()=>{
-   if(!state.done.includes(0))state.done.push(0);
-   showToast("Bilge Lora sana teşekkür ediyor!");
-   updateUI();
-  });
- }else if(nearTarget==="guard"){
-  if(state.done.length<5){showToast("Muhafız için önce 5 görev tamamla!");return}
-  bossBattle();
- }else if(nearTarget.type==="crystal"){
-  const c=nearTarget;
-  if(c.got)return;
-  c.got=true;c.group.visible=false;state.gems++;state.gold+=5;state.xp+=5;
-  showToast("💎 Kristal topladın! +5 XP");
-  updateUI();
- }else if(nearTarget==="monster"){
-  if(state.gems<2){showToast("Canavarın kalkanını kırmak için 2 kristal bul!");return}
-  question(questions[2],()=>{monster.visible=false;state.xp+=30;state.gold+=20;showToast("Canavar yenildi!");updateUI()});
- }
-}
-function bossBattle(){
- if(state.boss){showToast("Muhafız zaten yenildi!");return}
- const q=questions[8];
- question(q,()=>{
-  state.boss=true;state.xp+=100;state.gold+=100;
-  monster.visible=false;guard.visible=false;
-  modal(`<h2>🏆 KRALLIK KURTULDU!</h2><p>${state.name}, Kelime Muhafızı'nı yendin! Türkçe bilginle kayıp krallığı kurtardın.</p><p>⭐ +100 XP · 🪙 +100 altın</p><button class="primary" id="finish">Harika!</button>`);
-  $("finish").onclick=closeModal;updateUI();
- });
-}
-
-// Joystick: dairesel dış alan ve hareketli iç top
-const joystick=$("joystick"),stick=$("stick");
-let joyPointer=null;
-function setJoy(e){
- const r=joystick.getBoundingClientRect();
- const cx=r.left+r.width/2,cy=r.top+r.height/2;
- let dx=e.clientX-cx,dy=e.clientY-cy;
- const max=r.width*.34;
- const len=Math.hypot(dx,dy);
- if(len>max){dx=dx/len*max;dy=dy/len*max}
- joy.x=dx/max;joy.y=dy/max;
- stick.style.left=`calc(50% + ${dx}px)`;
- stick.style.top=`calc(50% + ${dy}px)`;
-}
-function resetJoy(){
- joy={x:0,y:0};joyPointer=null;
- stick.style.left="50%";stick.style.top="50%";
-}
-joystick.addEventListener("pointerdown",e=>{
- e.preventDefault();joyPointer=e.pointerId;joystick.setPointerCapture(e.pointerId);setJoy(e);
-});
-joystick.addEventListener("pointermove",e=>{if(e.pointerId===joyPointer)setJoy(e)});
-joystick.addEventListener("pointerup",e=>{if(e.pointerId===joyPointer)resetJoy()});
-joystick.addEventListener("pointercancel",resetJoy);
-
-$("jump").addEventListener("pointerdown",e=>{e.preventDefault();if(!paused&&hero.position.y<.05){verticalSpeed=7.5}});
-$("interact").addEventListener("pointerdown",e=>{e.preventDefault();interact()});
-window.addEventListener("keydown",e=>{
- keys[e.code]=true;
- if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
- if(e.code==="KeyE"||e.code==="Enter")interact();
- if(e.code==="Space"&&!paused&&hero.position.y<.05)verticalSpeed=7.5;
-});
-window.addEventListener("keyup",e=>keys[e.code]=false);
-
-// Fareyle kamera döndürme
-let dragging=false,lastX=0;
-renderer.domElement.addEventListener("pointerdown",e=>{
- if(e.pointerType==="mouse"){dragging=true;lastX=e.clientX}
-});
-window.addEventListener("pointerup",()=>dragging=false);
-window.addEventListener("pointermove",e=>{
- if(dragging){cameraAngle-=(e.clientX-lastX)*.005;lastX=e.clientX}
-});
-
-function nearestInteraction(){
- nearTarget=null;let best=3.4;
- let d=Math.hypot(hero.position.x-npc.position.x,hero.position.z-npc.position.z);
- if(d<best){best=d;nearTarget="npc"}
- d=Math.hypot(hero.position.x-guard.position.x,hero.position.z-guard.position.z);
- if(d<best){best=d;nearTarget="guard"}
- d=Math.hypot(hero.position.x-monster.position.x,hero.position.z-monster.position.z);
- if(d<best&&monster.visible){best=d;nearTarget="monster"}
- crystals.forEach(c=>{
-  if(!c.got){
-   let dd=Math.hypot(hero.position.x-c.x,hero.position.z-c.z);
-   if(dd<best){best=dd;nearTarget=c}
-  }
- });
- if(nearTarget){
-  $("mission").textContent="✨ Yaklaştın! E / ETKİLEŞİM";
- }else updateUI();
-}
-function update(dt){
- if(paused)return;
- let x=0,z=0;
- if(keys.KeyA||keys.ArrowLeft)x-=1;
- if(keys.KeyD||keys.ArrowRight)x+=1;
- if(keys.KeyW||keys.ArrowUp)z-=1;
- if(keys.KeyS||keys.ArrowDown)z+=1;
- x+=joy.x;z+=joy.y;
- const length=Math.hypot(x,z);
- if(length>1){x/=length;z/=length}
- const speed=7;
- // Kamera yönüne göre hareket
- const forward=new THREE.Vector3(Math.sin(cameraAngle),0,Math.cos(cameraAngle));
- const right=new THREE.Vector3(forward.z,0,-forward.x);
- const move=new THREE.Vector3().addScaledVector(right,x).addScaledVector(forward,z);
- if(move.lengthSq()>.001){
-  move.normalize();
-  hero.position.addScaledVector(move,speed*dt);
-  hero.rotation.y=Math.atan2(move.x,move.z);
- }
- hero.position.x=THREE.MathUtils.clamp(hero.position.x,-43,43);
- hero.position.z=THREE.MathUtils.clamp(hero.position.z,-43,43);
- verticalSpeed-=18*dt;
- hero.position.y+=verticalSpeed*dt;
- if(hero.position.y<0){hero.position.y=0;verticalSpeed=0}
- // Kristal hareketi
- crystals.forEach(c=>{
-  if(!c.got){c.mesh.rotation.y+=dt*1.4;c.mesh.position.y=1+Math.sin(performance.now()*.002+c.x)*.2}
- });
- monster.position.y=0;
- // Kamera takip
- const target=new THREE.Vector3(hero.position.x,hero.position.y+1.5,hero.position.z);
- const desired=new THREE.Vector3(
-  hero.position.x+Math.sin(cameraAngle)*9,
-  hero.position.y+6,
-  hero.position.z+Math.cos(cameraAngle)*9
- );
- camera.position.lerp(desired,1-Math.pow(.001,dt));
- camera.lookAt(target);
- nearestInteraction();
-}
-function animate(){
- requestAnimationFrame(animate);
- const dt=Math.min(clock.getDelta(),.04);
- update(dt);
- renderer.render(scene,camera);
-}
 function resize(){
- camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
- renderer.setSize(innerWidth,innerHeight);
+ const ww=innerWidth,hh=innerHeight;
+ dpr=Math.min(devicePixelRatio||1,2);
+ canvas.width=Math.floor(ww*dpr);
+ canvas.height=Math.floor(hh*dpr);
+ canvas.style.width=ww+'px';
+ canvas.style.height=hh+'px';
+ scale=Math.min(ww/W,hh/H);
+ offsetX=(ww-W*scale)/2;
+ offsetY=(hh-H*scale)/2;
 }
-window.addEventListener("resize",resize);
+addEventListener('resize',resize);
+resize();
 
-$("helpButton").onclick=()=>{
- modal(`<h2>🎮 Kontroller</h2><div id="helpContent">
- <h3>💻 Bilgisayar</h3>
- <p><kbd>W</kbd> ileri · <kbd>S</kbd> geri<br><kbd>A</kbd> sol · <kbd>D</kbd> sağ<br><kbd>SPACE</kbd> zıpla<br><kbd>E</kbd> etkileşim<br>Fareyi basılı tutup sağa-sola sürükle: kamera</p>
- <hr>
- <h3>📱 Telefon</h3>
- <p>Sol alttaki büyük yuvarlak joystick ile her yöne hareket et. İçindeki küçük daireyi sürükle.<br><b>ZIPLA:</b> zıplama düğmesi.<br><b>ETKİLEŞİM:</b> karakterlerle konuşma, kristal toplama ve savaş.</p>
- <hr>
- <h3>🖥️ Akıllı tahta</h3>
- <p>Ekranın sol altındaki joysticki parmağınla sürükle.<br>Sağ alttaki ZIPLA ve ETKİLEŞİM düğmelerine dokun.<br>Karakterlere yaklaşınca etkileşim düğmesini kullan.</p>
- <hr><p>💡 İpucu: Parlayan kristalleri topla. Bilge Lora ile konuş. Beş Türkçe görevini tamamlayıp kaleye git.</p>
- </div><button class="primary" id="closeHelp">Oyuna dön</button>`);
- $("closeHelp").onclick=closeModal;
+function rand(a,b){return a+Math.random()*(b-a)}
+function rect(x,y,w,h,type='wall'){walls.push({x,y,w,h,type})}
+
+function buildLevel(n){
+ level=n;
+ worldW=1800+(n-1)*120;
+ worldH=1100;
+ walls=[];gold=[];orbs=[];enemies=[];gates=[];particles=[];
+ gateIndex=0;
+
+ // Dış sınırlar
+ rect(-30,-30,worldW+60,30);
+ rect(-30,worldH,worldW+60,30);
+ rect(-30,0,30,worldH);
+ rect(worldW,0,30,worldH);
+
+ // Geçiş boşlukları bulunan labirent duvarları
+ const rows=[210,430,650,870];
+ rows.forEach((y,i)=>{
+  const gapX=260+(i%2)*340;
+  rect(210,y,gapX-210,22);
+  rect(gapX+180,y,worldW-(gapX+180)-210,22);
+ });
+
+ // Altınlar
+ for(let i=0;i<12+n*2;i++){
+  let x=rand(170,worldW-170),y=rand(110,worldH-110);
+  if(Math.hypot(x-100,y-300)<180)continue;
+  gold.push({x,y,r:9,t:rand(0,6.28),got:false});
+ }
+
+ // Can küreleri
+ for(let i=0;i<5+n;i++){
+  let x=rand(250,worldW-130),y=rand(100,worldH-100);
+  orbs.push({x,y,r:10,t:rand(0,6.28),got:false});
+ }
+
+ // Gölge yaratıkları
+ for(let i=0;i<3+Math.min(n,4);i++){
+  let x=rand(400,worldW-100),y=rand(100,worldH-100);
+  enemies.push({
+   x,y,r:17,hp:1+n*.25,
+   speed:rand(55,78)+n*5,
+   phase:rand(0,6),stun:0
+  });
+ }
+
+ const gateX=worldW-155;
+ gates.push({x:gateX,y:worldH/2,w:36,h:130,open:false});
+
+ player.x=100;
+ player.y=worldH/2;
+ player.inv=1.4;
+ player.dash=0;
+
+ $('level').textContent=n;
+ updateHud();
+ showToast('Bölüm '+n+' başladı! Kapıyı bul.');
+}
+
+function updateHud(){
+ $('score').textContent=score;
+ $('coins').textContent=coins;
+ $('hearts').textContent='❤'.repeat(Math.max(0,hearts));
+ $('hpbar').style.width=(hearts/3*100)+'%';
+ $('xpbar').style.width=(knowledge%5*20)+'%';
+}
+
+function showToast(s){
+ const el=$('toast');
+ el.textContent=s;
+ el.classList.add('show');
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>el.classList.remove('show'),1800);
+}
+
+function particle(x,y,color,count=8){
+ for(let i=0;i<count;i++){
+  particles.push({
+   x,y,vx:rand(-100,100),vy:rand(-130,60),
+   life:rand(.3,.7),max:.7,color,r:rand(2,4)
+  });
+ }
+}
+
+function startGame(){
+ $('startScreen').style.display='none';
+ $('hud').style.display='flex';
+ $('topBtns').style.display='flex';
+ $('hint').style.display='block';
+ mode='play';
+ buildLevel(1);
+ last=performance.now();
+ cancelAnimationFrame(raf);
+ raf=requestAnimationFrame(loop);
+}
+
+$('start').onclick=startGame;
+
+function openQuestion(){
+ if(mode!=='play')return;
+ mode='quiz';
+ const q=questions[(level*3+gateIndex)%questions.length];
+ $('overlay').style.display='flex';
+ $('modalIcon').textContent='🔐';
+ $('modalTitle').textContent='Bilgi Kapısı';
+ $('question').textContent=q.q;
+ $('answers').innerHTML='';
+ $('feedback').textContent='Doğru cevabı seç ve kapıyı aç!';
+ $('continue').style.display='none';
+
+ q.a.forEach((a,i)=>{
+  const b=document.createElement('button');
+  b.textContent='ABCD'[i]+') '+a;
+  b.onclick=()=>answer(i,q,b);
+  $('answers').appendChild(b);
+ });
+}
+
+function answer(i,q,btn){
+ if(mode!=='quiz')return;
+ const buttons=[...$('answers').children];
+
+ buttons.forEach((b,j)=>{
+  b.disabled=true;
+  if(j===q.c)b.classList.add('correct');
+ });
+
+ if(i===q.c){
+  knowledge++;
+  score+=100;
+  coins+=2;
+  updateHud();
+  $('feedback').textContent='✨ Doğru! '+q.e;
+  particle(player.x,player.y,'#ffe17a',18);
+ }else{
+  $('feedback').textContent='Bu kez olmadı. Doğru cevap: '+q.a[q.c]+'. '+q.e;
+  btn.classList.add('wrong');
+ }
+
+ $('continue').style.display='inline-block';
+ $('continue').textContent='Kapıyı aç';
+ $('continue').onclick=()=>{
+  $('overlay').style.display='none';
+  mode='play';
+  gates[0].open=true;
+  gateIndex++;
+  showToast(i===q.c?'Bilgi gücü kazandın!':'Kapı açıldı, devam et!');
+ };
+}
+
+function finishLevel(){
+ if(mode!=='play')return;
+ mode='result';
+ $('overlay').style.display='flex';
+ $('modalIcon').textContent='🏆';
+ $('modalTitle').textContent='Bölüm tamamlandı!';
+ $('question').textContent='Harika iş! '+(level===5?'Labirentten kurtuldun!':'Bir sonraki bölüm daha zor olacak.');
+ $('answers').innerHTML='';
+ $('feedback').textContent='+'+(150+level*25)+' puan · +3 altın';
+ $('continue').style.display='inline-block';
+ $('continue').textContent=level===5?'Yeniden oyna':'Sonraki bölüm';
+
+ $('continue').onclick=()=>{
+  score+=150+level*25;
+  coins+=3;
+  updateHud();
+  $('overlay').style.display='none';
+
+  if(level>=5){
+   score=0;coins=0;knowledge=0;hearts=3;
+   buildLevel(1);
+  }else{
+   buildLevel(level+1);
+  }
+  mode='play';
+ };
+}
+
+function pauseGame(){
+ if(mode!=='play')return;
+ mode='pause';
+ $('overlay').style.display='flex';
+ $('modalIcon').textContent='⏸️';
+ $('modalTitle').textContent='Mola';
+ $('question').textContent='Hazır olduğunda maceraya dön.';
+ $('answers').innerHTML='';
+ $('feedback').textContent='';
+ $('continue').style.display='inline-block';
+ $('continue').textContent='Devam et';
+ $('continue').onclick=()=>{
+  $('overlay').style.display='none';
+  mode='play';
+  last=performance.now();
+ };
+}
+
+$('pause').onclick=pauseGame;
+
+$('help').onclick=()=>{
+ if(mode!=='play')return;
+ mode='pause';
+ $('overlay').style.display='flex';
+ $('modalIcon').textContent='🎮';
+ $('modalTitle').textContent='Nasıl oynanır?';
+ $('question').textContent='Bilgisayar: WASD veya ok tuşlarıyla hareket et, Boşluk ile kısa atılma yap. Kapıya yaklaşınca E tuşuna bas. Telefon/tahta: Sol yuvarlak joystick ile hareket et; sağdaki ATIL ve ETKİLEŞ tuşlarını kullan. Altınları topla, gölgelerden kaç ve kapı sorularını çöz.';
+ $('answers').innerHTML='';
+ $('feedback').textContent='';
+ $('continue').style.display='inline-block';
+ $('continue').textContent='Anladım';
+ $('continue').onclick=()=>{
+  $('overlay').style.display='none';
+  mode='play';
+  last=performance.now();
+ };
 };
-$("begin").onclick=()=>{
- state.name=$("name").value.trim()||"Kahraman";
- $("start").style.display="none";paused=false;
- showToast("Bilge Lora'yı bul ve onunla konuş!");
- updateUI();
-};
-animate();
+
+function interact(){
+ const g=gates[0];
+ if(g&&!g.open&&Math.hypot(player.x-g.x,player.y-g.y)<100)openQuestion();
+}
+
+function collides(x,y){
+ const r=player.r;
+
+ for(const w of walls){
+  if(x+r>w.x&&x-r<w.x+w.w&&y+r>w.y&&y-r<w.y+w.h)return true;
+ }
+
+ const g=gates[0];
+ if(g&&!g.open&&x+r>g.x-g.w/2&&x-r<g.x+g.w/2&&y+r>g.y-g.h/2&&y-r<g.y+g.h/2)return true;
+
+ return false;
+}
+
+function dash(){
+ if(player.dash>0||mode!=='play')return;
+ const len=Math.hypot(player.dx,player.dy);
+ if(len<.1)return;
+
+ const sx=player.dx/len,sy=player.dy/len;
+
+ // Atılma hareketini küçük adımlarla kontrol et; duvarların içinden geçme.
+ for(let step=0;step<10;step++){
+  const nx=player.x+sx*10;
+  const ny=player.y+sy*10;
+  if(collides(nx,ny))break;
+  player.x=nx;
+  player.y=ny;
+ }
+
+ player.inv=.35;
+ player.dash=.9;
+ particle(player.x,player.y,'#7ee8df',12);
+}
+
+addEventListener('keydown',e=>{
+ const k=e.key.toLowerCase();
+ keys.add(k);
+
+ if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k))e.preventDefault();
+ if(k==='e')interact();
+ if(k===' '||k==='shift')dash();
+ if(k==='escape')pauseGame();
+});
+
+addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+
+$('useBtn').onclick=interact;
+$('dashBtn').onclick=dash;
+
+const base=$('stickBase');
+const stick=$('stick');
+
+function joyMove(e){
+ const r=base.getBoundingClientRect();
+ const cx=r.left+r.width/2,cy=r.top+r.height/2;
+ let x=e.clientX-cx,y=e.clientY-cy;
+ const l=Math.hypot(x,y),m=39;
+ if(l>m){x=x/l*m;y=y/l*m;}
+ joy.x=x/m;
+ joy.y=y/m;
+ stick.style.left=(36+x)+'px';
+ stick.style.top=(36+y)+'px';
+}
+
+base.addEventListener('pointerdown',e=>{
+ joy.id=e.pointerId;
+ base.setPointerCapture(e.pointerId);
+ joyMove(e);
+});
+
+base.addEventListener('pointermove',e=>{
+ if(joy.id===e.pointerId)joyMove(e);
+});
+
+function joyEnd(){
+ joy.id=null;
+ joy.x=joy.y=0;
+ stick.style.left='36px';
+ stick.style.top='36px';
+}
+
+base.addEventListener('pointerup',joyEnd);
+base.addEventListener('pointercancel',joyEnd);
+
+function move(dt){
+ let x=(keys.has('d')||keys.has('arrowright')?1:0)
+      -(keys.has('a')||keys.has('arrowleft')?1:0)+joy.x;
+
+ let y=(keys.has('s')||keys.has('arrowdown')?1:0)
+      -(keys.has('w')||keys.has('arrowup')?1:0)+joy.y;
+
+ let l=Math.hypot(x,y);
+ if(l>1){x/=l;y/=l;}
+
+ player.dx=x;
+ player.dy=y;
+
+ const nx=player.x+x*player.speed*dt;
+ const ny=player.y+y*player.speed*dt;
+
+ if(!collides(nx,player.y))player.x=nx;
+ if(!collides(player.x,ny))player.y=ny;
+
+ if(Math.abs(x)+Math.abs(y)>.05)player.face=x>=0?1:-1;
+
+ if(player.inv>0)player.inv-=dt;
+ if(player.dash>0)player.dash-=dt;
+}
+
+function enemyBlocked(x,y){
+ return walls.some(w=>
+  x+15>w.x&&x-15<w.x+w.w&&
+  y+15>w.y&&y-15<w.y+w.h
+ );
+}
+
+function update(dt,t){
+ move(dt);
+
+ for(const c of gold){
+  if(c.got)continue;
+  c.t+=dt*3;
+
+  if(Math.hypot(player.x-c.x,player.y-c.y)<player.r+13){
+   c.got=true;
+   coins++;
+   score+=10;
+   updateHud();
+   particle(c.x,c.y,'#ffd36a',9);
+  }
+ }
+
+ for(const o of orbs){
+  if(o.got)continue;
+  o.t+=dt*2;
+
+  if(Math.hypot(player.x-o.x,player.y-o.y)<player.r+15){
+   o.got=true;
+   score+=25;
+   hearts=Math.min(3,hearts+1);
+   updateHud();
+   particle(o.x,o.y,'#7de9e2',12);
+   showToast('Can küresi! +1 can');
+  }
+ }
+
+ for(const e of enemies){
+  e.phase+=dt;
+  if(e.stun>0){e.stun-=dt;continue;}
+
+  const dx=player.x-e.x;
+  const dy=player.y-e.y;
+  const d=Math.hypot(dx,dy);
+
+  if(d<250&&d>1){
+   const nx=e.x+dx/d*e.speed*dt;
+   const ny=e.y+dy/d*e.speed*dt;
+   if(!enemyBlocked(nx,e.y))e.x=nx;
+   if(!enemyBlocked(e.x,ny))e.y=ny;
+  }
+
+  if(d<player.r+e.r&&player.inv<=0){
+   hearts--;
+   player.inv=1.3;
+   player.x=Math.max(70,player.x-(dx>0?45:-45));
+   updateHud();
+   particle(player.x,player.y,'#ff799e',14);
+   showToast(hearts>0?'Gölgeler yakaladı! Dikkat et.':'Son canın! Daha dikkatli ol.');
+
+   if(hearts<=0){
+    hearts=3;
+    score=Math.max(0,score-50);
+    player.x=100;
+    player.y=worldH/2;
+    updateHud();
+    showToast('Yeniden dene! 50 puan kaybettin.');
+   }
+  }
+ }
+
+ for(const p of particles){
+  p.x+=p.vx*dt;
+  p.y+=p.vy*dt;
+  p.vy+=180*dt;
+  p.life-=dt;
+ }
+ particles=particles.filter(p=>p.life>0);
+
+ const g=gates[0];
+ if(g&&g.open&&player.x>g.x+30)finishLevel();
+
+ camera.x=Math.max(0,Math.min(worldW-W,player.x-W/2));
+ camera.y=Math.max(0,Math.min(worldH-H,player.y-H/2));
+}
+
+function draw(){
+ ctx.setTransform(dpr*scale,0,0,dpr*scale,dpr*offsetX,dpr*offsetY);
+ ctx.clearRect(0,0,W,H);
+ ctx.save();
+ ctx.translate(-camera.x,-camera.y);
+
+ // Kareli zemin
+ for(let y=0;y<worldH;y+=48){
+  for(let x=0;x<worldW;x+=48){
+   ctx.fillStyle=((x/48+y/48)%2===0)?'#253d4b':'#294451';
+   ctx.fillRect(x,y,48,48);
+   ctx.fillStyle='#ffffff08';
+   ctx.fillRect(x+3,y+3,42,42);
+  }
+ }
+
+ // Parlayan yol
+ ctx.strokeStyle='#79d5c733';
+ ctx.lineWidth=18;
+ ctx.setLineDash([10,22]);
+ ctx.beginPath();
+ ctx.moveTo(100,worldH/2);
+ ctx.lineTo(worldW-150,worldH/2);
+ ctx.stroke();
+ ctx.setLineDash([]);
+
+ // Duvarlar
+ for(const w of walls){
+  ctx.fillStyle='#15283b';
+  ctx.fillRect(w.x,w.y,w.w,w.h);
+  ctx.fillStyle='#426174';
+  ctx.fillRect(w.x,w.y,w.w,5);
+  ctx.fillStyle='#0b1727';
+  ctx.fillRect(w.x,w.y+w.h-5,w.w,5);
+ }
+
+ // Altınlar
+ for(const c of gold){
+  if(c.got)continue;
+  const bob=Math.sin(c.t)*3;
+  ctx.save();
+  ctx.translate(c.x,c.y+bob);
+  ctx.rotate(Math.PI/4);
+  ctx.fillStyle='#ffd36a';
+  ctx.shadowColor='#ffc44d';
+  ctx.shadowBlur=16;
+  ctx.fillRect(-7,-7,14,14);
+  ctx.restore();
+  ctx.shadowBlur=0;
+ }
+
+ // Can küreleri
+ for(const o of orbs){
+  if(o.got)continue;
+  const bob=Math.sin(o.t)*4;
+  ctx.beginPath();
+  ctx.arc(o.x,o.y+bob,11,0,Math.PI*2);
+  ctx.fillStyle='#72e9e0';
+  ctx.shadowColor='#72e9e0';
+  ctx.shadowBlur=20;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.beginPath();
+  ctx.arc(o.x,o.y+bob,4,0,Math.PI*2);
+  ctx.fillStyle='#fff';
+  ctx.fill();
+ }
+
+ // Gölge düşmanlar
+ for(const e of enemies){
+  ctx.save();
+  ctx.translate(e.x,e.y+Math.sin(e.phase*4)*3);
+  ctx.fillStyle='#10182b';
+  ctx.shadowColor='#c14c91';
+  ctx.shadowBlur=16;
+  ctx.beginPath();
+  ctx.arc(0,0,e.r,0,Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#ff739e';
+  ctx.beginPath();
+  ctx.arc(-6,-3,3,0,Math.PI*2);
+  ctx.arc(6,-3,3,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle='#fff';
+  ctx.fillRect(-9,10,18,3);
+  ctx.restore();
+ }
+
+ // Bilgi kapısı
+ const g=gates[0];
+ if(g){
+  ctx.save();
+  ctx.translate(g.x,g.y);
+  ctx.fillStyle=g.open?'#48cba5':'#e5a94e';
+  ctx.shadowColor=g.open?'#48cba5':'#ffca65';
+  ctx.shadowBlur=25;
+  ctx.beginPath();
+  ctx.roundRect(-18,-65,36,130,12);
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#16263a';
+  ctx.beginPath();
+  ctx.roundRect(-10,-55,20,110,8);
+  ctx.fill();
+  ctx.fillStyle='#fff';
+  ctx.font='bold 13px system-ui';
+  ctx.textAlign='center';
+  ctx.fillText(g.open?'AÇIK':'?',0,5);
+  ctx.restore();
+ }
+
+ // Oyuncu
+ ctx.save();
+ ctx.translate(player.x,player.y);
+ ctx.fillStyle='#07111c88';
+ ctx.beginPath();
+ ctx.ellipse(0,13,17,8,0,0,Math.PI*2);
+ ctx.fill();
+
+ if(player.inv>0&&Math.floor(performance.now()/90)%2===0)ctx.globalAlpha=.35;
+
+ ctx.fillStyle='#e9b36d';
+ ctx.beginPath();
+ ctx.arc(0,-8,13,0,Math.PI*2);
+ ctx.fill();
+
+ ctx.fillStyle='#4dc7c1';
+ ctx.beginPath();
+ ctx.roundRect(-13,3,26,23,7);
+ ctx.fill();
+
+ ctx.fillStyle='#26344c';
+ ctx.fillRect(-11,23,8,8);
+ ctx.fillRect(3,23,8,8);
+
+ ctx.fillStyle='#1b293c';
+ ctx.fillRect(player.face===1?4:-9,-11,4,4);
+ ctx.fillStyle='#fff';
+ ctx.fillRect(player.face===1?5:-8,-12,2,2);
+
+ ctx.fillStyle='#ffd36a';
+ ctx.fillRect(player.face===1?12:-15,5,5,15);
+ ctx.restore();
+
+ // Parçacıklar
+ for(const p of particles){
+  ctx.globalAlpha=Math.max(0,p.life/.7);
+  ctx.fillStyle=p.color;
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+  ctx.fill();
+ }
+ ctx.globalAlpha=1;
+
+ // Kapı işareti
+ if(g&&!g.open){
+  ctx.fillStyle='#ffe18a';
+  ctx.font='bold 15px system-ui';
+  ctx.textAlign='center';
+  ctx.fillText('E  KAPI',g.x,g.y-83);
+ }
+
+ ctx.restore();
+
+ // Ekran kenarı gölgesi
+ const grd=ctx.createRadialGradient(W/2,H/2,150,W/2,H/2,620);
+ grd.addColorStop(0,'#0000');
+ grd.addColorStop(1,'#06101b88');
+ ctx.fillStyle=grd;
+ ctx.fillRect(0,0,W,H);
+}
+
+function loop(now){
+ if(mode==='menu')return;
+ const dt=Math.min(.033,(now-last)/1000||0);
+ last=now;
+ if(mode==='play')update(dt,now);
+ draw();
+ raf=requestAnimationFrame(loop);
+}
+
+// Pencere odağı kaybolursa kontrolleri sıfırla.
+addEventListener('blur',()=>{
+ keys.clear();
+ joyEnd();
+});
+
+// Basit otomatik kayıt
+try{
+ const save=JSON.parse(localStorage.getItem('kelimeKacisiSave')||'null');
+ if(save){
+  score=Math.max(0,Number(save.score)||0);
+  coins=Math.max(0,Number(save.coins)||0);
+ }
+}catch{}
+
+setInterval(()=>{
+ try{
+  localStorage.setItem('kelimeKacisiSave',JSON.stringify({score,coins}));
+ }catch{}
+},3000);
+
 })();
 </script>
 </body>
