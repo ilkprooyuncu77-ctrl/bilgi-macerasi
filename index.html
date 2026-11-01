@@ -1,153 +1,27 @@
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harf Atölyesi</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#10152b;color:#fff;font-family:Arial,sans-serif}
-button,input{font:inherit}
-button{cursor:pointer;border:0;border-radius:13px;padding:12px 17px;font-weight:bold}
-#app{max-width:900px;margin:auto;padding:18px}
-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-h1{color:#ffe28a;margin:8px 0;font-size:clamp(25px,5vw,38px)}
-.stats{display:flex;gap:8px;flex-wrap:wrap}
-.pill{background:#263454;padding:10px 13px;border-radius:20px}
-.panel{background:#202d4c;border:1px solid #3d5278;border-radius:22px;padding:22px;margin-top:16px}
-.hidden{display:none!important}
-.muted{color:#bdcbe0;line-height:1.5}
-.characters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.character{background:#304467;color:white;border:2px solid transparent}
-.character.selected{border-color:#ffe28a;background:#425b83}
-.monster{width:85px;height:82px;border-radius:42% 42% 35% 35%;margin:8px auto 12px;display:flex;justify-content:center;align-items:center;gap:4px;position:relative}
-.monster:before,.monster:after{content:"";position:absolute;top:-10px;width:22px;height:27px;background:inherit;border-radius:80% 20% 50% 50%}
-.monster:before{left:5px;transform:rotate(-20deg)}
-.monster:after{right:5px;transform:rotate(20deg)}
-.m1{background:#ff9d5c}.m2{background:#60d7bc}.m3{background:#a98bff}
-.eye{width:17px;height:22px;border-radius:50%;background:white;color:#17213a;font-size:14px;line-height:22px}
-.primary{background:#ffe28a;color:#222b42}
-.secondary{background:#40577d;color:white}
-.sound{background:#304467;color:white}
-.wordbox{background:#131e37;border:2px dashed #6e87ac;border-radius:18px;text-align:center;padding:22px;margin:16px 0}
-.word{font-size:clamp(36px,9vw,58px);letter-spacing:9px;font-weight:900;color:#ffe28a}
-.clue{font-size:20px;line-height:1.5;margin:16px 0}
-.inputrow{display:flex;gap:9px;max-width:480px;margin:15px auto}
-#answer{min-width:0;flex:1;background:#fff;color:#18233b;border:3px solid #9eb2d3;border-radius:12px;padding:13px;font-size:22px;text-align:center;text-transform:uppercase}
-#feedback{min-height:48px;background:#17233d;padding:13px;border-radius:12px;margin-top:12px;line-height:1.5}
-.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:14px}
-.progress{height:10px;background:#121c31;border-radius:20px;overflow:hidden;margin:14px 0}
-.progress div{height:100%;width:0;background:#6ce2b5;transition:width .3s}
-.badge{display:inline-block;background:#344c70;border-radius:20px;padding:7px 12px;color:#d9e8ff}
-footer{text-align:center;color:#8fa4c3;padding:20px;font-size:13px}
-@media(max-width:540px){
- #app{padding:10px}.panel{padding:15px}.characters{gap:6px}
- .character{padding:10px 4px;font-size:13px}.monster{width:65px;height:65px}
- .inputrow{flex-direction:column}.inputrow button{width:100%}
-}
-</style>
-</head>
-<body>
-<div id="app">
-<header>
-  <h1>🔤 Harf Atölyesi</h1>
-  <div class="stats">
-    <span class="pill">⭐ <b id="score">0</b></span>
-    <span class="pill">💎 <b id="gems">0</b></span>
-    <button class="sound" id="soundBtn">🔊 Ses açık</button>
-  </div>
-</header>
-
-<section id="home" class="panel">
-  <h2>Kelime tamircisi olmaya hazır mısın?</h2>
-  <p class="muted">Bozulan kelimeleri tamir et! Sana bir kelime ve bilmece verilecek. Cevabı bulmak için yalnızca bir harfi değiştirmen gerekiyor.</p>
-  <h3>Canavar arkadaşını seç:</h3>
-  <div class="characters">
-    <button class="character selected" data-char="0">
-      <div class="monster m1"><span class="eye">●</span></div>
-      Mini<br><small>Tek gözlü</small>
-    </button>
-    <button class="character" data-char="1">
-      <div class="monster m2"><span class="eye">●</span><span class="eye">●</span></div>
-      Momo<br><small>İki gözlü</small>
-    </button>
-    <button class="character" data-char="2">
-      <div class="monster m3"><span class="eye">●</span><span class="eye">●</span><span class="eye">●</span></div>
-      Üçko<br><small>Üç gözlü</small>
-    </button>
-  </div>
-  <div class="wordbox">
-    <div style="font-size:42px">🛠️</div>
-    <h2>Atölyeyi aç!</h2>
-    <p class="muted">Her doğru cevap 10 puan ve 1 kristal kazandırır.</p>
-  </div>
-  <button class="primary" id="start">Oyuna başla ➜</button>
-</section>
-
-<section id="game" class="panel hidden">
-  <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-    <span class="badge" id="round">Bölüm 1 / 12</span>
-    <span class="badge" id="streak">🔥 Seri: 0</span>
-  </div>
-  <div class="progress"><div id="bar"></div></div>
-  <div class="wordbox">
-    <div style="font-size:30px">🔧</div>
-    <div class="muted">DÜZENLENECEK KELİME</div>
-    <div class="word" id="oldWord">KAL</div>
-  </div>
-  <div class="clue">
-    <b>🧩 Bilmece:</b>
-    <div id="clue"></div>
-  </div>
-  <p class="muted" style="text-align:center">Bir harfi değiştir ve yeni kelimeyi yaz.</p>
-  <div class="inputrow">
-    <input id="answer" maxlength="8" autocomplete="off" placeholder="Kelimeyi yaz...">
-    <button class="primary" id="check">Kontrol et</button>
-  </div>
-  <div id="feedback" aria-live="polite">Hazırsan cevabını yaz!</div>
-  <div class="actions">
-    <button class="secondary" id="hint">💡 İpucu</button>
-    <button class="secondary" id="skip">Bu soruyu geç</button>
-    <button class="secondary" id="homeBtn">Ana menü</button>
-  </div>
-  <div class="actions hidden" id="nextArea">
-    <button class="primary" id="next">Sonraki bilmece ➜</button>
-  </div>
-</section>
-
-<section id="end" class="panel hidden">
-  <div style="text-align:center">
-    <div style="font-size:75px">🏆</div>
-    <h2>Atölyenin yıldızı oldun!</h2>
-    <p class="muted">Bütün bilmeceleri tamamladın. Kelime tamirciliğinde ustalaştın!</p>
-    <h2>⭐ Puanın: <span id="finalScore">0</span></h2>
-    <h3>💎 Kristalin: <span id="finalGems">0</span></h3>
-    <button class="primary" id="restart">Tekrar oyna</button>
-  </div>
-</section>
-<footer>Harf Atölyesi • 7. Sınıf Türkçe • Kelimeleri keşfet!</footer>
-</div>
-
-<script>
 const puzzles=[
  {from:"KAL",to:"DAL",clue:"Ağacın gövdesinden çıkan, üzerinde yapraklar bulunan bölüm.",hint:"Ağaçta bulunur."},
  {from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle yaptığı tatlı besin.",hint:"Kahvaltıda yenebilir."},
  {from:"KOL",to:"GOL",clue:"Futbolda topun kaleye girmesiyle kazanılan sayı.",hint:"Futbol kelimesi."},
  {from:"GOL",to:"GÖL",clue:"Karalarla çevrili, durgun su birikintisi.",hint:"Doğada bulunur."},
- {from:"KARA",to:"PARA",clue:"Alışverişte kullandığımız ödeme aracı.",hint:"Cüzdanda bulunabilir."},
  {from:"KASA",to:"MASA",clue:"Üzerinde yemek yiyebildiğimiz veya ders çalıştığımız eşya.",hint:"Evde ve sınıfta bulunur."},
  {from:"VAR",to:"DAR",clue:"Geniş olmayan, eni az olan.",hint:"Geniş kelimesinin zıttı."},
  {from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
  {from:"YOL",to:"KOL",clue:"Omuzdan ele kadar uzanan vücut bölümü.",hint:"Vücudumuzda iki tane bulunur."},
  {from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
  {from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
- {from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."}
+ {from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."},
+ {from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."}
 ];
 
 let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
+let gamePuzzles=[];
+
 const $=id=>document.getElementById(id);
-function show(id){["home","game","end"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden")}
+function show(id){
+ ["home","game","end"].forEach(x=>$(x).classList.add("hidden"));
+ $(id).classList.remove("hidden");
+}
 
 function tone(freq,duration,type="sine"){
  if(!sound)return;
@@ -162,7 +36,11 @@ function tone(freq,duration,type="sine"){
   osc.onended=()=>ctx.close();
  }catch(e){}
 }
-function successSound(){tone(520,.12);setTimeout(()=>tone(680,.18),120);setTimeout(()=>tone(850,.22),240)}
+function successSound(){
+ tone(520,.12);
+ setTimeout(()=>tone(680,.18),120);
+ setTimeout(()=>tone(850,.22),240);
+}
 function failSound(){tone(180,.25,"triangle")}
 function update(){
  $("score").textContent=score;
@@ -181,17 +59,39 @@ $("soundBtn").onclick=()=>{
  $("soundBtn").textContent=sound?"🔊 Ses açık":"🔇 Ses kapalı";
  if(sound)tone(600,.15);
 };
+
+// Her oyun başlangıcında bilmeceleri karıştır.
+function shuffle(array){
+ const result=[...array];
+ for(let i=result.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [result[i],result[j]]=[result[j],result[i]];
+ }
+ return result;
+}
+
+// 12 farklı bilmeceyi karıştırarak 108 turluk oyun oluştur.
+function makeGame(){
+ const deck=[];
+ while(deck.length<108){
+  deck.push(...shuffle(puzzles));
+ }
+ return deck.slice(0,108);
+}
+
 $("start").onclick=()=>{
  score=0;gems=0;streak=0;index=0;
+ gamePuzzles=makeGame();
  update();show("game");load();
  tone(500,.15);
 };
+
 function load(){
  locked=false;
- const p=puzzles[index];
- $("round").textContent="Bölüm "+(index+1)+" / "+puzzles.length;
+ const p=gamePuzzles[index];
+ $("round").textContent="Bölüm "+(index+1)+" / "+gamePuzzles.length;
  $("streak").textContent="🔥 Seri: "+streak;
- $("bar").style.width=(index/puzzles.length*100)+"%";
+ $("bar").style.width=(index/gamePuzzles.length*100)+"%";
  $("oldWord").textContent=p.from;
  $("clue").textContent=p.clue;
  $("answer").value="";
@@ -202,6 +102,7 @@ function load(){
  $("nextArea").classList.add("hidden");
  $("answer").focus();
 }
+
 function normalize(s){return s.trim().toLocaleUpperCase("tr-TR")}
 function oneLetterDifferent(a,b){
  const x=Array.from(a),y=Array.from(b);
@@ -210,10 +111,14 @@ function oneLetterDifferent(a,b){
  for(let i=0;i<x.length;i++)if(x[i]!==y[i])diff++;
  return diff===1;
 }
+
 function check(){
  if(locked)return;
- const p=puzzles[index],v=normalize($("answer").value);
- if(!v){$("feedback").textContent="Önce bir kelime yazmalısın!";return}
+ const p=gamePuzzles[index],v=normalize($("answer").value);
+ if(!v){
+  $("feedback").textContent="Önce bir kelime yazmalısın!";
+  return;
+ }
  if(!oneLetterDifferent(p.from,v)){
   $("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
   failSound();return;
@@ -233,16 +138,19 @@ function check(){
  $("streak").textContent="🔥 Seri: "+streak;
  successSound();
 }
+
 $("check").onclick=check;
-$("answer").addEventListener("keydown",e=>{if(e.key==="Enter")check()});
+$("answer").addEventListener("keydown",e=>{
+ if(e.key==="Enter")check();
+});
 $("hint").onclick=()=>{
- $("feedback").textContent="💡 İpucu: "+puzzles[index].hint;
+ $("feedback").textContent="💡 İpucu: "+gamePuzzles[index].hint;
  tone(430,.12);
 };
 $("skip").onclick=()=>{
  if(locked)return;
  streak=0;
- $("feedback").textContent="Cevap: "+puzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
+ $("feedback").textContent="Cevap: "+gamePuzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
  $("answer").disabled=true;
  $("check").disabled=true;
  $("hint").disabled=true;
@@ -252,7 +160,7 @@ $("skip").onclick=()=>{
 };
 $("next").onclick=()=>{
  index++;
- if(index>=puzzles.length){
+ if(index>=gamePuzzles.length){
   $("finalScore").textContent=score;
   $("finalGems").textContent=gems;
   $("bar").style.width="100%";
@@ -261,6 +169,3 @@ $("next").onclick=()=>{
 };
 $("homeBtn").onclick=()=>show("home");
 $("restart").onclick=()=>{$("start").click()};
-</script>
-</body>
-</html>
