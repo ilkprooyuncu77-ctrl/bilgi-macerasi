@@ -86,7 +86,7 @@ Momo<br><small>İki gözlü</small>
 
 <section id="game" class="panel hidden">
 <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-<span class="badge" id="round">Soru 1 / 24</span>
+<span class="badge" id="round">Soru 1 / 50</span>
 <span class="badge" id="streak">🔥 Seri: 0</span>
 </div>
 <div class="progress"><div id="bar"></div></div>
@@ -119,7 +119,7 @@ Momo<br><small>İki gözlü</small>
 <div style="text-align:center">
 <div style="font-size:75px">🏆</div>
 <h2>Atölyenin yıldızı oldun!</h2>
-<p class="muted">24 soruyu tamamladın. Kelime tamirciliğinde ustalaştın!</p>
+<p class="muted">50 soruyu tamamladın. Kelime tamirciliğinde ustalaştın!</p>
 <h2>⭐ Puanın: <span id="finalScore">0</span></h2>
 <h3>💎 Kristalin: <span id="finalGems">0</span></h3>
 <button class="primary" id="restart">Tekrar oyna</button>
@@ -130,36 +130,63 @@ Momo<br><small>İki gözlü</small>
 
 <script>
 const puzzles=[
-{from:"KAL",to:"DAL",clue:"Ağacın gövdesinden çıkan, üzerinde yapraklar bulunan bölüm.",hint:"Ağaçta bulunur."},
-{from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle yaptığı tatlı besin.",hint:"Kahvaltıda yenebilir."},
-{from:"KOL",to:"GOL",clue:"Futbolda topun kaleye girmesiyle kazanılan sayı.",hint:"Futbol kelimesi."},
-{from:"GOL",to:"GÖL",clue:"Karalarla çevrili, durgun su birikintisi.",hint:"Doğada bulunur."},
-{from:"KASA",to:"MASA",clue:"Üzerinde yemek yiyebildiğimiz veya ders çalıştığımız eşya.",hint:"Evde ve sınıfta bulunur."},
-{from:"VAR",to:"DAR",clue:"Geniş olmayan, eni az olan.",hint:"Geniş kelimesinin zıttı."},
-{from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
-{from:"YOL",to:"KOL",clue:"Omuzdan ele kadar uzanan vücut bölümü.",hint:"Vücudumuzda iki tane bulunur."},
-{from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
-{from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
-{from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."},
-{from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."},
-{from:"KATI",to:"KADI",clue:"Osmanlı döneminde mahkemede görev yapan yargıç.",hint:"Eski dönemlerde mahkemelerde görev yapardı."},
-{from:"AT",to:"OT",clue:"Çimen veya bitki anlamında kullanılan kelime.",hint:"Yeşil alanlarda yetişir."},
-{from:"ET",to:"EK",clue:"Bir kelimenin sonuna getirilen dil bilgisi parçası.",hint:"Dil bilgisiyle ilgilidir."},
-{from:"AL",to:"EL",clue:"Kolun sonunda bulunan, parmakları olan organ.",hint:"Bir şeyleri tutmamızı sağlar."},
-{from:"EL",to:"EV",clue:"İnsanların yaşadığı yapı.",hint:"İçinde odalar bulunur."},
-{from:"TAŞ",to:"YAŞ",clue:"İnsanın doğumundan itibaren geçen yıl sayısı.",hint:"Doğum gününde artar."},
-{from:"BAŞ",to:"TAŞ",clue:"Yollarda ve doğada bulunan sert kaya parçası.",hint:"Yerden alınabilir."},
-{from:"GÖZ",to:"SÖZ",clue:"Konuşurken söylediğimiz kelime veya ifade.",hint:"Ağızdan çıkar."},
-{from:"KÖY",to:"KÖK",clue:"Bitkinin toprağın altında bulunan bölümü.",hint:"Bitkiyi toprağa bağlar."},
-{from:"KÖK",to:"GÖK",clue:"Gökyüzü anlamına gelen eski bir kelime.",hint:"Yukarı baktığında görürsün."},
-{from:"GÖK",to:"GÖL",clue:"Karalar arasında bulunan durgun su alanı.",hint:"Ördekler yüzebilir."},
-{from:"KUL",to:"KOL",clue:"Omuz ile el arasındaki vücut bölümü.",hint:"Vücudumuzda bulunur."}
+{from:"KAL",to:"DAL",clue:"Ağacın gövdesinden ayrılarak uzanan, yaprak taşıyabilen bölüm.",hint:"Ağaçların üzerinde bulunur."},
+{from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle ürettiği doğal besin.",hint:"Arılar üretir."},
+{from:"KOL",to:"GOL",clue:"Futbolda topun kale çizgisini geçmesiyle kazanılan sayı.",hint:"Bir spor terimi."},
+{from:"GOL",to:"GÖL",clue:"Karalarla çevrili, denizlerle doğrudan bağlantısı olmayan su alanı.",hint:"Doğal bir su birikintisi."},
+{from:"KASA",to:"MASA",clue:"Üzerinde eşya koyulan, yemek yenilen veya çalışılan mobilya.",hint:"Evlerde ve sınıflarda bulunur."},
+{from:"VAR",to:"DAR",clue:"Eni veya genişliği az olan; geniş sözcüğünün karşıtı.",hint:"Bir geçit çok geniş değilse böyledir."},
+{from:"DAR",to:"KAR",clue:"Bulutlardan buz kristalleri şeklinde düşen beyaz yağış.",hint:"Kışın sık görülür."},
+{from:"YOL",to:"KOL",clue:"Omuzdan başlayıp ele kadar uzanan uzuv.",hint:"İnsan vücudunun bir parçası."},
+{from:"KAN",to:"KAR",clue:"Soğuk havalarda gökten beyaz taneler hâlinde düşen yağış.",hint:"Kış mevsimiyle ilgilidir."},
+{from:"YAZ",to:"YAS",clue:"Ölüm nedeniyle duyulan derin üzüntü ve matem.",hint:"Bir kaybın ardından tutulabilir."},
+{from:"GÜL",to:"KÜL",clue:"Yanma sonucunda geriye kalan ince, toz hâlindeki madde.",hint:"Ateş söndükten sonra kalabilir."},
+{from:"KATI",to:"KADI",clue:"Osmanlı döneminde mahkemelerde yargıçlık yapan görevli.",hint:"Adalet işlerinde görev alırdı."},
+{from:"AT",to:"OT",clue:"Toprakta kendiliğinden yetişebilen küçük bitki.",hint:"Hayvanlar bazen bununla beslenir."},
+{from:"ET",to:"EK",clue:"Bir sözcüğün köküne veya gövdesine getirilen dil bilgisi birimi.",hint:"Yapım ve çekim türleri vardır."},
+{from:"AL",to:"EL",clue:"İnsanların tutma ve kavrama işlerini yaptığı organ.",hint:"Parmakları vardır."},
+{from:"EL",to:"EV",clue:"İnsanların barınmak ve yaşamak için kullandığı yapı.",hint:"Odaları ve çatısı olabilir."},
+{from:"TAŞ",to:"YAŞ",clue:"Bir insanın doğumundan bugüne kadar geçen yıl sayısı.",hint:"Doğum gününde bir artar."},
+{from:"BAŞ",to:"TAŞ",clue:"Doğada bulunan, sert ve katı kaya parçası.",hint:"Yerden alınabilir."},
+{from:"GÖZ",to:"SÖZ",clue:"Bir düşünceyi veya duyguyu anlatmak için söylenen ifade.",hint:"Konuşmayla ilgilidir."},
+{from:"KÖY",to:"KÖK",clue:"Bitkilerin toprağın altında bulunan, su ve besin alan bölümü.",hint:"Bitkinin toprağa tutunmasını sağlar."},
+{from:"KÖK",to:"GÖK",clue:"Yeryüzünden bakıldığında görülen gökyüzü.",hint:"Bulutlar burada görünür."},
+{from:"GÖK",to:"GÖL",clue:"Çevresi kara ile kaplı doğal su birikintisi.",hint:"Akarsu veya yağmurla beslenebilir."},
+{from:"KUL",to:"KOL",clue:"Omuz ile el arasında bulunan vücut bölümü.",hint:"İnsanlarda sağ ve sol olarak bulunur."},
+{from:"KOL",to:"SOL",clue:"Sağ yönünün karşıtı olan yön.",hint:"Yön tarifinde kullanılır."},
+{from:"KASA",to:"KAZA",clue:"İstenmeden gerçekleşen, zarara veya aksaklığa yol açabilen olay.",hint:"Trafikte de yaşanabilir."},
+{from:"KARA",to:"KARE",clue:"Dört kenarı eşit ve dört açısı dik olan geometrik şekil.",hint:"Dört eşit kenarı vardır."},
+{from:"KARE",to:"KASE",clue:"Çorba veya salata koymak için kullanılan derin kap.",hint:"Mutfakta bulunur."},
+{from:"KASE",to:"KALE",clue:"Satrançta düz çizgide hareket edebilen taş.",hint:"Satranç oyununda bulunur."},
+{from:"KURT",to:"KART",clue:"Üzerinde bilgi veya resim bulunan küçük, sert kâğıt ya da plastik parçası.",hint:"Kimlik veya oyun türleri olabilir."},
+{from:"YAKA",to:"YARA",clue:"Vücutta kesik, çarpma veya başka bir nedenle oluşan doku zedelenmesi.",hint:"Bir yaralanma sonucunda oluşabilir."},
+{from:"DERE",to:"DENE",clue:"Bir şeyin nasıl sonuçlandığını görmek için onu uygulamaya koy.",hint:"Denemek fiilinin emir biçimi."},
+{from:"YÜZ",to:"DÜZ",clue:"Pürüzü veya çıkıntısı olmayan; eğri olmayan.",hint:"Engebeli kelimesinin karşıtı."},
+{from:"GÜN",to:"GÜL",clue:"Güzel kokulu, dikenli olabilen bir süs bitkisi.",hint:"Bahçelerde yetişebilir."},
+{from:"GÜN",to:"DÜN",clue:"Bugünden bir önceki takvim günü.",hint:"Geçmiş zamanı anlatır."},
+{from:"DÜN",to:"DİN",clue:"İnsanların inanç ve ibadet esaslarını içeren inanç sistemi.",hint:"İnançla ilgilidir."},
+{from:"DİN",to:"DİL",clue:"İnsanların anlaşmak için kullandığı sesli veya yazılı iletişim sistemi.",hint:"Türkçe bir örneğidir."},
+{from:"KÜP",to:"KÜL",clue:"Yanmış maddelerden geriye kalan toz.",hint:"Odun yandığında oluşabilir."},
+{from:"SÜR",to:"SÜT",clue:"Memeli hayvanlardan elde edilen, besin olarak tüketilen beyaz sıvı.",hint:"Peynir ve yoğurt yapımında kullanılır."},
+{from:"SÜT",to:"SAT",clue:"Bir malı para karşılığında başkasına ver anlamındaki emir.",hint:"Alışverişte kullanılan bir fiil."},
+{from:"SAT",to:"SAZ",clue:"Türk halk müziğinde kullanılan telli çalgı.",hint:"Bağlama olarak da bilinir."},
+{from:"SAZ",to:"SAP",clue:"Bir aracın tutulmasını sağlayan bölüm.",hint:"Tava veya bıçakta bulunabilir."},
+{from:"KAR",to:"KAP",clue:"Bir şeyi eline geçir anlamında kullanılan emir.",hint:"Yakalamak fiiliyle ilgilidir."},
+{from:"KAP",to:"KAT",clue:"Bir binanın zemin seviyesinden yukarıdaki bölümlerinden her biri.",hint:"Apartmanlarda bulunur."},
+{from:"KAT",to:"KAZ",clue:"Uzun boyunlu, evcil bir su kuşu.",hint:"Gagası ve perdeli ayakları vardır."},
+{from:"KAZ",to:"KAS",clue:"Vücudun hareket etmesini sağlayan dokulardan biri.",hint:"Spor yaparken çalışır."},
+{from:"YAT",to:"YAK",clue:"Bir şeyi ateşe vererek tutuştur anlamındaki emir.",hint:"Ateşle ilgilidir."},
+{from:"YAK",to:"YAZ",clue:"Düşünceleri harflerle kâğıda veya ekrana aktar.",hint:"Kalemle veya klavyeyle yapılır."},
+{from:"BAK",to:"BAL",clue:"Arıların ürettiği tatlı ve yoğun kıvamlı besin.",hint:"Kahvaltıda tüketilebilir."},
+{from:"BAL",to:"BAR",clue:"İçki veya yiyecek servisi yapılan işletme türü.",hint:"Bir eğlence mekânı olabilir."},
+{from:"BAR",to:"DAR",clue:"Genişliği az olan, sıkışık veya geniş olmayan.",hint:"Geniş sözcüğünün zıttı."}
 ];
 
 let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
 let gamePuzzles=[];
 
 const $=id=>document.getElementById(id);
+
 function show(id){
 ["home","game","end"].forEach(x=>$(x).classList.add("hidden"));
 $(id).classList.remove("hidden");
@@ -181,12 +208,15 @@ osc.stop(ctx.currentTime+duration);
 osc.onended=()=>ctx.close();
 }catch(e){}
 }
+
 function successSound(){
 tone(520,.12);
 setTimeout(()=>tone(680,.18),120);
 setTimeout(()=>tone(850,.22),240);
 }
+
 function failSound(){tone(180,.25,"triangle")}
+
 function update(){
 $("score").textContent=score;
 $("gems").textContent=gems;
@@ -235,9 +265,9 @@ tone(500,.15);
 function load(){
 locked=false;
 const p=gamePuzzles[index];
-$("round").textContent="Soru "+(index+1)+" / 24";
+$("round").textContent="Soru "+(index+1)+" / 50";
 $("streak").textContent="🔥 Seri: "+streak;
-$("bar").style.width=(index/24*100)+"%";
+$("bar").style.width=(index/50*100)+"%";
 $("oldWord").textContent=p.from;
 $("clue").textContent=p.clue;
 $("answer").value="";
@@ -249,37 +279,49 @@ $("nextArea").classList.add("hidden");
 $("answer").focus();
 }
 
-function normalize(s){return s.trim().toLocaleUpperCase("tr-TR")}
+function normalize(s){
+return s.trim().toLocaleUpperCase("tr-TR");
+}
+
 function oneLetterDifferent(a,b){
 const x=Array.from(a),y=Array.from(b);
 if(x.length!==y.length)return false;
 let diff=0;
-for(let i=0;i<x.length;i++)if(x[i]!==y[i])diff++;
+for(let i=0;i<x.length;i++){
+if(x[i]!==y[i])diff++;
+}
 return diff===1;
 }
 
 function check(){
 if(locked)return;
-const p=gamePuzzles[index],v=normalize($("answer").value);
+
+const p=gamePuzzles[index];
+const v=normalize($("answer").value);
+
 if(!v){
 $("feedback").textContent="Önce bir kelime yazmalısın!";
 return;
 }
+
 if(!oneLetterDifferent(p.from,v)){
 $("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
 failSound();
 return;
 }
+
 if(v!==p.to){
 $("feedback").textContent="Bu kelime uygun ama bilmecenin cevabı değil. Bir daha düşün!";
 failSound();
 return;
 }
+
 locked=true;
 score+=10;
 gems++;
 streak++;
 update();
+
 $("feedback").textContent="🎉 Harika! "+p.from+" → "+p.to+". Bir harfi değiştirerek doğru kelimeyi buldun! +10 puan, +1 kristal.";
 $("answer").disabled=true;
 $("check").disabled=true;
@@ -290,6 +332,7 @@ successSound();
 }
 
 $("check").onclick=check;
+
 $("answer").addEventListener("keydown",e=>{
 if(e.key==="Enter")check();
 });
@@ -301,6 +344,7 @@ tone(430,.12);
 
 $("skip").onclick=()=>{
 if(locked)return;
+
 streak=0;
 $("feedback").textContent="Cevap: "+gamePuzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
 $("answer").disabled=true;
@@ -313,6 +357,7 @@ failSound();
 
 $("next").onclick=()=>{
 index++;
+
 if(index>=gamePuzzles.length){
 $("finalScore").textContent=score;
 $("finalGems").textContent=gems;
@@ -325,7 +370,11 @@ load();
 };
 
 $("homeBtn").onclick=()=>show("home");
-$("restart").onclick=()=>{$("start").click()};
+
+$("restart").onclick=()=>{
+$("start").click();
+};
+
 update();
 </script>
 </body>
