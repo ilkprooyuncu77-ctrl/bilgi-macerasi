@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -87,7 +86,7 @@ Momo<br><small>İki gözlü</small>
 
 <section id="game" class="panel hidden">
 <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-<span class="badge" id="round">Bölüm 1 / 100</span>
+<span class="badge" id="round">Soru 1 / 24</span>
 <span class="badge" id="streak">🔥 Seri: 0</span>
 </div>
 <div class="progress"><div id="bar"></div></div>
@@ -120,7 +119,7 @@ Momo<br><small>İki gözlü</small>
 <div style="text-align:center">
 <div style="font-size:75px">🏆</div>
 <h2>Atölyenin yıldızı oldun!</h2>
-<p class="muted">100 bölümü tamamladın. Kelime tamirciliğinde ustalaştın!</p>
+<p class="muted">24 soruyu tamamladın. Kelime tamirciliğinde ustalaştın!</p>
 <h2>⭐ Puanın: <span id="finalScore">0</span></h2>
 <h3>💎 Kristalin: <span id="finalGems">0</span></h3>
 <button class="primary" id="restart">Tekrar oyna</button>
@@ -142,7 +141,19 @@ const puzzles=[
 {from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
 {from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
 {from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."},
-{from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."}
+{from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."},
+{from:"KATI",to:"KADI",clue:"Osmanlı döneminde mahkemede görev yapan yargıç.",hint:"Eski dönemlerde mahkemelerde görev yapardı."},
+{from:"AT",to:"OT",clue:"Çimen veya bitki anlamında kullanılan kelime.",hint:"Yeşil alanlarda yetişir."},
+{from:"ET",to:"EK",clue:"Bir kelimenin sonuna getirilen dil bilgisi parçası.",hint:"Dil bilgisiyle ilgilidir."},
+{from:"AL",to:"EL",clue:"Kolun sonunda bulunan, parmakları olan organ.",hint:"Bir şeyleri tutmamızı sağlar."},
+{from:"EL",to:"EV",clue:"İnsanların yaşadığı yapı.",hint:"İçinde odalar bulunur."},
+{from:"TAŞ",to:"YAŞ",clue:"İnsanın doğumundan itibaren geçen yıl sayısı.",hint:"Doğum gününde artar."},
+{from:"BAŞ",to:"TAŞ",clue:"Yollarda ve doğada bulunan sert kaya parçası.",hint:"Yerden alınabilir."},
+{from:"GÖZ",to:"SÖZ",clue:"Konuşurken söylediğimiz kelime veya ifade.",hint:"Ağızdan çıkar."},
+{from:"KÖY",to:"KÖK",clue:"Bitkinin toprağın altında bulunan bölümü.",hint:"Bitkiyi toprağa bağlar."},
+{from:"KÖK",to:"GÖK",clue:"Gökyüzü anlamına gelen eski bir kelime.",hint:"Yukarı baktığında görürsün."},
+{from:"GÖK",to:"GÖL",clue:"Karalar arasında bulunan durgun su alanı.",hint:"Ördekler yüzebilir."},
+{from:"KUL",to:"KOL",clue:"Omuz ile el arasındaki vücut bölümü.",hint:"Vücudumuzda bulunur."}
 ];
 
 let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
@@ -206,11 +217,7 @@ return result;
 }
 
 function makeGame(){
-let result=[];
-while(result.length<100){
-result.push(...shuffle(puzzles));
-}
-return result.slice(0,100);
+return shuffle(puzzles);
 }
 
 $("start").onclick=()=>{
@@ -228,9 +235,9 @@ tone(500,.15);
 function load(){
 locked=false;
 const p=gamePuzzles[index];
-$("round").textContent="Bölüm "+(index+1)+" / 100";
+$("round").textContent="Soru "+(index+1)+" / 24";
 $("streak").textContent="🔥 Seri: "+streak;
-$("bar").style.width=(index/100*100)+"%";
+$("bar").style.width=(index/24*100)+"%";
 $("oldWord").textContent=p.from;
 $("clue").textContent=p.clue;
 $("answer").value="";
@@ -306,7 +313,7 @@ failSound();
 
 $("next").onclick=()=>{
 index++;
-if(index>=100){
+if(index>=gamePuzzles.length){
 $("finalScore").textContent=score;
 $("finalGems").textContent=gems;
 $("bar").style.width="100%";
