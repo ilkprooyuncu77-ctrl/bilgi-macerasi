@@ -51,230 +51,98 @@ footer{text-align:center;color:#8fa4c3;padding:20px;font-size:13px}
 <body>
 <div id="app">
 <header>
-  <h1>🔤 Harf Atölyesi</h1>
-  <div class="stats">
-    <span class="pill">⭐ <b id="score">0</b></span>
-    <span class="pill">💎 <b id="gems">0</b></span>
-    <button class="sound" id="soundBtn">🔊 Ses açık</button>
-  </div>
+<h1>🔤 Harf Atölyesi</h1>
+<div class="stats">
+<span class="pill">⭐ <b id="score">0</b></span>
+<span class="pill">💎 <b id="gems">0</b></span>
+<button class="sound" id="soundBtn">🔊 Ses açık</button>
+</div>
 </header>
 
 <section id="home" class="panel">
-  <h2>Kelime tamircisi olmaya hazır mısın?</h2>
-  <p class="muted">Bozulan kelimeleri tamir et! Sana bir kelime ve bilmece verilecek. Cevabı bulmak için yalnızca bir harfi değiştirmen gerekiyor.</p>
-  <h3>Canavar arkadaşını seç:</h3>
-  <div class="characters">
-    <button class="character selected" data-char="0">
-      <div class="monster m1"><span class="eye">●</span></div>
-      Mini<br><small>Tek gözlü</small>
-    </button>
-    <button class="character" data-char="1">
-      <div class="monster m2"><span class="eye">●</span><span class="eye">●</span></div>
-      Momo<br><small>İki gözlü</small>
-    </button>
-    <button class="character" data-char="2">
-      <div class="monster m3"><span class="eye">●</span><span class="eye">●</span><span class="eye">●</span></div>
-      Üçko<br><small>Üç gözlü</small>
-    </button>
-  </div>
-  <div class="wordbox">
-    <div style="font-size:42px">🛠️</div>
-    <h2>Atölyeyi aç!</h2>
-    <p class="muted">Her doğru cevap 10 puan ve 1 kristal kazandırır.</p>
-  </div>
-  <button class="primary" id="start">Oyuna başla ➜</button>
+<h2>Kelime tamircisi olmaya hazır mısın?</h2>
+<p class="muted">Bozulan kelimeleri tamir et! Sana bir kelime ve bilmece verilecek. Cevabı bulmak için yalnızca bir harfi değiştirmen gerekiyor.</p>
+<h3>Canavar arkadaşını seç:</h3>
+<div class="characters">
+<button class="character selected" data-char="0">
+<div class="monster m1"><span class="eye">●</span></div>
+Mini<br><small>Tek gözlü</small>
+</button>
+<button class="character" data-char="1">
+<div class="monster m2"><span class="eye">●</span><span class="eye">●</span></div>
+Momo<br><small>İki gözlü</small>
+</button>
+<button class="character" data-char="2">
+<div class="monster m3"><span class="eye">●</span><span class="eye">●</span><span class="eye">●</span></div>
+Üçko<br><small>Üç gözlü</small>
+</button>
+</div>
+<div class="wordbox">
+<div style="font-size:42px">🛠️</div>
+<h2>Atölyeyi aç!</h2>
+<p class="muted">Her doğru cevap 10 puan ve 1 kristal kazandırır.</p>
+</div>
+<button class="primary" id="start">Oyuna başla ➜</button>
 </section>
 
 <section id="game" class="panel hidden">
-  <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-    <span class="badge" id="round">Bölüm 1 / 12</span>
-    <span class="badge" id="streak">🔥 Seri: 0</span>
-  </div>
-  <div class="progress"><div id="bar"></div></div>
-  <div class="wordbox">
-    <div style="font-size:30px">🔧</div>
-    <div class="muted">DÜZENLENECEK KELİME</div>
-    <div class="word" id="oldWord">KAL</div>
-  </div>
-  <div class="clue">
-    <b>🧩 Bilmece:</b>
-    <div id="clue"></div>
-  </div>
-  <p class="muted" style="text-align:center">Bir harfi değiştir ve yeni kelimeyi yaz.</p>
-  <div class="inputrow">
-    <input id="answer" maxlength="8" autocomplete="off" placeholder="Kelimeyi yaz...">
-    <button class="primary" id="check">Kontrol et</button>
-  </div>
-  <div id="feedback" aria-live="polite">Hazırsan cevabını yaz!</div>
-  <div class="actions">
-    <button class="secondary" id="hint">💡 İpucu</button>
-    <button class="secondary" id="skip">Bu soruyu geç</button>
-    <button class="secondary" id="homeBtn">Ana menü</button>
-  </div>
-  <div class="actions hidden" id="nextArea">
-    <button class="primary" id="next">Sonraki bilmece ➜</button>
-  </div>
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<span class="badge" id="round">Bölüm 1 / 100</span>
+<span class="badge" id="streak">🔥 Seri: 0</span>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="wordbox">
+<div style="font-size:30px">🔧</div>
+<div class="muted">DÜZENLENECEK KELİME</div>
+<div class="word" id="oldWord">KAL</div>
+</div>
+<div class="clue">
+<b>🧩 Bilmece:</b>
+<div id="clue"></div>
+</div>
+<p class="muted" style="text-align:center">Bir harfi değiştir ve yeni kelimeyi yaz.</p>
+<div class="inputrow">
+<input id="answer" maxlength="8" autocomplete="off" placeholder="Kelimeyi yaz...">
+<button class="primary" id="check">Kontrol et</button>
+</div>
+<div id="feedback" aria-live="polite">Hazırsan cevabını yaz!</div>
+<div class="actions">
+<button class="secondary" id="hint">💡 İpucu</button>
+<button class="secondary" id="skip">Bu soruyu geç</button>
+<button class="secondary" id="homeBtn">Ana menü</button>
+</div>
+<div class="actions hidden" id="nextArea">
+<button class="primary" id="next">Sonraki bilmece ➜</button>
+</div>
 </section>
 
 <section id="end" class="panel hidden">
-  <div style="text-align:center">
-    <div style="font-size:75px">🏆</div>
-    <h2>Atölyenin yıldızı oldun!</h2>
-    <p class="muted">Bütün bilmeceleri tamamladın. Kelime tamirciliğinde ustalaştın!</p>
-    <h2>⭐ Puanın: <span id="finalScore">0</span></h2>
-    <h3>💎 Kristalin: <span id="finalGems">0</span></h3>
-    <button class="primary" id="restart">Tekrar oyna</button>
-  </div>
+<div style="text-align:center">
+<div style="font-size:75px">🏆</div>
+<h2>Atölyenin yıldızı oldun!</h2>
+<p class="muted">100 bölümü tamamladın. Kelime tamirciliğinde ustalaştın!</p>
+<h2>⭐ Puanın: <span id="finalScore">0</span></h2>
+<h3>💎 Kristalin: <span id="finalGems">0</span></h3>
+<button class="primary" id="restart">Tekrar oyna</button>
+</div>
 </section>
 <footer>Harf Atölyesi • 7. Sınıf Türkçe • Kelimeleri keşfet!</footer>
 </div>
 
 <script>
 const puzzles=[
- {from:"KAL",to:"DAL",clue:"Ağacın gövdesinden çıkan, üzerinde yapraklar bulunan bölüm.",hint:"Ağaçta bulunur."},
- {from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle yaptığı tatlı besin.",hint:"Kahvaltıda yenebilir."},
- {from:"KOL",to:"GOL",clue:"Futbolda topun kaleye girmesiyle kazanılan sayı.",hint:"Futbol kelimesi."},
- {from:"GOL",to:"GÖL",clue:"Karalarla çevrili, durgun su birikintisi.",hint:"Doğada bulunur."},
- {from:"KARA",to:"PARA",clue:"Alışverişte kullandığımız ödeme aracı.",hint:"Cüzdanda bulunabilir."},
- {from:"KASA",to:"MASA",clue:"Üzerinde yemek yiyebildiğimiz veya ders çalıştığımız eşya.",hint:"Evde ve sınıfta bulunur."},
- {from:"VAR",to:"DAR",clue:"Geniş olmayan, eni az olan.",hint:"Geniş kelimesinin zıttı."},
- {from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
- {from:"YOL",to:"KOL",clue:"Omuzdan ele kadar uzanan vücut bölümü.",hint:"Vücudumuzda iki tane bulunur."},
- {from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
- {from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
- {from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."}
-];
-
-let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
-const $=id=>document.getElementById(id);
-function show(id){["home","game","end"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden")}
-
-function tone(freq,duration,type="sine"){
- if(!sound)return;
- try{
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const osc=ctx.createOscillator(),gain=ctx.createGain();
-  osc.type=type;osc.frequency.value=freq;
-  gain.gain.setValueAtTime(.08,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
-  osc.connect(gain);gain.connect(ctx.destination);
-  osc.start();osc.stop(ctx.currentTime+duration);
-  osc.onended=()=>ctx.close();
- }catch(e){}
-}
-function successSound(){tone(520,.12);setTimeout(()=>tone(680,.18),120);setTimeout(()=>tone(850,.22),240)}
-function failSound(){tone(180,.25,"triangle")}
-function update(){
- $("score").textContent=score;
- $("gems").textContent=gems;
-}
-document.querySelectorAll(".character").forEach(b=>{
- b.onclick=()=>{
-  selected=Number(b.dataset.char);
-  document.querySelectorAll(".character").forEach(x=>x.classList.remove("selected"));
-  b.classList.add("selected");
-  tone(420,.1);
- };
-});
-$("soundBtn").onclick=()=>{
- sound=!sound;
- $("soundBtn").textContent=sound?"🔊 Ses açık":"🔇 Ses kapalı";
- if(sound)tone(600,.15);
-};
-$("start").onclick=()=>{
- score=0;gems=0;streak=0;index=0;
- update();show("game");load();
- tone(500,.15);
-};
-function load(){
- locked=false;
- const p=puzzles[index];
- $("round").textContent="Bölüm "+(index+1)+" / "+puzzles.length;
- $("streak").textContent="🔥 Seri: "+streak;
- $("bar").style.width=(index/puzzles.length*100)+"%";
- $("oldWord").textContent=p.from;
- $("clue").textContent=p.clue;
- $("answer").value="";
- $("answer").disabled=false;
- $("check").disabled=false;
- $("feedback").textContent="Cevabını yaz ve kontrol et!";
- $("hint").disabled=false;
- $("nextArea").classList.add("hidden");
- $("answer").focus();
-}
-function normalize(s){return s.trim().toLocaleUpperCase("tr-TR")}
-function oneLetterDifferent(a,b){
- const x=Array.from(a),y=Array.from(b);
- if(x.length!==y.length)return false;
- let diff=0;
- for(let i=0;i<x.length;i++)if(x[i]!==y[i])diff++;
- return diff===1;
-}
-function check(){
- if(locked)return;
- const p=puzzles[index],v=normalize($("answer").value);
- if(!v){$("feedback").textContent="Önce bir kelime yazmalısın!";return}
- if(!oneLetterDifferent(p.from,v)){
-  $("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
-  failSound();return;
- }
- if(v!==p.to){
-  $("feedback").textContent="Bu kelime uygun ama bilmecenin cevabı değil. Bir daha düşün!";
-  failSound();return;
- }
- locked=true;
- score+=10;gems++;streak++;
- update();
- $("feedback").textContent="🎉 Harika! "+p.from+" → "+p.to+". Bir harfi değiştirerek doğru kelimeyi buldun! +10 puan, +1 kristal.";
- $("answer").disabled=true;
- $("check").disabled=true;
- $("hint").disabled=true;
- $("nextArea").classList.remove("hidden");
- $("streak").textContent="🔥 Seri: "+streak;
- successSound();
-}
-$("check").onclick=check;
-$("answer").addEventListener("keydown",e=>{if(e.key==="Enter")check()});
-$("hint").onclick=()=>{
- $("feedback").textContent="💡 İpucu: "+puzzles[index].hint;
- tone(430,.12);
-};
-$("skip").onclick=()=>{
- if(locked)return;
- streak=0;
- $("feedback").textContent="Cevap: "+puzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
- $("answer").disabled=true;
- $("check").disabled=true;
- $("hint").disabled=true;
- $("nextArea").classList.remove("hidden");
- $("streak").textContent="🔥 Seri: 0";
- failSound();
-};
-$("next").onclick=()=>{
- index++;
- if(index>=puzzles.length){
-  $("finalScore").textContent=score;
-  $("finalGems").textContent=gems;
-  $("bar").style.width="100%";
-  show("end");successSound();
- }else load();
-};
-$("homeBtn").onclick=()=>show("home");
-$("restart").onclick=()=>{$("start").click()};
-
-const puzzles=[
- {from:"KAL",to:"DAL",clue:"Ağacın gövdesinden çıkan, üzerinde yapraklar bulunan bölüm.",hint:"Ağaçta bulunur."},
- {from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle yaptığı tatlı besin.",hint:"Kahvaltıda yenebilir."},
- {from:"KOL",to:"GOL",clue:"Futbolda topun kaleye girmesiyle kazanılan sayı.",hint:"Futbol kelimesi."},
- {from:"GOL",to:"GÖL",clue:"Karalarla çevrili, durgun su birikintisi.",hint:"Doğada bulunur."},
- {from:"KASA",to:"MASA",clue:"Üzerinde yemek yiyebildiğimiz veya ders çalıştığımız eşya.",hint:"Evde ve sınıfta bulunur."},
- {from:"VAR",to:"DAR",clue:"Geniş olmayan, eni az olan.",hint:"Geniş kelimesinin zıttı."},
- {from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
- {from:"YOL",to:"KOL",clue:"Omuzdan ele kadar uzanan vücut bölümü.",hint:"Vücudumuzda iki tane bulunur."},
- {from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
- {from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
- {from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."},
- {from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."}
+{from:"KAL",to:"DAL",clue:"Ağacın gövdesinden çıkan, üzerinde yapraklar bulunan bölüm.",hint:"Ağaçta bulunur."},
+{from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle yaptığı tatlı besin.",hint:"Kahvaltıda yenebilir."},
+{from:"KOL",to:"GOL",clue:"Futbolda topun kaleye girmesiyle kazanılan sayı.",hint:"Futbol kelimesi."},
+{from:"GOL",to:"GÖL",clue:"Karalarla çevrili, durgun su birikintisi.",hint:"Doğada bulunur."},
+{from:"KASA",to:"MASA",clue:"Üzerinde yemek yiyebildiğimiz veya ders çalıştığımız eşya.",hint:"Evde ve sınıfta bulunur."},
+{from:"VAR",to:"DAR",clue:"Geniş olmayan, eni az olan.",hint:"Geniş kelimesinin zıttı."},
+{from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
+{from:"YOL",to:"KOL",clue:"Omuzdan ele kadar uzanan vücut bölümü.",hint:"Vücudumuzda iki tane bulunur."},
+{from:"KAN",to:"KAR",clue:"Gökyüzünden beyaz taneler hâlinde yağan yağış.",hint:"Kış mevsimini düşün."},
+{from:"YAZ",to:"YAS",clue:"Bir kişinin ölümünden sonra duyulan büyük üzüntü.",hint:"Üzüntü ve matem anlamındadır."},
+{from:"GÜL",to:"GÖL",clue:"Ördeklerin yüzebildiği doğal su alanı.",hint:"Su ile ilgilidir."},
+{from:"GÜL",to:"KÜL",clue:"Bir şey yandıktan sonra geriye kalan toz.",hint:"Ateşten sonra kalır."}
 ];
 
 let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
@@ -282,156 +150,176 @@ let gamePuzzles=[];
 
 const $=id=>document.getElementById(id);
 function show(id){
- ["home","game","end"].forEach(x=>$(x).classList.add("hidden"));
- $(id).classList.remove("hidden");
+["home","game","end"].forEach(x=>$(x).classList.add("hidden"));
+$(id).classList.remove("hidden");
 }
 
 function tone(freq,duration,type="sine"){
- if(!sound)return;
- try{
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const osc=ctx.createOscillator(),gain=ctx.createGain();
-  osc.type=type;osc.frequency.value=freq;
-  gain.gain.setValueAtTime(.08,ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
-  osc.connect(gain);gain.connect(ctx.destination);
-  osc.start();osc.stop(ctx.currentTime+duration);
-  osc.onended=()=>ctx.close();
- }catch(e){}
+if(!sound)return;
+try{
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+const osc=ctx.createOscillator(),gain=ctx.createGain();
+osc.type=type;
+osc.frequency.value=freq;
+gain.gain.setValueAtTime(.08,ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+osc.connect(gain);
+gain.connect(ctx.destination);
+osc.start();
+osc.stop(ctx.currentTime+duration);
+osc.onended=()=>ctx.close();
+}catch(e){}
 }
 function successSound(){
- tone(520,.12);
- setTimeout(()=>tone(680,.18),120);
- setTimeout(()=>tone(850,.22),240);
+tone(520,.12);
+setTimeout(()=>tone(680,.18),120);
+setTimeout(()=>tone(850,.22),240);
 }
 function failSound(){tone(180,.25,"triangle")}
 function update(){
- $("score").textContent=score;
- $("gems").textContent=gems;
+$("score").textContent=score;
+$("gems").textContent=gems;
 }
+
 document.querySelectorAll(".character").forEach(b=>{
- b.onclick=()=>{
-  selected=Number(b.dataset.char);
-  document.querySelectorAll(".character").forEach(x=>x.classList.remove("selected"));
-  b.classList.add("selected");
-  tone(420,.1);
- };
+b.onclick=()=>{
+selected=Number(b.dataset.char);
+document.querySelectorAll(".character").forEach(x=>x.classList.remove("selected"));
+b.classList.add("selected");
+tone(420,.1);
+};
 });
+
 $("soundBtn").onclick=()=>{
- sound=!sound;
- $("soundBtn").textContent=sound?"🔊 Ses açık":"🔇 Ses kapalı";
- if(sound)tone(600,.15);
+sound=!sound;
+$("soundBtn").textContent=sound?"🔊 Ses açık":"🔇 Ses kapalı";
+if(sound)tone(600,.15);
 };
 
-// Her oyun başlangıcında bilmeceleri karıştır.
 function shuffle(array){
- const result=[...array];
- for(let i=result.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [result[i],result[j]]=[result[j],result[i]];
- }
- return result;
+const result=[...array];
+for(let i=result.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[result[i],result[j]]=[result[j],result[i]];
+}
+return result;
 }
 
-// 12 farklı bilmeceyi karıştırarak 108 turluk oyun oluştur.
 function makeGame(){
- const deck=[];
- while(deck.length<108){
-  deck.push(...shuffle(puzzles));
- }
- return deck.slice(0,108);
+let result=[];
+while(result.length<100){
+result.push(...shuffle(puzzles));
+}
+return result.slice(0,100);
 }
 
 $("start").onclick=()=>{
- score=0;gems=0;streak=0;index=0;
- gamePuzzles=makeGame();
- update();show("game");load();
- tone(500,.15);
+score=0;
+gems=0;
+streak=0;
+index=0;
+gamePuzzles=makeGame();
+update();
+show("game");
+load();
+tone(500,.15);
 };
 
 function load(){
- locked=false;
- const p=gamePuzzles[index];
- $("round").textContent="Bölüm "+(index+1)+" / "+gamePuzzles.length;
- $("streak").textContent="🔥 Seri: "+streak;
- $("bar").style.width=(index/gamePuzzles.length*100)+"%";
- $("oldWord").textContent=p.from;
- $("clue").textContent=p.clue;
- $("answer").value="";
- $("answer").disabled=false;
- $("check").disabled=false;
- $("feedback").textContent="Cevabını yaz ve kontrol et!";
- $("hint").disabled=false;
- $("nextArea").classList.add("hidden");
- $("answer").focus();
+locked=false;
+const p=gamePuzzles[index];
+$("round").textContent="Bölüm "+(index+1)+" / 100";
+$("streak").textContent="🔥 Seri: "+streak;
+$("bar").style.width=(index/100*100)+"%";
+$("oldWord").textContent=p.from;
+$("clue").textContent=p.clue;
+$("answer").value="";
+$("answer").disabled=false;
+$("check").disabled=false;
+$("feedback").textContent="Cevabını yaz ve kontrol et!";
+$("hint").disabled=false;
+$("nextArea").classList.add("hidden");
+$("answer").focus();
 }
 
 function normalize(s){return s.trim().toLocaleUpperCase("tr-TR")}
 function oneLetterDifferent(a,b){
- const x=Array.from(a),y=Array.from(b);
- if(x.length!==y.length)return false;
- let diff=0;
- for(let i=0;i<x.length;i++)if(x[i]!==y[i])diff++;
- return diff===1;
+const x=Array.from(a),y=Array.from(b);
+if(x.length!==y.length)return false;
+let diff=0;
+for(let i=0;i<x.length;i++)if(x[i]!==y[i])diff++;
+return diff===1;
 }
 
 function check(){
- if(locked)return;
- const p=gamePuzzles[index],v=normalize($("answer").value);
- if(!v){
-  $("feedback").textContent="Önce bir kelime yazmalısın!";
-  return;
- }
- if(!oneLetterDifferent(p.from,v)){
-  $("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
-  failSound();return;
- }
- if(v!==p.to){
-  $("feedback").textContent="Bu kelime uygun ama bilmecenin cevabı değil. Bir daha düşün!";
-  failSound();return;
- }
- locked=true;
- score+=10;gems++;streak++;
- update();
- $("feedback").textContent="🎉 Harika! "+p.from+" → "+p.to+". Bir harfi değiştirerek doğru kelimeyi buldun! +10 puan, +1 kristal.";
- $("answer").disabled=true;
- $("check").disabled=true;
- $("hint").disabled=true;
- $("nextArea").classList.remove("hidden");
- $("streak").textContent="🔥 Seri: "+streak;
- successSound();
+if(locked)return;
+const p=gamePuzzles[index],v=normalize($("answer").value);
+if(!v){
+$("feedback").textContent="Önce bir kelime yazmalısın!";
+return;
+}
+if(!oneLetterDifferent(p.from,v)){
+$("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
+failSound();
+return;
+}
+if(v!==p.to){
+$("feedback").textContent="Bu kelime uygun ama bilmecenin cevabı değil. Bir daha düşün!";
+failSound();
+return;
+}
+locked=true;
+score+=10;
+gems++;
+streak++;
+update();
+$("feedback").textContent="🎉 Harika! "+p.from+" → "+p.to+". Bir harfi değiştirerek doğru kelimeyi buldun! +10 puan, +1 kristal.";
+$("answer").disabled=true;
+$("check").disabled=true;
+$("hint").disabled=true;
+$("nextArea").classList.remove("hidden");
+$("streak").textContent="🔥 Seri: "+streak;
+successSound();
 }
 
 $("check").onclick=check;
 $("answer").addEventListener("keydown",e=>{
- if(e.key==="Enter")check();
+if(e.key==="Enter")check();
 });
+
 $("hint").onclick=()=>{
- $("feedback").textContent="💡 İpucu: "+gamePuzzles[index].hint;
- tone(430,.12);
+$("feedback").textContent="💡 İpucu: "+gamePuzzles[index].hint;
+tone(430,.12);
 };
+
 $("skip").onclick=()=>{
- if(locked)return;
- streak=0;
- $("feedback").textContent="Cevap: "+gamePuzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
- $("answer").disabled=true;
- $("check").disabled=true;
- $("hint").disabled=true;
- $("nextArea").classList.remove("hidden");
- $("streak").textContent="🔥 Seri: 0";
- failSound();
+if(locked)return;
+streak=0;
+$("feedback").textContent="Cevap: "+gamePuzzles[index].to+". Bir sonraki bilmeceye geçebilirsin.";
+$("answer").disabled=true;
+$("check").disabled=true;
+$("hint").disabled=true;
+$("nextArea").classList.remove("hidden");
+$("streak").textContent="🔥 Seri: 0";
+failSound();
 };
+
 $("next").onclick=()=>{
- index++;
- if(index>=gamePuzzles.length){
-  $("finalScore").textContent=score;
-  $("finalGems").textContent=gems;
-  $("bar").style.width="100%";
-  show("end");successSound();
- }else load();
+index++;
+if(index>=100){
+$("finalScore").textContent=score;
+$("finalGems").textContent=gems;
+$("bar").style.width="100%";
+show("end");
+successSound();
+}else{
+load();
+}
 };
+
 $("homeBtn").onclick=()=>show("home");
 $("restart").onclick=()=>{$("start").click()};
+update();
 </script>
 </body>
 </html>
