@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -7,283 +6,376 @@
 <title>Harf Atölyesi</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:linear-gradient(135deg,#10152f,#202b52);color:white;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;padding:18px}
-.app{width:100%;max-width:850px;background:#192342;border:2px solid #35436e;border-radius:25px;padding:25px;box-shadow:0 15px 40px #080d20}
-h1{color:#ffd84d;text-align:center;font-size:38px;margin:5px 0 8px}
-.subtitle{text-align:center;color:#c3cbea;margin-bottom:20px}
-.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:15px 0}
-.stat{background:#27365e;padding:11px 18px;border-radius:14px;font-weight:bold}
-button{border:0;border-radius:12px;padding:12px 18px;background:#ffd84d;color:#20213b;font-weight:bold;font-size:15px;cursor:pointer;margin:5px}
-button:hover{filter:brightness(1.1);transform:translateY(-1px)}
-button.secondary{background:#435582;color:white}
-button:disabled{opacity:.4;cursor:not-allowed}
-.screen{display:none;text-align:center}
-.screen.active{display:block}
-.characters{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:25px 0}
-.character{background:#27365e;border:3px solid transparent;border-radius:18px;padding:15px;width:145px;cursor:pointer}
-.character.selected{border-color:#ffd84d;background:#354777}
-.monster{font-size:58px}
-.character strong{display:block;margin-top:8px}
-#startBtn{font-size:18px;padding:15px 35px}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.progress{height:12px;background:#303d64;border-radius:20px;overflow:hidden;margin:15px 0 25px}
-#bar{height:100%;width:0;background:#ffd84d;transition:width .3s}
-.question{background:#27365e;border-radius:18px;padding:22px;margin:15px 0}
-.word{font-size:38px;letter-spacing:8px;color:#ffd84d;font-weight:900;margin:12px}
-.target{font-size:30px;letter-spacing:6px;color:#fff;font-weight:bold}
-input{width:100%;max-width:330px;padding:15px;border-radius:12px;border:2px solid #7183b4;background:#101a35;color:white;text-align:center;font-size:22px;text-transform:uppercase;letter-spacing:4px;margin:15px 0}
-.feedback{min-height:28px;font-weight:bold;margin:8px}
-.help{color:#c3cbea;font-size:14px}
-#endScore{font-size:35px;color:#ffd84d;font-weight:bold}
-footer{text-align:center;color:#8998c0;font-size:12px;margin-top:20px}
+body{margin:0;background:#10152b;color:#fff;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer;border:0;border-radius:13px;padding:12px 17px;font-weight:bold}
+#app{max-width:900px;margin:auto;padding:18px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{color:#ffe28a;margin:8px 0;font-size:clamp(25px,5vw,38px)}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#263454;padding:10px 13px;border-radius:20px}
+.panel{background:#202d4c;border:1px solid #3d5278;border-radius:22px;padding:22px;margin-top:16px}
+.hidden{display:none!important}
+.muted{color:#bdcbe0;line-height:1.5}
+.characters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.character{background:#304467;color:white;border:2px solid transparent}
+.character.selected{border-color:#ffe28a;background:#425b83}
+.monster{width:85px;height:82px;border-radius:42% 42% 35% 35%;margin:8px auto 12px;display:flex;justify-content:center;align-items:center;gap:4px;position:relative}
+.monster:before,.monster:after{content:"";position:absolute;top:-10px;width:22px;height:27px;background:inherit;border-radius:80% 20% 50% 50%}
+.monster:before{left:5px;transform:rotate(-20deg)}
+.monster:after{right:5px;transform:rotate(20deg)}
+.m1{background:#ff9d5c}.m2{background:#60d7bc}.m3{background:#a98bff}
+.eye{width:17px;height:22px;border-radius:50%;background:white;color:#17213a;font-size:14px;line-height:22px}
+.primary{background:#ffe28a;color:#222b42}
+.secondary{background:#40577d;color:white}
+.sound{background:#304467;color:white}
+.wordbox{background:#131e37;border:2px dashed #6e87ac;border-radius:18px;text-align:center;padding:22px;margin:16px 0}
+.word{font-size:clamp(36px,9vw,58px);letter-spacing:9px;font-weight:900;color:#ffe28a}
+.clue{font-size:20px;line-height:1.5;margin:16px 0}
+.inputrow{display:flex;gap:9px;max-width:480px;margin:15px auto}
+#answer{min-width:0;flex:1;background:#fff;color:#18233b;border:3px solid #9eb2d3;border-radius:12px;padding:13px;font-size:22px;text-align:center;text-transform:uppercase}
+#feedback{min-height:48px;background:#17233d;padding:13px;border-radius:12px;margin-top:12px;line-height:1.5}
+.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.progress{height:10px;background:#121c31;border-radius:20px;overflow:hidden;margin:14px 0}
+.progress div{height:100%;width:0;background:#6ce2b5;transition:width .3s}
+.badge{display:inline-block;background:#344c70;border-radius:20px;padding:7px 12px;color:#d9e8ff}
+footer{text-align:center;color:#8fa4c3;padding:20px;font-size:13px}
+@media(max-width:540px){
+ #app{padding:10px}.panel{padding:15px}.characters{gap:6px}
+ .character{padding:10px 4px;font-size:13px}.monster{width:65px;height:65px}
+ .inputrow{flex-direction:column}.inputrow button{width:100%}
+}
 </style>
 </head>
 <body>
-<div class="app">
-  <h1>⭐ HARF ATÖLYESİ ⭐</h1>
-  <div class="subtitle">Kelimeyi bul, soruları çöz, eğlen!</div>
+<div id="app">
+<header>
+<h1>🔤 Harf Atölyesi</h1>
+<div class="stats">
+<span class="pill">⭐ <b id="score">0</b></span>
+<span class="pill">💎 <b id="gems">0</b></span>
+<button class="sound" id="soundBtn">🔊 Ses açık</button>
+</div>
+</header>
 
-  <div class="stats">
-    <div class="stat">⭐ Puan: <span id="score">0</span></div>
-    <div class="stat">💎 Elmas: <span id="gems">0</span></div>
-    <div class="stat">🔊 <button class="secondary" id="soundBtn">Ses: Açık</button></div>
-  </div>
+<section id="home" class="panel">
+<h2>Kelime tamircisi olmaya hazır mısın?</h2>
+<p class="muted">Bozulan kelimeleri tamir et! Sana bir kelime ve bilmece verilecek. Cevabı bulmak için yalnızca bir harfi değiştirmen gerekiyor.</p>
+<h3>Canavar arkadaşını seç:</h3>
+<div class="characters">
+<button class="character selected" data-char="0">
+<div class="monster m1"><span class="eye">●</span></div>
+Mini<br><small>Tek gözlü</small>
+</button>
+<button class="character" data-char="1">
+<div class="monster m2"><span class="eye">●</span><span class="eye">●</span></div>
+Momo<br><small>İki gözlü</small>
+</button>
+<button class="character" data-char="2">
+<div class="monster m3"><span class="eye">●</span><span class="eye">●</span><span class="eye">●</span></div>
+Üçko<br><small>Üç gözlü</small>
+</button>
+</div>
+<div class="wordbox">
+<div style="font-size:42px">🛠️</div>
+<h2>Atölyeyi aç!</h2>
+<p class="muted">Her doğru cevap 10 puan ve 1 kristal kazandırır.</p>
+</div>
+<button class="primary" id="start">Oyuna başla ➜</button>
+</section>
 
-  <section id="home" class="screen active">
-    <h2>Karakterini seç!</h2>
-    <p class="help">Maceraya hangi canavarla çıkacaksın?</p>
-    <div class="characters">
-      <div class="character selected" data-character="Mini">
-        <div class="monster">👾</div><strong>Mini</strong>
-      </div>
-      <div class="character" data-character="Momo">
-        <div class="monster">👻</div><strong>Momo</strong>
-      </div>
-      <div class="character" data-character="Üçko">
-        <div class="monster">🟢</div><strong>Üçko</strong>
-      </div>
-    </div>
-    <p>Seçtiğin karakterle 50 kelime sorusunu tamamla!</p>
-    <button id="startBtn">🚀 Oyuna Başla</button>
-  </section>
+<section id="game" class="panel hidden">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<span class="badge" id="round">Soru 1 / 50</span>
+<span class="badge" id="streak">🔥 Seri: 0</span>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<div class="wordbox">
+<div style="font-size:30px">🔧</div>
+<div class="muted">DÜZENLENECEK KELİME</div>
+<div class="word" id="oldWord">KAL</div>
+</div>
+<div class="clue">
+<b>🧩 Bilmece:</b>
+<div id="clue"></div>
+</div>
+<p class="muted" style="text-align:center">Bir harfi değiştir ve yeni kelimeyi yaz.</p>
+<div class="inputrow">
+<input id="answer" maxlength="8" autocomplete="off" placeholder="Kelimeyi yaz...">
+<button class="primary" id="check">Kontrol et</button>
+</div>
+<div id="feedback" aria-live="polite">Hazırsan cevabını yaz!</div>
+<div class="actions">
+<button class="secondary" id="hint">💡 İpucu</button>
+<button class="secondary" id="skip">Bu soruyu geç</button>
+<button class="secondary" id="homeBtn">Ana menü</button>
+</div>
+<div class="actions hidden" id="nextArea">
+<button class="primary" id="next">Sonraki bilmece ➜</button>
+</div>
+</section>
 
-  <section id="game" class="screen">
-    <div class="topline">
-      <strong id="round">Soru 1 / 50</strong>
-      <strong id="characterName">Karakter: Mini</strong>
-    </div>
-    <div class="progress"><div id="bar"></div></div>
-    <div class="question">
-      <div class="help">İPUCU</div>
-      <h2 id="clue">İpucu burada görünecek.</h2>
-      <div class="help">Başlangıç kelimesi</div>
-      <div class="word" id="fromWord">KAL</div>
-      <div class="help">Hedef kelime</div>
-      <div class="target" id="toWord">DAL</div>
-      <p class="help">Başlangıç kelimesinden hedef kelimeye ulaşmak için yalnızca bir harfi değiştir!</p>
-      <input id="answer" maxlength="8" autocomplete="off" placeholder="Kelimeyi yaz">
-      <div class="feedback" id="feedback"></div>
-      <div class="help" id="hintText"></div>
-    </div>
-    <div>
-      <button id="checkBtn">✓ Kontrol Et</button>
-      <button class="secondary" id="hintBtn">💡 İpucu</button>
-      <button class="secondary" id="skipBtn">⏭ Geç</button>
-      <button id="nextBtn" style="display:none">Sonraki Soru ➜</button>
-    </div>
-    <button class="secondary" id="homeBtn">Ana Menü</button>
-  </section>
-
-  <section id="end" class="screen">
-    <div class="monster" id="endMonster">👾</div>
-    <h2>🎉 Harika iş çıkardın!</h2>
-    <p>50 soruluk macerayı tamamladın!</p>
-    <div id="endScore">0 puan</div>
-    <p id="endGems"></p>
-    <button id="againBtn">🔄 Yeniden Oyna</button>
-    <button class="secondary" id="endHomeBtn">Ana Menü</button>
-  </section>
-  <footer>Harf Atölyesi • Kelimelerle öğren, eğlen!</footer>
+<section id="end" class="panel hidden">
+<div style="text-align:center">
+<div style="font-size:75px">🏆</div>
+<h2>Atölyenin yıldızı oldun!</h2>
+<p class="muted">50 soruyu tamamladın. Kelime tamirciliğinde ustalaştın!</p>
+<h2>⭐ Puanın: <span id="finalScore">0</span></h2>
+<h3>💎 Kristalin: <span id="finalGems">0</span></h3>
+<button class="primary" id="restart">Tekrar oyna</button>
+</div>
+</section>
+<footer>Harf Atölyesi • 7. Sınıf Türkçe • Kelimeleri keşfet!</footer>
 </div>
 
 <script>
-const puzzles = [
-{from:"KAL",to:"DAL",clue:"Ağaçların üzerinde bulunan bölüm.",hint:"Yapraklar üzerinde büyür."},
-{from:"DAL",to:"BAL",clue:"Arıların yaptığı tatlı yiyecek.",hint:"Kahvaltıda yenir."},
-{from:"KOL",to:"GOL",clue:"Futbolda topun ağlarla buluşması.",hint:"Takıma puan kazandırır."},
-{from:"GOL",to:"GÖL",clue:"Çevresi karayla kaplı su birikintisi.",hint:"Doğal bir su alanıdır."},
-{from:"KASA",to:"MASA",clue:"Üzerinde yemek yenilen eşya.",hint:"Dört ayağı olabilir."},
-{from:"VAR",to:"DAR",clue:"Geniş olmayan, sıkışık.",hint:"Geniş kelimesinin zıttı."},
-{from:"DAR",to:"KAR",clue:"Kışın yağan beyaz yağış.",hint:"Soğuk havalarda görülür."},
-{from:"YOL",to:"KOL",clue:"Omuzdan ele uzanan uzuv.",hint:"İnsan vücudunun bir parçası."},
-{from:"AL",to:"EL",clue:"Bir şeyi tutmaya yarayan organ.",hint:"Beş parmağı vardır."},
-{from:"EL",to:"EV",clue:"İnsanların yaşadığı yer.",hint:"Aileler burada yaşar."},
-{from:"AT",to:"OT",clue:"Çimen veya bitki anlamında kullanılan kelime.",hint:"Hayvanlar yiyebilir."},
-{from:"ET",to:"EK",clue:"Bir şeye sonradan katılan bölüm.",hint:"Bir şeyin devamına eklenir."},
-{from:"BAŞ",to:"TAŞ",clue:"Yerde bulunan sert doğal madde.",hint:"Dağlarda ve yollarda bulunur."},
-{from:"TAŞ",to:"YAŞ",clue:"Bir insanın kaç yıllık olduğunu gösterir.",hint:"Doğum gününde artar."},
-{from:"GÖZ",to:"SÖZ",clue:"Konuşurken söylediğimiz kelime.",hint:"Ağızdan çıkar."},
-{from:"KÖY",to:"KÖK",clue:"Bitkinin toprağın altındaki bölümü.",hint:"Bitkiyi toprağa bağlar."},
-{from:"KÖK",to:"GÖK",clue:"Dünyanın üzerinde gördüğümüz mavi alan.",hint:"Bulutlar oradadır."},
-{from:"GÖK",to:"GÖL",clue:"Doğal su birikintisi.",hint:"Balıklar yaşayabilir."},
-{from:"KUL",to:"KOL",clue:"İnsan vücudundaki uzuv.",hint:"Dirsek ve omuz arasında da bölümü vardır."},
-{from:"KOL",to:"SOL",clue:"Sağın karşıtı olan yön.",hint:"Kalbin bulunduğu taraf."},
-{from:"KARA",to:"KARE",clue:"Dört eşit kenarı olan şekil.",hint:"Dört köşesi vardır."},
-{from:"KARE",to:"KASE",clue:"Çorba içmek için kullanılan kap.",hint:"Mutfakta bulunur."},
-{from:"KASE",to:"KALE",clue:"Futbolda kalecinin koruduğu yer.",hint:"Topun girmesi istenir."},
-{from:"KURT",to:"KART",clue:"Üzerinde bilgi veya resim bulunan küçük dikdörtgen.",hint:"Oyunlarda da kullanılır."},
-{from:"DERE",to:"DENE",clue:"Bir şeyi yaparak sonucunu gör.",hint:"Denemek anlamında emir."},
-{from:"YÜZ",to:"DÜZ",clue:"Eğri olmayan, pürüzsüz.",hint:"Düz çizgi gibi."},
-{from:"GÜN",to:"GÜL",clue:"Güzel kokulu bir çiçek.",hint:"Bahçelerde yetişir."},
-{from:"GÜN",to:"DÜN",clue:"Bugünden önceki gün.",hint:"Geçmiş zamanı anlatır."},
-{from:"DÜN",to:"DİN",clue:"İnanç ve ibadet esaslarını içeren kavram.",hint:"İslam da bir örneğidir."},
-{from:"DİN",to:"DİL",clue:"İnsanların anlaşmasını sağlayan sistem.",hint:"Türkçe bir örneğidir."},
-{from:"DİL",to:"DİK",clue:"Eğik olmayan, yukarı doğru duran.",hint:"Dik durmak deyiminde geçer."},
-{from:"İMAN",to:"İMAM",clue:"Camide cemaate namaz kıldıran kişi.",hint:"Dinî görev üstlenir."},
-{from:"ODA",to:"ADA",clue:"Her tarafı suyla çevrili kara parçası.",hint:"Denizin ortasında bulunabilir."},
-{from:"ANA",to:"ARA",clue:"İki şeyin arasında bulunan bölüm.",hint:"Orta anlamına yakındır."},
-{from:"ARA",to:"ARI",clue:"Bal yapan böcek.",hint:"Çiçeklerden nektar toplar."},
-{from:"AY",to:"AT",clue:"Üzerine binilebilen hayvan.",hint:"Dört ayağı vardır."},
-{from:"AY",to:"AŞ",clue:"Yemek anlamına gelen eski bir kelime.",hint:"Sofrada yenir."},
-{from:"TAÇ",to:"TAŞ",clue:"Doğal, sert kaya parçası.",hint:"Yerde bulunabilir."},
-{from:"SÜR",to:"SÜT",clue:"İnek gibi hayvanlardan elde edilen içecek.",hint:"Kahvaltıda içilebilir."},
-{from:"SAT",to:"SAZ",clue:"Telli bir müzik aleti.",hint:"Türk halk müziğinde kullanılır."},
-{from:"SAZ",to:"SAP",clue:"Bir aletin tutulduğu bölüm.",hint:"Süpürgenin de olabilir."},
-{from:"KAR",to:"KAP",clue:"İçine bir şey konulan eşya.",hint:"Kapaklı olabilir."},
-{from:"KAP",to:"KAT",clue:"Bir binanın her bir seviyesi.",hint:"Apartmanlarda bulunur."},
-{from:"KAT",to:"KAZ",clue:"Evcil bir su kuşu.",hint:"Gagası ve perdeli ayakları vardır."},
-{from:"KAZ",to:"KAS",clue:"Vücudumuzun hareket etmesini sağlayan doku.",hint:"Spor yaparken çalışır."},
-{from:"YAT",to:"YAK",clue:"Bir şeyi ateşle tutuştur anlamında emir.",hint:"Ateş yakmak."},
-{from:"YAK",to:"YAZ",clue:"Düşüncelerini kâğıda veya ekrana aktar.",hint:"Kalemle yapılabilir."},
-{from:"BAK",to:"BAL",clue:"Arıların ürettiği tatlı besin.",hint:"Kahvaltıda yenir."},
-{from:"KÖR",to:"KOR",clue:"Ateşin alevsiz, kızgın hâli.",hint:"Mangaldaki kızgın kömür."},
-{from:"KOR",to:"KAR",clue:"Kışın gökten düşen beyaz yağış.",hint:"Kardan adam yapılır."},
-{from:"YAZ",to:"YAS",clue:"Bir kayıp sonrası duyulan üzüntü dönemi.",hint:"Üzüntü ve anma ile ilgilidir."}
+const puzzles=[
+{from:"KAL",to:"DAL",clue:"Ağacın gövdesinden ayrılarak uzanan, yaprak taşıyabilen bölüm.",hint:"Ağaçların üzerinde bulunur."},
+{from:"DAL",to:"BAL",clue:"Arıların çiçeklerden topladığı özlerle ürettiği doğal besin.",hint:"Arılar üretir."},
+{from:"KOL",to:"GOL",clue:"Futbolda topun kale çizgisini geçmesiyle kazanılan sayı.",hint:"Bir spor terimi."},
+{from:"GOL",to:"GÖL",clue:"Karalarla çevrili, denizlerle doğrudan bağlantısı olmayan su alanı.",hint:"Doğal bir su birikintisi."},
+{from:"KASA",to:"MASA",clue:"Üzerinde eşya koyulan, yemek yenilen veya çalışılan mobilya.",hint:"Evlerde ve sınıflarda bulunur."},
+{from:"VAR",to:"DAR",clue:"Eni veya genişliği az olan; geniş sözcüğünün karşıtı.",hint:"Bir geçit çok geniş değilse böyledir."},
+{from:"DAR",to:"KAR",clue:"Bulutlardan buz kristalleri şeklinde düşen beyaz yağış.",hint:"Kışın sık görülür."},
+{from:"YOL",to:"KOL",clue:"Omuzdan başlayıp ele kadar uzanan uzuv.",hint:"İnsan vücudunun bir parçası."},
+{from:"KAN",to:"KAR",clue:"Soğuk havalarda gökten beyaz taneler hâlinde düşen yağış.",hint:"Kış mevsimiyle ilgilidir."},
+{from:"YAZ",to:"NAZ",clue:"Birinin isteğini hemen yerine getirmeyip biraz ağırdan alma davranışı.",hint:"Naz yapmak sözünde geçer."},
+{from:"GÜL",to:"KÜL",clue:"Yanma sonucunda geriye kalan ince, toz hâlindeki madde.",hint:"Ateş söndükten sonra kalabilir."},
+{from:"KATI",to:"KADI",clue:"Osmanlı döneminde mahkemelerde yargıçlık yapan görevli.",hint:"Adalet işlerinde görev alırdı."},
+{from:"AT",to:"OT",clue:"Toprakta kendiliğinden yetişebilen küçük bitki.",hint:"Hayvanlar bazen bununla beslenir."},
+{from:"ET",to:"EK",clue:"Bir sözcüğün köküne veya gövdesine getirilen dil bilgisi birimi.",hint:"Yapım ve çekim türleri vardır."},
+{from:"AL",to:"EL",clue:"İnsanların tutma ve kavrama işlerini yaptığı organ.",hint:"Parmakları vardır."},
+{from:"EL",to:"EV",clue:"İnsanların barınmak ve yaşamak için kullandığı yapı.",hint:"Odaları ve çatısı olabilir."},
+{from:"TAŞ",to:"YAŞ",clue:"Bir insanın doğumundan bugüne kadar geçen yıl sayısı.",hint:"Doğum gününde bir artar."},
+{from:"BAŞ",to:"TAŞ",clue:"Doğada bulunan, sert ve katı kaya parçası.",hint:"Yerden alınabilir."},
+{from:"GÖZ",to:"SÖZ",clue:"Bir düşünceyi veya duyguyu anlatmak için söylenen ifade.",hint:"Konuşmayla ilgilidir."},
+{from:"KÖY",to:"KÖK",clue:"Bitkilerin toprağın altında bulunan, su ve besin alan bölümü.",hint:"Bitkinin toprağa tutunmasını sağlar."},
+{from:"KÖK",to:"GÖK",clue:"Yeryüzünden bakıldığında görülen gökyüzü.",hint:"Bulutlar burada görünür."},
+{from:"GÖK",to:"GÖL",clue:"Çevresi kara ile kaplı doğal su birikintisi.",hint:"Akarsu veya yağmurla beslenebilir."},
+{from:"KUL",to:"KOL",clue:"Omuz ile el arasında bulunan vücut bölümü.",hint:"İnsanlarda sağ ve sol olarak bulunur."},
+{from:"KOL",to:"SOL",clue:"Sağ yönünün karşıtı olan yön.",hint:"Yön tarifinde kullanılır."},
+{from:"KASA",to:"KAZA",clue:"İstenmeden gerçekleşen, zarara veya aksaklığa yol açabilen olay.",hint:"Trafikte de yaşanabilir."},
+{from:"KARA",to:"KARE",clue:"Dört kenarı eşit ve dört açısı dik olan geometrik şekil.",hint:"Dört eşit kenarı vardır."},
+{from:"KARE",to:"KASE",clue:"Çorba veya salata koymak için kullanılan derin kap.",hint:"Mutfakta bulunur."},
+{from:"KASE",to:"KALE",clue:"Satrançta düz çizgide hareket edebilen taş.",hint:"Satranç oyununda bulunur."},
+{from:"KURT",to:"KART",clue:"Üzerinde bilgi veya resim bulunan küçük, sert kâğıt ya da plastik parçası.",hint:"Kimlik veya oyun türleri olabilir."},
+{from:"YAKA",to:"YARA",clue:"Vücutta kesik, çarpma veya başka bir nedenle oluşan doku zedelenmesi.",hint:"Bir yaralanma sonucunda oluşabilir."},
+{from:"DERE",to:"DENE",clue:"Bir şeyin nasıl sonuçlandığını görmek için onu uygulamaya koy.",hint:"Denemek fiilinin emir biçimi."},
+{from:"YÜZ",to:"DÜZ",clue:"Pürüzü veya çıkıntısı olmayan; eğri olmayan.",hint:"Engebeli kelimesinin karşıtı."},
+{from:"GÜN",to:"GÜL",clue:"Güzel kokulu, dikenli olabilen bir süs bitkisi.",hint:"Bahçelerde yetişebilir."},
+{from:"GÜN",to:"DÜN",clue:"Bugünden bir önceki takvim günü.",hint:"Geçmiş zamanı anlatır."},
+{from:"DÜN",to:"DİN",clue:"İnsanların inanç ve ibadet esaslarını içeren inanç sistemi.",hint:"İnançla ilgilidir."},
+{from:"DİN",to:"DİL",clue:"İnsanların anlaşmak için kullandığı sesli veya yazılı iletişim sistemi.",hint:"Türkçe bir örneğidir."},
+{from:"KÜP",to:"KÜL",clue:"Yanmış maddelerden geriye kalan toz.",hint:"Odun yandığında oluşabilir."},
+{from:"SÜR",to:"SÜT",clue:"Memeli hayvanlardan elde edilen, besin olarak tüketilen beyaz sıvı.",hint:"Peynir ve yoğurt yapımında kullanılır."},
+{from:"SÜT",to:"SAT",clue:"Bir malı para karşılığında başkasına ver anlamındaki emir.",hint:"Alışverişte kullanılan bir fiil."},
+{from:"SAT",to:"SAZ",clue:"Türk halk müziğinde kullanılan telli çalgı.",hint:"Bağlama olarak da bilinir."},
+{from:"SAZ",to:"SAP",clue:"Bir aracın tutulmasını sağlayan bölüm.",hint:"Tava veya bıçakta bulunabilir."},
+{from:"KAR",to:"KAP",clue:"Bir şeyi eline geçir anlamında kullanılan emir.",hint:"Yakalamak fiiliyle ilgilidir."},
+{from:"KAP",to:"KAT",clue:"Bir binanın zemin seviyesinden yukarıdaki bölümlerinden her biri.",hint:"Apartmanlarda bulunur."},
+{from:"KAT",to:"KAZ",clue:"Uzun boyunlu, evcil bir su kuşu.",hint:"Gagası ve perdeli ayakları vardır."},
+{from:"KAZ",to:"KAS",clue:"Vücudun hareket etmesini sağlayan dokulardan biri.",hint:"Spor yaparken çalışır."},
+{from:"YAT",to:"YAK",clue:"Bir şeyi ateşe vererek tutuştur anlamındaki emir.",hint:"Ateşle ilgilidir."},
+{from:"YAK",to:"YAZ",clue:"Düşünceleri harflerle kâğıda veya ekrana aktar.",hint:"Kalemle veya klavyeyle yapılır."},
+{from:"BAK",to:"BAL",clue:"Arıların ürettiği tatlı ve yoğun kıvamlı besin.",hint:"Kahvaltıda tüketilebilir."},
+{from:"BAS",to:"KAS",clue:"Vücudumuzun hareket etmesini sağlayan doku.",hint:"Spor yaparken çalışır."},
+{from:"KAS",to:"KAZ",clue:"Toprağı kürekle eşele anlamındaki emir.",hint:"Bahçede yapılan bir iş."}
 ];
 
-const $ = id => document.getElementById(id);
-let selectedCharacter="Mini", score=0, gems=0, index=0, gamePuzzles=[], soundOn=true, answered=false;
+let selected=0,score=0,gems=0,streak=0,index=0,locked=false,sound=true;
+let gamePuzzles=[];
 
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  $(id).classList.add("active");
+const $=id=>document.getElementById(id);
+
+function show(id){
+["home","game","end"].forEach(x=>$(x).classList.add("hidden"));
+$(id).classList.remove("hidden");
 }
+
+function tone(freq,duration,type="sine"){
+if(!sound)return;
+try{
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+const osc=ctx.createOscillator(),gain=ctx.createGain();
+osc.type=type;
+osc.frequency.value=freq;
+gain.gain.setValueAtTime(.08,ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+osc.connect(gain);
+gain.connect(ctx.destination);
+osc.start();
+osc.stop(ctx.currentTime+duration);
+osc.onended=()=>ctx.close();
+}catch(e){}
+}
+
+function successSound(){
+tone(520,.12);
+setTimeout(()=>tone(680,.18),120);
+setTimeout(()=>tone(850,.22),240);
+}
+
+function failSound(){tone(180,.25,"triangle")}
+
+function update(){
+$("score").textContent=score;
+$("gems").textContent=gems;
+}
+
+document.querySelectorAll(".character").forEach(b=>{
+b.onclick=()=>{
+selected=Number(b.dataset.char);
+document.querySelectorAll(".character").forEach(x=>x.classList.remove("selected"));
+b.classList.add("selected");
+tone(420,.1);
+};
+});
+
+$("soundBtn").onclick=()=>{
+sound=!sound;
+$("soundBtn").textContent=sound?"🔊 Ses açık":"🔇 Ses kapalı";
+if(sound)tone(600,.15);
+};
+
 function shuffle(array){
-  const a=[...array];
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
+const result=[...array];
+for(let i=result.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[result[i],result[j]]=[result[j],result[i]];
 }
-document.querySelectorAll(".character").forEach(el=>{
-  el.addEventListener("click",()=>{
-    document.querySelectorAll(".character").forEach(c=>c.classList.remove("selected"));
-    el.classList.add("selected");
-    selectedCharacter=el.dataset.character;
-  });
-});
-function updateStats(){
-  $("score").textContent=score;
-  $("gems").textContent=gems;
+return result;
 }
-function startGame(){
-  score=0; gems=0; index=0; answered=false;
-  gamePuzzles=shuffle(puzzles);
-  updateStats();
-  $("characterName").textContent="Karakter: "+selectedCharacter;
-  showScreen("game");
-  loadQuestion();
+
+function makeGame(){
+return shuffle(puzzles);
 }
-function loadQuestion(){
-  if(index>=gamePuzzles.length){endGame();return;}
-  const p=gamePuzzles[index];
-  answered=false;
-  $("round").textContent="Soru "+(index+1)+" / "+gamePuzzles.length;
-  $("bar").style.width=(index/gamePuzzles.length*100)+"%";
-  $("clue").textContent=p.clue;
-  $("fromWord").textContent=p.from;
-  $("toWord").textContent=p.to;
-  $("answer").value="";
-  $("answer").disabled=false;
-  $("feedback").textContent="";
-  $("hintText").textContent="";
-  $("checkBtn").style.display="inline-block";
-  $("nextBtn").style.display="none";
-  $("hintBtn").disabled=false;
-  $("answer").focus();
+
+$("start").onclick=()=>{
+score=0;
+gems=0;
+streak=0;
+index=0;
+gamePuzzles=makeGame();
+update();
+show("game");
+load();
+tone(500,.15);
+};
+
+function load(){
+locked=false;
+const p=gamePuzzles[index];
+$("round").textContent="Soru "+(index+1)+" / 50";
+$("streak").textContent="🔥 Seri: "+streak;
+$("bar").style.width=(index/50*100)+"%";
+$("oldWord").textContent=p.from;
+$("clue").textContent=p.clue;
+$("answer").value="";
+$("answer").disabled=false;
+$("check").disabled=false;
+$("feedback").textContent="Cevabını yaz ve kontrol et!";
+$("hint").disabled=false;
+$("nextArea").classList.add("hidden");
+$("answer").focus();
 }
+
 function normalize(s){
-  return s.trim().toLocaleUpperCase("tr-TR");
+return s.trim().toLocaleUpperCase("tr-TR");
 }
-function checkAnswer(){
-  if(answered)return;
-  const answer=normalize($("answer").value);
-  const p=gamePuzzles[index];
-  if(answer===p.to){
-    answered=true;
-    score+=10; gems+=1; updateStats();
-    $("feedback").textContent="🎉 Doğru cevap! +10 puan, +1 elmas";
-    $("feedback").style.color="#7ff0a2";
-    $("answer").disabled=true;
-    $("checkBtn").style.display="none";
-    $("nextBtn").style.display="inline-block";
-    $("hintBtn").disabled=true;
-    if(soundOn)beep(660);
-  }else{
-    $("feedback").textContent="Tekrar dene! Yalnızca bir harfi değiştir.";
-    $("feedback").style.color="#ff9b9b";
-    if(soundOn)beep(180);
-  }
+
+function oneLetterDifferent(a,b){
+const x=Array.from(a),y=Array.from(b);
+if(x.length!==y.length)return false;
+let diff=0;
+for(let i=0;i<x.length;i++){
+if(x[i]!==y[i])diff++;
 }
-function showHint(){
-  $("hintText").textContent="💡 "+gamePuzzles[index].hint;
-  $("hintBtn").disabled=true;
+return diff===1;
 }
-function skipQuestion(){
-  if(answered)return;
-  answered=true;
-  $("feedback").textContent="Bu soruyu geçtin. Cevap: "+gamePuzzles[index].to;
-  $("feedback").style.color="#ffd84d";
-  $("answer").disabled=true;
-  $("checkBtn").style.display="none";
-  $("nextBtn").style.display="inline-block";
-  $("hintBtn").disabled=true;
+
+function check(){
+if(locked)return;
+
+const p=gamePuzzles[index];
+const v=normalize($("answer").value);
+
+if(!v){
+$("feedback").textContent="Önce bir kelime yazmalısın!";
+return;
 }
-function nextQuestion(){
-  index++;
-  loadQuestion();
+
+if(!oneLetterDifferent(p.from,v)){
+$("feedback").textContent="⚠️ Kelimenin yalnızca bir harfini değiştirmelisin. Tekrar dene!";
+failSound();
+return;
 }
-function endGame(){
-  $("bar").style.width="100%";
-  $("endScore").textContent=score+" puan";
-  $("endGems").textContent=gems+" elmas kazandın!";
-  $("endMonster").textContent=selectedCharacter==="Mini"?"👾":selectedCharacter==="Momo"?"👻":"🟢";
-  showScreen("end");
+
+if(v!==p.to){
+$("feedback").textContent="Bu kelime uygun ama bilmecenin cevabı değil. Bir daha düşün!";
+failSound();
+return;
 }
-function beep(freq){
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.frequency.value=freq;
-    osc.connect(gain);gain.connect(ctx.destination);
-    gain.gain.value=.06;
-    osc.start();osc.stop(ctx.currentTime+.12);
-  }catch(e){}
+
+locked=true;
+score+=10;
+gems++;
+streak++;
+update();
+
+$("feedback").textContent="🎉 Harika! "+p.from+" → "+p.to+". Bir harfi değiştirerek doğru kelimeyi buldun! +10 puan, +1 kristal.";
+$("answer").disabled=true;
+$("check").disabled=true;
+$("hint").disabled=true;
+$("nextArea").classList.remove("hidden");
+$("streak").textContent="🔥 Seri: "+streak;
+successSound();
 }
-$("startBtn").addEventListener("click",startGame);
-$("checkBtn").addEventListener("click",checkAnswer);
-$("hintBtn").addEventListener("click",showHint);
-$("skipBtn").addEventListener("click",skipQuestion);
-$("nextBtn").addEventListener("click",nextQuestion);
-$("answer").addEventListener("keydown",e=>{if(e.key==="Enter")checkAnswer();});
-$("againBtn").addEventListener("click",startGame);
-$("homeBtn").addEventListener("click",()=>showScreen("home"));
-$("endHomeBtn").addEventListener("click",()=>showScreen("home"));
-$("soundBtn").addEventListener("click",()=>{
-  soundOn=!soundOn;
-  $("soundBtn").textContent="Ses: "+(soundOn?"Açık":"Kapalı");
+
+$("check").onclick=check;
+
+$("answer").addEventListener("keydown",e=>{
+if(e.key==="Enter")check();
 });
+
+$("hint").onclick=()=>{
+$("feedback").textContent="💡 İpucu: "+gamePuzzles[index].hint;
+tone(430,.12);
+};
+
+$("skip").onclick=()=>{
+if(locked)return;
+
+streak=0;
+$("feedback").textContent="Bu soruyu geçtin. Bir sonraki bilmeceye geçebilirsin.";
+$("answer").disabled=true;
+$("check").disabled=true;
+$("hint").disabled=true;
+$("nextArea").classList.remove("hidden");
+$("streak").textContent="🔥 Seri: 0";
+failSound();
+};
+
+$("next").onclick=()=>{
+index++;
+
+if(index>=gamePuzzles.length){
+$("finalScore").textContent=score;
+$("finalGems").textContent=gems;
+$("bar").style.width="100%";
+show("end");
+successSound();
+}else{
+load();
+}
+};
+
+$("homeBtn").onclick=()=>show("home");
+
+$("restart").onclick=()=>{
+$("start").click();
+};
+
+update();
 </script>
 </body>
 </html>
