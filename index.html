@@ -346,7 +346,8 @@ $("skip").onclick=()=>{
 if(locked)return;
 
 streak=0;
-$("feedback").textContent="Bu soruyu geçtin. Bir sonraki bilmeceye geçebilirsin.";
+const p=gamePuzzles[index];
+$("feedback").textContent="⏭️ Soruyu atladın! Doğru cevap: "+p.to+".";
 $("answer").disabled=true;
 $("check").disabled=true;
 $("hint").disabled=true;
