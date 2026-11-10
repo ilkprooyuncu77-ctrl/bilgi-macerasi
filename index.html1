@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ağlayan Rakun ve Ağlayan Nör</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;color:white;
+ background:linear-gradient(135deg,#101a3d,#34215d);
+ text-align:center;padding:18px
+}
+h1{color:#ffe477;text-shadow:0 3px 8px #000;font-size:clamp(25px,5vw,40px)}
+#game{max-width:950px;margin:auto}
+.scene{
+ background:linear-gradient(#70c9ff 0 65%,#4eaa61 65%);
+ border:5px solid #fff;border-radius:22px;padding:18px;
+ min-height:340px;box-shadow:0 8px 25px #0008
+}
+.cloud{font-size:35px}
+.characters{display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin-top:25px}
+.person{
+ background:#fff1d5;color:#28203e;border:4px solid #49335e;
+ border-radius:20px;width:210px;padding:12px;cursor:pointer;
+ box-shadow:0 7px 0 #352344;transition:.15s
+}
+.person:hover{transform:translateY(-5px)}
+.person:active{transform:translateY(3px);box-shadow:0 2px 0 #352344}
+.human{height:145px;position:relative;margin:auto;width:110px}
+.hair{position:absolute;top:3px;left:17px;width:76px;height:35px;
+ background:#35221d;border-radius:45px 45px 10px 10px;z-index:2}
+.head{position:absolute;top:18px;left:21px;width:68px;height:77px;
+ background:#f1bd91;border-radius:45% 45% 48% 48%;border:2px solid #a76c51}
+.eye{position:absolute;top:29px;left:17px;width:7px;height:9px;
+ background:#222;border-radius:50%;box-shadow:27px 0 #222}
+.mouth{position:absolute;top:53px;left:26px;font-size:20px}
+.tear{position:absolute;top:48px;left:13px;color:#159de5;font-size:23px;
+ animation:cry .8s infinite alternate}
+.tear.right{left:44px;animation-delay:.3s}
+@keyframes cry{to{transform:translateY(16px)}}
+.body{position:absolute;bottom:0;left:7px;width:96px;height:48px;
+ background:#e15c75;border-radius:35px 35px 12px 12px;border:2px solid #913b59}
+.nor .body{background:#7565dc}
+.shop{
+ margin-top:20px;padding:20px;background:linear-gradient(135deg,#ffbd59,#ed7c38);
+ border:4px solid #ffe5a3;border-radius:20px;color:#402414
+}
+.shop h2{margin:0 0 8px}
+button{
+ border:0;border-radius:12px;padding:13px 19px;
+ font-size:16px;font-weight:bold;cursor:pointer
+}
+#get{background:#ffe65c;color:#392500}
+#message{
+ margin:18px auto;padding:16px;background:#111b38;
+ border:2px solid #8c83d9;border-radius:15px;min-height:55px;
+ font-size:18px;max-width:700px
+}
+#stick{font-size:23px}
+#reset{background:#a9d9ff;color:#17234b}
+</style>
+</head>
+<body>
+<div id="game">
+<h1>😭 AĞLAYAN RAKUN & AĞLAYAN NÖR 😭</h1>
+<div class="scene">
+ <div class="cloud">☁️ ☀️ ☁️</div>
+ <h2 style="color:#17375c">Şehir Parkı</h2>
+ <div class="characters">
+  <button class="person" id="rakun">
+   <div class="human">
+    <div class="hair"></div>
+    <div class="head"><div class="eye"></div><div class="mouth">☹️</div>
+     <span class="tear">💧</span><span class="tear right">💧</span>
+    </div>
+    <div class="body"></div>
+   </div>
+   <h3>Ağlayan Rakun</h3>
+   <small>😢 Çok üzgün...</small>
+  </button>
+  <button class="person nor" id="nor">
+   <div class="human">
+    <div class="hair" style="background:#17152d"></div>
+    <div class="head"><div class="eye"></div><div class="mouth">☹️</div>
+     <span class="tear">💧</span><span class="tear right">💧</span>
+    </div>
+    <div class="body"></div>
+   </div>
+   <h3>Ağlayan Nör</h3>
+   <small>😭 Çok üzgün...</small>
+  </button>
+ </div>
+</div>
+
+<div class="shop">
+ <h2>🏪 MARKET AMCA</h2>
+ <p>🧔 Amca: Hoş geldiniz! Size bedava bir sopa vereyim!</p>
+ <div id="stick">🪵</div>
+ <button id="get">🎁 Bedava sopayı al</button>
+</div>
+
+<div id="message">Önce market amcadan bedava sopayı al!</div>
+<button id="reset">🔄 Oyunu yeniden başlat</button>
+</div>
+
+<script>
+let hasStick=false;
+let done={rakun:false,nor:false};
+
+const message=document.getElementById("message");
+
+document.getElementById("get").onclick=()=>{
+ hasStick=true;
+ document.getElementById("stick").textContent="🪵 ✅";
+ message.textContent="Market Amca: Sopayı bedava verdim! Şimdi karakterlere tıklayabilirsin.";
+};
+
+function clickPerson(id,name){
+ if(!hasStick){
+  message.textContent="Önce market amcadan bedava sopayı almalısın!";
+  return;
+ }
+ if(done[id]){
+  message.textContent=name+": YouTuber abi, özür dilerim!";
+  return;
+ }
+ done[id]=true;
+ const person=document.getElementById(id);
+ person.querySelector(".human").innerHTML=
+ '<div class="hair"></div><div class="head"><div class="eye"></div><div class="mouth">😊</div></div><div class="body"></div>';
+ person.querySelector("small").textContent="😊 Özür diledi!";
+ message.textContent=name+": YouTuber abi, özür dilerim!";
+}
+
+document.getElementById("rakun").onclick=()=>clickPerson("rakun","Ağlayan Rakun");
+document.getElementById("nor").onclick=()=>clickPerson("nor","Ağlayan Nör");
+
+document.getElementById("reset").onclick=()=>location.reload();
+</script>
+</body>
+</html>
